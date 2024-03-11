@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1073126543345",
+    "firebase_url": "https://test-firebase-3c120-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "test-firebase-3c120",
+    "storage_bucket": "test-firebase-3c120.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073126543345:android:0e6ee7c13845d837f5be50",
+        "android_client_info": {
+          "package_name": "com.example.quanpham"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD81stRRpEkENKS7Mj8tVa1MUrPkorUeqM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073126543345:android:c81a22ebc68fde0cf5be50",
+        "android_client_info": {
+          "package_name": "com.example.testfirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD81stRRpEkENKS7Mj8tVa1MUrPkorUeqM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
