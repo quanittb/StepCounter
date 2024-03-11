@@ -24,6 +24,10 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
         const val LINK_TERM ="https://sites.google.com/view/step-counter-walk-tracker-tos/home"
         const val LINK_POLICY ="https://sites.google.com/view/step-counter-track-walk-policy/home"
     }
+    override fun onStop() {
+        super.onStop()
+        Log.d("abcd","Stop setting")
+    }
 
     override fun initView() {
         setValue()

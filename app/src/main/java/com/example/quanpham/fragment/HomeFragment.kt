@@ -1,5 +1,6 @@
 package com.example.quanpham.fragment
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.quanpham.base.BaseFragment
@@ -17,5 +18,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     override fun initView() {
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("abcd","Stop home")
     }
 }
