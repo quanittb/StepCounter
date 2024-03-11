@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FFFFFF" /> <!-- Màu nền của Layout -->
+    <corners android:radius="20dp" /> <!-- Bán kính góc cong, thay đổi giá trị 10dp thành bất kỳ giá trị nào bạn muốn -->
+</shape>

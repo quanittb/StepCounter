@@ -1,0 +1,218 @@
+<resources>
+    <string name="app_name">Step counter</string>
+    <string name="this_action_can_contain_ad">This action can contain ad</string>
+    <string name="facebook_app_id" translatable="false">694991312016869</string>
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_spain" translatable="false">Spanish</string>
+    <string name="language_portugal" translatable="false">Portuguese</string>
+    <string name="language_vietnam" translatable="false">Vietnamese</string>
+    <string name="language_hindi" translatable="false">भारतीय भाषा</string>
+    <string name="language_germany" translatable="false">German</string>
+    <string name="language_brazil" translatable="false">Lingua Brasilia</string>
+    <string name="language_japan" translatable="false">日本</string>
+    <string name="language_korean" translatable="false">Korean</string>
+    <string name="language_france" translatable="false">French</string>
+    <string name="language_china" translatable="false">中国人</string>
+    <string name="languages" translatable="false">Language</string>
+    <string name="report">Report</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
+    <string name="day">Day</string>
+    <string name="steps">Steps</string>
+    <string name="kcal" translatable="false">Kcal</string>
+    <string name="km" translatable="false">Km</string>
+    <string name="h" translatable="false">H</string>
+    <string name="home">Home</string>
+    <string name="health">Health</string>
+    <string name="calories">Calories</string>
+    <string name="distance">Distance</string>
+    <string name="month_january">January</string>
+    <string name="month_february">February</string>
+    <string name="month_march">March</string>
+    <string name="month_april">April</string>
+    <string name="month_may">May</string>
+    <string name="month_june">June</string>
+    <string name="month_july">July</string>
+    <string name="month_august">August</string>
+    <string name="month_september">September</string>
+    <string name="month_october">October</string>
+    <string name="month_november">November</string>
+    <string name="month_december">December</string>
+
+    <string name="_month_jan">Jan</string>
+    <string name="_month_feb">Feb</string>
+    <string name="_month_mar">Mar</string>
+    <string name="_month_apr">Apr</string>
+    <string name="_month_may">May</string>
+    <string name="_month_jun">Jun</string>
+    <string name="_month_jul">Jul</string>
+    <string name="_month_aug">Aug</string>
+    <string name="_month_sep">Sep</string>
+    <string name="_month_oct">Oct</string>
+    <string name="_month_nov">Nov</string>
+    <string name="_month_dec">Dec</string>
+
+    <string name="skip">Skip</string>
+    <string name="we_will_use_this_data_to_give_you_a_better_diet_type_for_you">We will use this data to give you a better diet type for you</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string name="lbs" translatable="false">lbs</string>
+    <string name="lb" translatable="false">lb</string>
+    <string name="cm" translatable="false">cm</string>
+    <string name="kg" translatable="false">kg</string>
+    <string name="your_current_weight"><font color="#173430">Your </font><font color="#19B888">current weight</font></string>
+    <string name="what_is_your_gender"><font color="#173430">What is your</font><font color="#19B888"> gender?</font></string>
+    <string name="how_tall_are_you"><font color="#173430">How </font> <font color="#19B888">tall </font> <font color="#173430">are you ?</font></string>
+    <string name="how_old_are_you"><font color="#173430">How </font><font color="#19B888">old </font><font color="#173430">are you ?</font></string>
+    <string name="automatically_calculate_on_your_height"><font color="#173430">Automatically calculate on your height  </font></string>
+    <string name="settings">Settings</string>
+    <string name="steps_goal">Steps Goal</string>
+    <string name="gender">Gender</string>
+    <string name="age">Age</string>
+    <string name="weight">Weight</string>
+    <string name="sensitive">Sensitive</string>
+    <string name="metric_imperial_unit">Metric &amp; Imperial Unit</string>
+    <string name="general">General</string>
+    <string name="every_day">Every day</string>
+    <string name="kg_cm_km" translatable="false">kg/cm/km</string>
+    <string name="language">Language</string>
+    <string name="privacy">Privacy</string>
+    <string name="term">Term</string>
+    <string name="sen_1" translatable="false">Sen 1</string>
+    <string name="sen_2" translatable="false">Sen 2</string>
+    <string name="sen_3" translatable="false">Sen 3</string>
+    <string name="sen_4" translatable="false">Sen 4</string>
+    <string name="sen_5" translatable="false">Sen 5</string>
+    <string name="rate_app">Rate app</string>
+    <string name="save_lowercase">Save</string>
+    <string name="save">Save</string>
+    <string name="calories_calculation_needs_it">Calories calculation needs it</string>
+    <string name="ft" translatable="false">ft</string>
+    <string name="high_sensitivity_mean_small_movements_will_be_counted_as_steps">High sensitivity mean small movements will be counted as steps</string>
+    <string name="low">Low</string>
+    <string name="high">High</string>
+    <string name="lbs_ft_mile" translatable="false">lbs/ft/mile</string>
+    <string name="reminder">Reminder</string>
+    <string name="daily_exercise_reminder">Daily Exercise Reminder</string>
+    <string name="repeat">Repeat</string>
+    <string name="time">Time</string>
+    <string name="time_format">%02d</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="current">Current</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="step_length">Step length</string>
+    <string name="your_step_length_is_about_0_4_your_height">Your step length is about 0.4* your height</string>
+    <string name="we_are_working_hard_for_a_better_user_experience">We are working hard for a better user experience</string>
+    <string name="image">Image</string>
+    <string name="we_are_very_appreciate_if_you_rate_for_us">We are very appreciate if you rate for us</string>
+    <string name="please_leave_feedback_to_help_us_improve_product">Please leave feedback to help us improve product</string>
+    <string name="_onboarding_1_title">Record activity results</string>
+    <string name="_onboarding_1_description">Record activities to get a more intuitive view of your health</string>
+    <string name="_onboarding_2_title">Follow the chart in the most intuitive way</string>
+    <string name="_onboarding_2_description">Helps review your fitness activities in the most intuitive way</string>
+    <string name="_onboarding_3_title">Health and life are improved in the best way</string>
+    <string name="_onboarding_3_description">Your health and life improve every day</string>
+    <string name="next">Next</string>
+    <string name="_get_started">Get Started</string>
+    <string name="without_this_authorization_the_app_will_not_work">Without this Authorization, the app <font color="#A9DD38"><b>will not work </b></font> </string>
+    <string name="allow">ALLOW</string>
+    <string name="physical_activity_permission_required">Physical Activity Permission Required</string>
+    <string name="why_do_we_need_permission">Why do we need permission ?</string>
+    <string name="tap_permissions">1. Tap “Permissions”</string>
+    <string name="_2_tap_physical_activity">2. Tap “Physical activity”</string>
+    <string name="_3_tap_allow">3. Tap “Allow”</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="to_make_sure_app_work_properly">To make sure app work properly</string>
+    <string name="auto_start">Auto start</string>
+    <string name="protected_apps">Protected apps</string>
+    <string name="do_you_like_the_app">Do you like the app ?</string>
+    <string name="let_us_know_your_experience_5_stars_is_the_best_on_google_play">Let us know your experience 5 stars is the best on google play</string>
+    <string name="select_email_application_to_continue">Select email application to continue</string>
+    <string name="we_love_you_too">We love you too</string>
+    <string name="thanks_for_your_feedback">Thanks for your feedback</string>
+    <string name="oh_no">Oh no !</string>
+    <string name="set_goal">Set Goal</string>
+    <string name="set_target_achieve_your_goal">Set target achieve your goal</string>
+    <string name="recommend_6000_step_a_day_base_on_your_parameter"><font color="#78828A">Recommend:</font> <font color="#A9DD38">6000</font><font color="#78828A">/step a day (base on your parameter)</font></string>
+    <string name="good_morning">Good Morning ☀</string>
+    <string name="good_evening">Good evening 🌙</string>
+    <string name="good_afternoon">Good afternoon ⛅️</string>
+    <string name="welcome">Welcome</string>
+    <string name="let_s_set_a_step_goal">Let’s set a Step Goal</string>
+    <string name="step_goal">Step Goal</string>
+    <string name="exercise">Exercise</string>
+    <string name="_km" translatable="false">Km</string>
+    <string name="_mile" translatable="false">Mile</string>
+    <string name="_min" translatable="false">Min</string>
+    <string name="yesterday_you_walked">Yesterday you walked</string>
+    <string name="daily_average">Daily average: </string>
+    <string name="pause">Pause</string>
+    <string name="steps_keep_it_up">steps, keep it up!</string>
+
+    <string name="the_average_value">The average value</string>
+    <string name="add">Add</string>
+    <string name="last_30_days">Last 30 days</string>
+    <string name="body_mass_index">Body Mass Index</string>
+    <string name="bmi_score">BMI score :</string>
+    <string name="height">Height</string>
+    <string name="in" translatable="false">in</string>
+    <string name="invalid_weight">Invalid weight</string>
+    <string name="invalid_height">Invalid height</string>
+    <string name="underweight">"Underweight, "</string>
+    <string name="normal">Normal</string>
+    <string name="overweight">Overweight</string>
+    <string name="obesity">Obesity</string>
+    <string name="invalid_date">Invalid date</string>
+    <string name="_mon">Mon </string>
+    <string name="_tue">Tue </string>
+    <string name="_wed">Wed </string>
+    <string name="_thu">Thu </string>
+    <string name="_fri">Fri </string>
+    <string name="_sun">Sun </string>
+    <string name="_sat">Sat </string>
+    <string name="yesterday_total_steps">Yesterday total steps </string>
+    <string name="check_your_walking_report">Check your walking report!</string>
+    <string name="_of">of</string>
+    <string name="mile" translatable="false">mile</string>
+
+    <string name="rate_us">Rate us</string>
+    <string name="total_value">Total value</string>
+    <string name="title_benefits">Reasons you...</string>
+    <string name="des_benefits">Reasons you should exercise and benefits of walking 🫢</string>
+    <string name="des_benefits_exercise">Reasons you should exercise and benefits of exercise 🫢</string>
+    <string name="see_more">See more</string>
+    <string name="detail">Detail</string>
+    <string name="detail_exercise">According to the NHS, it is medically proven that women who are regularly physically active have:\n Up to 35% reduced risk of coronary heart disease and stroke Up to 50% reduction in risk of type diabetes 2 Up to 50% reduction in colon cancer risk Up to 20% reduction in breast cancer risk 30% reduction in risk of early death Up to 83% reduction in osteoarthritis risk Up to 68% reduction in hip fracture risk 30 % risk of falls (in older adults) Up to 30% reduction in risk of depression Up to 30% reduction in dementia risk</string>
+    <string name="play" translatable="false">Play</string>
+    <string name="see_chart" translatable="false">See chart</string>
+    <string name="you_should_look_at_the_weight_chart_to_take_better_care_of_yourself" translatable="false">You should look at the weight chart to take better care of yourself</string>
+    <string name="if_you_forgot_to_record_your_steps_record_them_to_monitor_your_health" translatable="false">If you forgot to record your steps, record them to monitor your health</string>
+
+    <string name="if_you_forget">If you forget...😳</string>
+    <string name="if_you_forgot_to_record_your_steps_record_them_to_monitor_your_health_">If you forgot to record your steps, record them to monitor your health 🫢</string>
+    <string name="you_just_gained_weight">You just gained weight...</string>
+    <string name="you_should_look_at_the_weight_chart_to_take_better_care_of_yourself_">You should look at the weight chart to take better care of yourself🤗</string>
+    <string name="step_count_chart">Step count chart</string>
+    <string name="watch_now">watch now</string>
+    <string name="calorie_number_chart">Calorie number chart</string>
+    <string name="time_number_chart">Time number chart</string>
+    <string name="distance_number_chart">Distance number chart</string>
+    <string name="follow_">Follow...🙃 </string>
+    <string name="follow_the_chart_for_more_details_about_your_health_this_week">Follow the chart for more details about your health this week 🫢</string>
+    <string name="_follow_the_chart_for_more_details_about_your_health_this_week">Follow the chart for more details about your health this week</string>
+    <string name="follow_the_chart_for_more_details_about_your_health_today">Follow the chart for more details about your health today</string>
+    <string name="_follow_the_chart_for_more_details_about_your_health_today">Follow the chart for more details about your health today 🫢</string>
+
+    <string name="add_your_steps_to_track_your_health_in_the_most_intuitive_way">Add your steps to track your health in the most intuitive way</string>
+    <string name="add_your_steps">Add your steps...</string>
+    <string name="add_your_steps_to_track_your_health_in_the_most_intuitive_way_">Add your steps to track your health in the most intuitive way🤗</string>
+    <string name="add_your_calories">Add your calories...</string>
+    <string name="add_your_calories_to_track_your_health_in_the_most_intuitive_way_">Add your calories to track your health in the most intuitive way🤗</string>
+    <string name="add_your_calories_to_track_your_health_in_the_most_intuitive_way">Add your calories to track your health in the most intuitive way</string>
+
+</resources>

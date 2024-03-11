@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:background="@color/color_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_WellCome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/good_morning"
+                android:gravity="center"
+                android:fontFamily="@font/mukta_bold"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:textSize="@dimen/_20ssp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+            <LinearLayout
+                android:id="@+id/ln_content_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_WellCome"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/yesterday_you_walked"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/mukta_medium"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="#617D79"
+                    app:layout_constraintTop_toBottomOf="@id/tv_WellCome"
+                    />
+                <TextView
+                    android:id="@+id/tv_content_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2489"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_2sdp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/mukta_medium"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="#06A003"
+                    app:layout_constraintTop_toBottomOf="@id/tv_WellCome"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/steps_keep_it_up"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/mukta_medium"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="#617D79"
+                    app:layout_constraintTop_toBottomOf="@id/tv_WellCome"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ln_chart_step"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/ln_content_header"
+                android:background="@drawable/bg_chart_step"
+                android:layout_marginHorizontal="@dimen/_14sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_3sdp"
+                    android:layout_height="wrap_content">
+
+                    <com.example.quanpham.widget.CalorieChart
+                        android:background="@color/white"
+                        android:id="@+id/chart"
+                        android:layout_width="match_parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        app:layout_constraintEnd_toEndOf="@+id/chart"
+                        app:layout_constraintStart_toStartOf="@+id/chart"
+                        app:layout_constraintBottom_toBottomOf="@id/chart"
+                        app:layout_constraintTop_toTopOf="@id/chart">
+
+                        <ImageView
+                            android:id="@+id/iv_fire"
+                            android:layout_width="wrap_content"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:visibility="gone"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_fire_01" />
+
+                        <TextView
+                            android:id="@+id/tv_step_real_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_50sdp"
+                            android:fontFamily="@font/mukta_semi_bold"
+                            android:text="9"
+                            android:textColor="@color/color_text_home"
+                            android:textSize="@dimen/_35sdp" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_pause"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/mukta_bold"
+                                android:text="@string/pause"
+                                android:gravity="center"
+                                android:visibility="gone"
+                                android:background="@drawable/bg_tv_pause_step_home"
+                                android:textColor="@color/color_text_pause"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                android:textSize="@dimen/_12ssp" />
+
+                            <LinearLayout
+                                android:id="@+id/ln_target"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/mukta_medium"
+                                    android:text="@string/_of"
+                                    android:gravity="center"
+                                    android:textColor="#9CA4AB"
+                                    android:textSize="@dimen/_11ssp" />
+                                <TextView
+                                    android:id="@+id/tv_target"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/mukta_medium"
+                                    android:layout_marginHorizontal="@dimen/_2sdp"
+                                    android:text="6000"
+                                    android:gravity="center"
+                                    android:textColor="#9CA4AB"
+                                    android:textSize="@dimen/_11ssp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/mukta_medium"
+                                    android:text="@string/steps"
+                                    android:gravity="center"
+                                    android:textColor="#9CA4AB"
+                                    android:textSize="@dimen/_11ssp" />
+                            </LinearLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        <ImageView
+                            android:id="@+id/iv_step_start"
+                            android:layout_width="wrap_content"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_pause_step_home" />
+
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/daily_average"
+                        android:fontFamily="@font/mukta_regular"
+                        android:textColor="#434E58"
+                        android:textSize="@dimen/_12sdp"
+                        />
+                    <TextView
+                        android:id="@+id/tv_step_now"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:text="1234"
+                        android:fontFamily="@font/mukta_semi_bold"
+                        android:textColor="#173430"
+                        android:textSize="@dimen/_12sdp"
+                        />
+                </LinearLayout>
+
+                <com.mobiai.base.chart.weekly_review.WeekReviewView
+                    android:id="@+id/chartWeek"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_3sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ln_goal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_step_goal"
+                android:layout_margin="@dimen/_14sdp"
+                app:layout_constraintTop_toBottomOf="@id/ln_chart_step"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:orientation="vertical">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ctl_stepGoal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/_10sdp"
+                    >
+                    <ImageView
+                        android:id="@+id/iv_close"
+                        android:layout_width="@dimen/_24sdp"
+                        android:layout_height="@dimen/_24sdp"
+                        android:src="@drawable/ic_close_home"
+                        android:elevation="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <LinearLayout
+                        android:id="@+id/ln_content_goal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="@dimen/_14sdp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        >
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_taget"
+                            />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingHorizontal="@dimen/_10sdp"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/color_text_home"
+                                android:text="@string/welcome"
+                                android:fontFamily="@font/mukta_semi_bold"
+                                android:textSize="@dimen/_14ssp"
+                                android:singleLine="true"
+                                android:ellipsize="end"
+                                />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#434E58"
+                                android:text="@string/let_s_set_a_step_goal"
+                                android:singleLine="true"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/mukta_regular"
+                                android:textSize="@dimen/_12ssp"
+                                />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/btn_step_goal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/ln_content_goal"
+                        android:background="@drawable/bg_btn_step_goal"
+                        android:text="@string/step_goal"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/mukta_semi_bold"
+                        android:textSize="@dimen/_14ssp"
+                        android:layout_marginHorizontal="@dimen/_14sdp"
+                        android:layout_marginVertical="@dimen/_12sdp"
+                        android:gravity="center"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ln_exercise"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_exercise"
+                android:layout_margin="@dimen/_14sdp"
+                app:layout_constraintTop_toBottomOf="@id/ln_goal"
+                app:layout_constraintBottom_toTopOf="@id/view"
+                android:paddingHorizontal="@dimen/_18sdp"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/_10sdp"
+                    >
+                    <TextView
+                        android:id="@+id/tv_exercise"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/exercise"
+                        android:fontFamily="@font/mukta_bold"
+                        android:textSize="@dimen/_16ssp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:textColor="@color/black"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/tv_exercise"
+                        android:layout_marginTop="@dimen/_10ssp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            >
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_timer_exercise"
+                                />
+                            <TextView
+                                android:id="@+id/tv_timer_min_home"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="0h 0m"
+                                android:gravity="center"
+                                android:paddingHorizontal="@dimen/_4sdp"
+                                android:singleLine="true"
+                                android:ellipsize="end"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:fontFamily="@font/mukta_semi_bold"
+                                android:textSize="@dimen/_16ssp"
+                                android:layout_gravity="center"
+                                android:textColor="@color/color_text_home"
+                                />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/_min"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:ellipsize="end"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/mukta_medium"
+                                android:textSize="@dimen/_12ssp"
+                                android:textColor="#78828A"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            >
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_step_exercise"
+                                />
+                            <TextView
+                                android:id="@+id/tv_km_home"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="0.0"
+                                android:paddingHorizontal="@dimen/_4sdp"
+                                android:gravity="center"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:fontFamily="@font/mukta_semi_bold"
+                                android:textSize="@dimen/_16ssp"
+                                android:layout_gravity="center"
+                                android:textColor="@color/color_text_home"
+                                />
+                            <TextView
+                                android:id="@+id/tv_km"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/_km"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:ellipsize="end"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/mukta_medium"
+                                android:textSize="@dimen/_12ssp"
+                                android:textColor="#78828A"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_kcal_exercise" />
+
+                            <TextView
+                                android:id="@+id/tv_kcal_home"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:paddingHorizontal="@dimen/_4sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:fontFamily="@font/mukta_semi_bold"
+                                android:text="0.0"
+                                android:textColor="@color/color_text_home"
+                                android:textSize="@dimen/_16ssp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/mukta_medium"
+                                android:text="@string/kcal"
+                                android:textColor="#78828A"
+                                android:textSize="@dimen/_12ssp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="@dimen/_130sdp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

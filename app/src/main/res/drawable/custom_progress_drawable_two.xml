@@ -1,0 +1,23 @@
+<!-- custom_progress_drawable.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Phần chưa đạt được (màu trắng) -->
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/_7sdp"/>
+            <solid android:color="#E3E9ED" />
+        </shape>
+    </item>
+
+    <!-- Phần đã đạt được (gradient màu đen từ trái qua phải) -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/_7sdp"/>
+                <gradient
+                    android:startColor="@color/start_color_2"
+                    android:endColor="@color/end_color_2"
+                    android:angle="0"/> <!-- Điều này xác định góc gradient -->
+            </shape>
+        </clip>
+    </item>
+</layer-list>

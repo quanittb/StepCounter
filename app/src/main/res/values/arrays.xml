@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="markArray">
+        <item>@string/sen_1</item>
+        <item>@string/sen_2</item>
+        <item>@string/sen_3</item>
+        <item>@string/sen_4</item>
+        <item>@string/sen_5</item>
+    </string-array>
+</resources>
