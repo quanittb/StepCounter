@@ -48,7 +48,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
         binding.btnSignin.setOnClickListener {
             if (checkValue()) {
                 showToast("Tesst")
-                singInApp()
+                singUpApp()
             } else {
                 showToast(getString(R.string.enter_all_value))
             }
@@ -58,7 +58,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
         }
     }
 
-    private fun singInApp() {
+    private fun singUpApp() {
 
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnSuccessListener { auth ->
