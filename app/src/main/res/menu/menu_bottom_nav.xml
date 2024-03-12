@@ -10,7 +10,10 @@
         android:title="@string/report"
         android:icon="@drawable/ic_report"
         />
-
+    <item android:id="@+id/action_rank"
+        android:title="@string/rank"
+        android:icon="@drawable/ic_rank_disable"
+        />
     <item android:id="@+id/action_health"
         android:title="@string/health"
         android:icon="@drawable/ic_health" />

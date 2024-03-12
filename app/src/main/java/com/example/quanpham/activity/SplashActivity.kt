@@ -47,7 +47,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                 LanguageActivity.start(this)
             else
                 if (auth.currentUser == null) {
-                    SignInActivity.start(this, true)
+                    SignUpActivity.start(this, true)
                 } else {
                     MainActivity.startMain(this, true)
                 }

@@ -4,17 +4,16 @@ import android.content.Context
 import android.content.Intent
 import com.example.quanpham.R
 import com.example.quanpham.base.BaseActivity
-import com.example.quanpham.databinding.ActivitySigninBinding
+import com.example.quanpham.databinding.ActivitySignInBinding
+import com.example.quanpham.fragment.ForgotPassFragment
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.showToast
 
-class SignInActivity : BaseActivity<ActivitySigninBinding>() {
-    override fun getViewBinding() = ActivitySigninBinding.inflate(layoutInflater)
+class SignInActivity : BaseActivity<ActivitySignInBinding>() {
+    override fun getViewBinding() = ActivitySignInBinding.inflate(layoutInflater)
     private var email = ""
-    private var name = ""
     private var pass = ""
-    private var repass = ""
 
     companion object {
         fun start(context: Context, clearTask: Boolean) {
@@ -31,10 +30,8 @@ class SignInActivity : BaseActivity<ActivitySigninBinding>() {
     private fun checkValue(): Boolean {
         email = binding.email.text.toString()
         pass = binding.passrod.text.toString()
-        repass = binding.repass.text.toString()
-        name = binding.userName.text.toString()
 
-        if (email.isEmpty() || pass.isEmpty() || repass.isEmpty() || name.isEmpty()) {
+        if (email.isEmpty() || pass.isEmpty()) {
             return false
         }
 
@@ -47,34 +44,38 @@ class SignInActivity : BaseActivity<ActivitySigninBinding>() {
     override fun createView() {
         binding.btnSignin.setOnClickListener {
             if (checkValue()) {
-                showToast("Tesst")
-                singInApp()
+                signApp()
             } else {
                 showToast(getString(R.string.enter_all_value))
             }
         }
-        binding.txtSignup.setOnClickListener { v->
+
+        binding.txtSignup.setOnClickListener {
             SignUpActivity.start(this,true)
+        }
+        binding.txtfogotpass.setOnClickListener {
+            addFragment(ForgotPassFragment(),android.R.id.content,true)
         }
     }
 
-    private fun singInApp() {
-
-        auth.createUserWithEmailAndPassword(email, pass)
-            .addOnSuccessListener { auth ->
-                val user = Users(auth.user?.uid, name, email, pass)
-                firestore.collection(Constant.KEY_USER).document(user.id!!).set(user)
+    private fun signApp() {
+        auth.signInWithEmailAndPassword(email,pass)
+            .addOnSuccessListener {
+                firestore.collection(Constant.KEY_USER)
+                    .document(it.user!!.uid)
+                    .get()
                     .addOnSuccessListener {
-                        MainActivity.startMain(this, true)
-                        finish()
-                    }.addOnFailureListener {
+
+                        usLoggin?.postValue(it.toObject(Users::class.java))
+                        MainActivity.startMain(this,true)
+
+                    }
+                    .addOnFailureListener {
                         showToast(it.message.toString())
                     }
-            }.addOnFailureListener {
+            }
+            .addOnFailureListener {
                 showToast(it.message.toString())
             }
-
-
     }
 }
-

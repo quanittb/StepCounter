@@ -20,7 +20,7 @@
             android:layout_marginTop="@dimen/_120sdp"
             android:fontFamily="@font/mukta_bold"
             android:gravity="center"
-            android:text="@string/sign_in"
+            android:text="@string/sign_up"
             android:textSize="@dimen/_18sdp" />
 
         <TextView
@@ -202,7 +202,7 @@
             android:fontFamily="@font/mukta_bold"
             android:gravity="center"
             android:paddingVertical="@dimen/_8sdp"
-            android:text="@string/sign_in"
+            android:text="@string/sign_up"
             android:textColor="@color/black"
             android:textSize="@dimen/_16sdp" />
 
@@ -236,7 +236,7 @@
                 android:fontFamily="@font/mukta_medium"
                 android:gravity="center"
                 android:paddingVertical="@dimen/_8sdp"
-                android:text="@string/sign_up"
+                android:text="@string/sign_in"
                 android:textColor="#A9DD38"
                 android:textSize="@dimen/_14sdp" />
         </LinearLayout>
