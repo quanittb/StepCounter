@@ -214,5 +214,19 @@
     <string name="add_your_calories">Add your calories...</string>
     <string name="add_your_calories_to_track_your_health_in_the_most_intuitive_way_">Add your calories to track your health in the most intuitive way🤗</string>
     <string name="add_your_calories_to_track_your_health_in_the_most_intuitive_way">Add your calories to track your health in the most intuitive way</string>
+    <string name="sign_in">Sign In</string>
+    <string name="register_now_the_application">Register now to experience the application</string>
+    <string name="user_name">User name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="reenter_password">Entered the password</string>
+    <string name="have_an_account">Have an account?</string>
+    <string name="enter_all_value">Please enter all value</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in_now_to_experience_the_application">Login now to experience the application</string>
+    <string name="forget_pass">Forget pass?</string>
+    <string name="vui_l_ng_ki_m_tra_email_c_a_b_n_v_t_o_m_t_kh_u_m_i_theo_ng_link_ch_ng_t_i_g_i_t_i">Vui lòng kiểm tra email của bạn và tạo mật khẩu mới theo đường link chúng tôi gửi tới</string>
+    <string name="back">Back</string>
+    <string name="send">Send</string>
 
 </resources>

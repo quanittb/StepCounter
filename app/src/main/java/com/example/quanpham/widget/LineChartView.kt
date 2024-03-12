@@ -98,7 +98,7 @@ class LineChartView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun getPointByIndex(currentIndex: Int, calback: (PointF) -> Unit) {
+    private fun getPointByIndex(currentIndex: Int, calback: (PointF) -> Unit) {
         listPoint.forEachIndexed { index, rectF ->
             if (index == currentIndex) {
                 calback(PointF(rectF.x,rectF.y))

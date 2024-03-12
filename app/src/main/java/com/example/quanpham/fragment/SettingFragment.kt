@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.quanpham.R
 import com.example.quanpham.activity.LanguageActivity
+import com.example.quanpham.activity.SignInActivity
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentSettingsBinding
 import com.example.quanpham.language.Language
@@ -49,6 +50,11 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
         binding.btnReminder.setOnClickListener{
         }
         binding.btnStepLength.setOnClickListener{
+        }
+
+        binding.title.setOnClickListener {
+            SignInActivity.start(this@SettingFragment.requireContext(),true)
+            auth.signOut()
         }
 
     }

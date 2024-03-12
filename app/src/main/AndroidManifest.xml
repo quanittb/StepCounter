@@ -18,6 +18,16 @@
             android:exported="true">
         </activity>
         <activity
+            android:windowSoftInputMode="adjustResize"
+            android:name=".activity.SignInActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:windowSoftInputMode="adjustResize"
+            android:name=".activity.SignUpActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>

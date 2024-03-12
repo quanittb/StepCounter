@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.quanpham" />
-                  <option name="mobileSdkAppId" value="1:1073126543345:android:0e6ee7c13845d837f5be50" />
-                  <option name="projectId" value="test-firebase-3c120" />
-                  <option name="projectNumber" value="1073126543345" />
+                  <option name="mobileSdkAppId" value="1:191239284221:android:1923c3e03dd75bcc54a594" />
+                  <option name="projectId" value="step-counter-a5790" />
+                  <option name="projectNumber" value="191239284221" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

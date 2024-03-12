@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:layout_gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:padding="@dimen/_16sdp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_120sdp"
+            android:fontFamily="@font/mukta_bold"
+            android:gravity="center"
+            android:text="@string/forget_pass"
+            android:textSize="@dimen/_18sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:text="@string/vui_l_ng_ki_m_tra_email_c_a_b_n_v_t_o_m_t_kh_u_m_i_theo_ng_link_ch_ng_t_i_g_i_t_i"
+            android:textColor="#989898"
+            android:textSize="@dimen/_14sdp" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:background="@drawable/bg_input_account"
+            android:padding="@dimen/_8sdp">
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:src="@drawable/src_email_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#989898" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:background="#00000000"
+                android:fontFamily="@font/mukta_medium"
+                android:hint="@string/email"
+                android:maxLines="1"
+                android:textSize="@dimen/_14sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <TextView
+            android:id="@+id/btn_signin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:background="@drawable/btn_account"
+            android:fontFamily="@font/mukta_bold"
+            android:gravity="center"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/send"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sdp" />
+
+
+        <TextView
+            android:id="@+id/btn_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:background="@drawable/btn_account"
+            android:fontFamily="@font/mukta_bold"
+            android:gravity="center"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/back"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sdp" />
+
+
+    </LinearLayout>
+
+</ScrollView>
+
+
+
+
+
+
+
+
+
+
+
+

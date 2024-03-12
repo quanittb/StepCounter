@@ -60,6 +60,13 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation 'com.github.bumptech.glide:glide:4.15.1'
 
+    implementation 'com.google.firebase:firebase-database:20.3.0'
+    implementation 'com.google.firebase:firebase-firestore:24.10.1'
+    implementation 'com.google.firebase:firebase-storage:20.3.0'
+    implementation 'com.google.firebase:firebase-auth:22.3.1'
+
+    implementation 'com.google.code.gson:gson:2.10.1'
+
     def lottieVersion = "3.4.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
@@ -67,7 +74,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-//
-//    implementation platform('com.google.firebase:firebase-bom:32.7.4')
-//    implementation 'com.google.firebase:firebase-analytics'
+
+    implementation platform('com.google.firebase:firebase-bom:32.7.4')
+    implementation 'com.google.firebase:firebase-analytics'
 }
