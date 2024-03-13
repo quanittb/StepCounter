@@ -63,7 +63,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
 
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnSuccessListener { auth ->
-                val user = Users(auth.user?.uid, name, email, pass)
+                val user = Users(auth.user?.uid, email, pass, name)
                 firestore.collection(Constant.KEY_USER).document(user.id!!).set(user)
                     .addOnSuccessListener {
                         MainActivity.startMain(this, true)

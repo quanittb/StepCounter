@@ -170,7 +170,6 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         isGoToSetting = true
     }
 
-
     companion object {
         var isGoToSetting = false
         var isAdsRewardShowing = false

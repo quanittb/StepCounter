@@ -8,12 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySplashBinding
-import com.example.quanpham.db.model.Users
 import com.example.quanpham.lib.SharedPreferenceUtils
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
-import com.google.firebase.database.FirebaseDatabase
 
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
