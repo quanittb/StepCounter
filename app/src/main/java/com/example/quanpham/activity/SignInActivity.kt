@@ -51,13 +51,14 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
         }
 
         binding.txtSignup.setOnClickListener {
-            SignUpActivity.start(this,true)
+            supportFragmentManager.popBackStack()
+            SignUpActivity.start(this,false)
         }
         binding.txtfogotpass.setOnClickListener {
+            supportFragmentManager.popBackStack()
             addFragment(ForgotPassFragment(),android.R.id.content,true)
         }
     }
-
     private fun signApp() {
         auth.signInWithEmailAndPassword(email,pass)
             .addOnSuccessListener {

@@ -41,13 +41,13 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         }
 
 
-    fun openNextScreen() {
+    private fun openNextScreen() {
         Handler().postDelayed({
             if (SharedPreferenceUtils.firstOpenApp)
                 LanguageActivity.start(this)
             else
                 if (auth.currentUser == null) {
-                    SignUpActivity.start(this, true)
+                    SignInActivity.start(this, true)
                 } else {
                     MainActivity.startMain(this, true)
                 }

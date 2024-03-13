@@ -47,14 +47,15 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
     override fun createView() {
         binding.btnSignin.setOnClickListener {
             if (checkValue()) {
-                showToast("Tesst")
+                showToast("Test")
                 singUpApp()
             } else {
                 showToast(getString(R.string.enter_all_value))
             }
         }
         binding.txtSignup.setOnClickListener { v->
-            SignInActivity.start(this,true)
+            supportFragmentManager.popBackStack()
+            SignInActivity.start(this,false)
         }
     }
 

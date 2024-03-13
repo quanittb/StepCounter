@@ -3,28 +3,32 @@ package com.example.quanpham.fragment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.quanpham.base.BaseFragment
-import com.example.quanpham.databinding.ActivityForgotPassBinding
+import com.example.quanpham.databinding.FragmnetForgotPassBinding
 import com.example.quanpham.utility.showToast
 
-class ForgotPassFragment : BaseFragment<ActivityForgotPassBinding>() {
+class ForgotPassFragment : BaseFragment<FragmnetForgotPassBinding>() {
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ) = ActivityForgotPassBinding.inflate(inflater)
+    ) = FragmnetForgotPassBinding.inflate(inflater)
 
     override fun initView() {
         binding.btnSignin.setOnClickListener {
             auth.sendPasswordResetEmail(binding.email.text.toString())
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        showToast("Send successfull")
-                        closeFragment(this)
+                        showToast("Send successfully")
+                        requireActivity().supportFragmentManager.beginTransaction().hide(this).commit()
                     }
                 }
                 .addOnFailureListener {
                     showToast(it.message.toString())
                 }
         }
-        binding.btnBack.setOnClickListener {  closeFragment(this) }
+    }
+
+    override fun handlerBackPressed() {
+        super.handlerBackPressed()
+        requireActivity().supportFragmentManager.beginTransaction().hide(this).commit()
     }
 }

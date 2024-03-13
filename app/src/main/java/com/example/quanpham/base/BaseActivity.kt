@@ -63,13 +63,13 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
             .allowMainThreadQueries()
             .build()
         decorView = window.decorView
-        getLogginUser {
+        getLoginUser {
             usLoggin?.postValue(it)
         }
         createView()
     }
 
-    private fun getLogginUser(user: (Users?) -> Unit) {
+    private fun getLoginUser(user: (Users?) -> Unit) {
         if (auth.currentUser != null) {
             firestore.collection(Constant.KEY_USER)
                 .document(auth.currentUser!!.uid)
