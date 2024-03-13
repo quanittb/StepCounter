@@ -3,19 +3,21 @@ package com.example.quanpham.db.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.util.foreignKeyCheck
+import com.example.quanpham.db.AppDatabase
 
 @Entity(tableName = "Steps")
 class Steps (
     @PrimaryKey(autoGenerate = true)
     var id : Long? = null ,
     @ColumnInfo
-    var buocChan : Long? = null,
+    var step : Long? = null,
     @ColumnInfo
-    var thoiDiemBatDau : String? = null,
+    var startTime : String? = null,
     @ColumnInfo
-    var thoiGianHoatDong : Long? = null,
+    var activeTime : Long? = null,
     @ColumnInfo
     var calo : Long? = null,
     @ColumnInfo
-    var quangDuong : Long? = null,
+    var distance : Long? = null
     )

@@ -5,6 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentHomeBinding
+import com.example.quanpham.db.model.Steps
+import com.example.quanpham.db.model.Weights
+import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.showToast
+import com.google.firebase.Firebase
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     companion object{
@@ -17,14 +24,32 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun initView() {
-        usLoggin?.observeForever {
-            binding.btnStepGoal.text=""+it?.email
+        usLoggin?.observe(this@HomeFragment) {
+            binding.btnStepGoal.text=""+it?.userName
+
         }
+        addDB()
 
     }
 
     override fun onStop() {
         super.onStop()
         Log.d("abcd","Stop home")
+    }
+    fun addDB(){
+        val database = Firebase.database
+        val myRef = database.getReference("message")
+
+        myRef.setValue("Hello, World!")
+        Log.d("abcd","đã chạy vào đây")
+        FirebaseDatabase.getInstance().getReference(Constant.KEY_WEIGHT).child(auth.currentUser!!.uid).setValue(Weights(1,55F,"") ).addOnSuccessListener {
+                showToast("Thành công")
+                Log.d("abcd","đã chạy")
+        }.addOnFailureListener{
+            showToast(it.message.toString())
+            Log.d("abcd","lỗi ${it.message}")
+
+        }
+        fbDatabase.getReference(Constant.KEY_STEP).child(auth.currentUser!!.uid).push().setValue(Steps(1,1000,"",20,150,2))
     }
 }

@@ -9,7 +9,7 @@ class Weights (
     @PrimaryKey(autoGenerate = true)
     var id : Long? = null ,
     @ColumnInfo
-    var canNang : Float? = null,
+    var weight : Float? = null,
     @ColumnInfo
-    var thoiDiemTao : String? = null,
+    var updateTime : String? = null,
     )
