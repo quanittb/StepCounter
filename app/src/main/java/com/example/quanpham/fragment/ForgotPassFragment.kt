@@ -39,10 +39,11 @@ class ForgotPassFragment : BaseFragment<FragmnetForgotPassBinding>() {
         super.handlerBackPressed()
         requireActivity().supportFragmentManager.beginTransaction().
         setCustomAnimations(
-            R.anim.slide_in,
+            R.anim.slide_out,
             R.anim.fade_out,
             R.anim.fade_in,
-            R.anim.slide_out
+            R.anim.slide_in,
+
         ).remove(this).commit()
     }
 }
