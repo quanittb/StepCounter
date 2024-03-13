@@ -60,7 +60,6 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
     }
 
     private fun singUpApp() {
-
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnSuccessListener { auth ->
                 val user = Users(auth.user?.uid, email, pass, name)

@@ -2,13 +2,20 @@ package com.example.quanpham.activity
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.quanpham.R
 import com.example.quanpham.databinding.ActivityMainBinding
 import com.example.quanpham.base.BaseActivity
+import com.example.quanpham.db.model.Steps
+import com.example.quanpham.db.model.Weights
 import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.fragment.SettingFragment
+import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.showToast
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
 
 class MainActivity : BaseActivity<ActivityMainBinding>(){
@@ -80,11 +87,52 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
         }
     }
 
+    fun addDB() {
+        try {
+
+
+            val database = Firebase.database
+            val myRef = database.getReference("message")
+
+            myRef.setValue("Hello, World!")
+            Log.d("abcd", "đã chạy vào đây")
+
+            val auth = FirebaseAuth.getInstance()
+            val fbDatabase = FirebaseDatabase.getInstance()
+
+            val currentUser = auth.currentUser
+            currentUser?.let { user ->
+                fbDatabase.getReference(Constant.KEY_WEIGHT)
+                    .child("123")
+                    .push()
+                    .setValue(Weights(1, 55F, ""))
+                    .addOnSuccessListener {
+                        showToast("Thành công")
+                        Log.d("abcd", "đã chạy")
+                    }
+                    .addOnFailureListener {
+                        showToast(it.message.toString())
+                        Log.d("abcd", "lỗi ${it.message}")
+                    }
+
+                fbDatabase.getReference(Constant.KEY_STEP)
+                    .child(user.uid)
+                    .push()
+                    .setValue(Steps(1, 1000, "", 20, 150, 2))
+            } ?: run {
+                // Handle case where currentUser is null
+                showToast("User not authenticated")
+            }
+        } catch (e: Exception) {
+            Log.d("abcd", "Err ${e.message}")
+        }
+    }
     override fun getViewBinding() = ActivityMainBinding.inflate(layoutInflater)
 
     override fun createView() {
         initBottomNav()
         setListeners()
+        addDB()
     }
 
 }
