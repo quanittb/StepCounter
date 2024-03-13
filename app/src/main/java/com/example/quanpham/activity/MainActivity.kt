@@ -8,6 +8,8 @@ import com.example.quanpham.databinding.ActivityMainBinding
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.fragment.SettingFragment
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class MainActivity : BaseActivity<ActivityMainBinding>(){
     companion object{

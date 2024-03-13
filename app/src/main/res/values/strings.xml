@@ -214,5 +214,21 @@
     <string name="add_your_calories">Add your calories...</string>
     <string name="add_your_calories_to_track_your_health_in_the_most_intuitive_way_">Add your calories to track your health in the most intuitive way🤗</string>
     <string name="add_your_calories_to_track_your_health_in_the_most_intuitive_way">Add your calories to track your health in the most intuitive way</string>
+    <string name="sign_in">Sign In</string>
+    <string name="register_now_the_application">Register now to experience the application</string>
+    <string name="user_name">User name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="reenter_password">Entered the password</string>
+    <string name="have_an_account">Have an account?</string>
+    <string name="enter_all_value">Please enter all value</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in_now_to_experience_the_application">Login now to experience the application</string>
+    <string name="forget_pass">Forget pass?</string>
+    <string name="back">Back</string>
+    <string name="send">Send</string>
+    <string name="rank">Rank</string>
+    <string name="log_out">Log out</string>
+    <string name="please_enter_your_registered_email_and_check_your_mailbox_to_create_a_new_password">Please enter your registered email and check your mailbox to create a new password</string>
 
 </resources>

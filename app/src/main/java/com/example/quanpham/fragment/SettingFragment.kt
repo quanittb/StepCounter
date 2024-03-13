@@ -1,16 +1,15 @@
 package com.example.quanpham.fragment
 
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.quanpham.R
 import com.example.quanpham.activity.LanguageActivity
+import com.example.quanpham.activity.SignUpActivity
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentSettingsBinding
 import com.example.quanpham.language.Language
 import com.example.quanpham.lib.SharedPreferenceUtils
-import java.lang.StringBuilder
 import java.text.DecimalFormat
 
 class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
@@ -49,6 +48,11 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
         binding.btnReminder.setOnClickListener{
         }
         binding.btnStepLength.setOnClickListener{
+        }
+
+        binding.txtLogOut.setOnClickListener {
+            SignUpActivity.start(this@SettingFragment.requireContext(),true)
+            auth.signOut()
         }
 
     }

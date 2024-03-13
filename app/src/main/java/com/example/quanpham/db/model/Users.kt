@@ -3,21 +3,20 @@ package com.example.quanpham.db.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
-@Entity(tableName = "User")
+@Entity(tableName = "News")
 class Users (
     @PrimaryKey(autoGenerate = true)
-    var id : Long? = null ,
+    var id : String? = null ,
     @ColumnInfo
-    var tenDN : String? = null,
+    var loginName : String? = null,
     @ColumnInfo
-    var matKhau : String? = null,
+    var password : String? = null,
     @ColumnInfo
-    var hoTen : String? = null,
+    var sex : Boolean? = null,
     @ColumnInfo
-    var tuoi : Int? = null,
+    var age : Int? = null,
     @ColumnInfo
-    var gioiTinh : Boolean? = null,
-    @ColumnInfo
-    var chieuCao : Float? = null,
+    var tall : Float? = null
     )

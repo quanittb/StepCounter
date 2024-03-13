@@ -18,15 +18,25 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.example.quanpham.R
 import com.example.quanpham.db.AppDatabase
+import com.example.quanpham.model.Users
+import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.showToast
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 
 abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
-
     companion object {
         private val TAG = BaseActivity::class.java.name
     }
@@ -35,6 +45,12 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
 
     protected lateinit var binding: V
     private var onFullscreen = false
+
+    var usLoggin: MutableLiveData<Users>? = MutableLiveData(null)
+    val auth = Firebase.auth
+    val fbDatabase: FirebaseDatabase = Firebase.database
+    val firestore: FirebaseFirestore = Firebase.firestore
+    val storage = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +63,28 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
             .allowMainThreadQueries()
             .build()
         decorView = window.decorView
+        getLoginUser {
+            usLoggin?.postValue(it)
+        }
         createView()
+    }
 
+    private fun getLoginUser(user: (Users?) -> Unit) {
+        if (auth.currentUser != null) {
+            firestore.collection(Constant.KEY_USER)
+                .document(auth.currentUser!!.uid)
+                .get()
+                .addOnSuccessListener {
+                    user(it.toObject(Users::class.java))
+                }
+                .addOnFailureListener {
+                    user(null)
+                    showToast(it.message.toString())
+                }
+        }
 
     }
+
 
     protected abstract fun getViewBinding(): V
 

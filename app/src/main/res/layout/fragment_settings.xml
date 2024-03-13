@@ -19,6 +19,22 @@
      android:paddingTop="@dimen/_5sdp"
      app:layout_constraintTop_toTopOf="parent"
      app:layout_constraintLeft_toLeftOf="parent"/>
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingVertical="@dimen/_10sdp"
+        android:layout_marginVertical="@dimen/_20sdp"
+        android:text="Xin chào, Quân Phạm"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mukta_medium"
+        android:textSize="@dimen/_16ssp"
+        android:textAlignment="center"
+        android:background="@drawable/bg_text_radius_12sp_white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"/>
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,13 +43,14 @@
         android:scrollbars="none"
         android:layout_marginTop="@dimen/_14sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/tv_name"
         tools:layout_editor_absoluteX="19dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/_10sdp">
+
 
             <LinearLayout
                 android:id="@+id/detail"
@@ -461,8 +478,32 @@
                         android:textColor="@color/text_detail_settings"
                         android:textSize="@dimen/_14sdp"
                         app:layout_constraintRight_toRightOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="#E3E9ED" />
+                <TextView
+                    android:id="@+id/txtLogOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:paddingHorizontal="@dimen/_5sdp"
+                    android:fontFamily="@font/mukta_medium"
+                    android:text="@string/log_out"
+                    android:textColor="@color/md_red"
+                    android:textSize="@dimen/_14sdp"
+                    android:layout_marginVertical="@dimen/_12sdp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="#E3E9ED" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_100sdp"
+                    android:background="#FFFFFF" />
             </LinearLayout>
 
             <LinearLayout

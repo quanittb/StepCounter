@@ -2,16 +2,18 @@ package com.example.quanpham.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Handler
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import com.example.quanpham.R
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySplashBinding
+import com.example.quanpham.db.model.Users
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.database.FirebaseDatabase
 
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
@@ -21,29 +23,50 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         private val TAG = SplashActivity::class.java.name
     }
 
-    override fun getViewBinding(): ActivitySplashBinding = ActivitySplashBinding.inflate(layoutInflater)
+    override fun getViewBinding(): ActivitySplashBinding =
+        ActivitySplashBinding.inflate(layoutInflater)
+
     override fun createView() {
         openNextScreen()
 
     }
 
     private fun hasPostNotificationGranted(): Boolean {
-        return isAPI33OrHigher() && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        return isAPI33OrHigher() && ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private val notificationPermissionLauncher: ActivityResultLauncher<String> = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) {
+    private val notificationPermissionLauncher: ActivityResultLauncher<String> =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {
 
-    }
+        }
 
 
-    fun openNextScreen() {
+    private fun openNextScreen() {
+//        addDB()
         Handler().postDelayed({
-            if(SharedPreferenceUtils.firstOpenApp)
+            if (SharedPreferenceUtils.firstOpenApp)
                 LanguageActivity.start(this)
             else
-                MainActivity.startMain(this, true)
-        },2000)
-            }
+                if (auth.currentUser == null) {
+                    SignInActivity.start(this, true)
+                } else {
+                    MainActivity.startMain(this, true)
+                }
+
+        }, 2000)
+    }
+//    fun addDB(){
+//        var auth = Firebase.auth
+//        var db = FirebaseDatabase.getInstance().getReference("Users")
+//        val userId = auth.currentUser!!.uid
+//        val userName = auth.currentUser!!.email
+//        val displayName = auth.currentUser!!.displayName
+//        val user = Users(userId,userName,displayName,true,20,160f)
+//        db.child(userId).setValue(user)
+//    }
 }

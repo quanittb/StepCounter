@@ -105,7 +105,12 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
 
         LanguageUtil.changeLang(SharedPreferenceUtils.languageCode!!, this)
         SharedPreferenceUtils.firstOpenApp = false
-        MainActivity.startMain(this, true)
+        if(usLoggin?.value==null){
+            SignUpActivity.start(this, true)
+        }else{
+            MainActivity.startMain(this, true)
+        }
+
     }
 
     fun initData() {

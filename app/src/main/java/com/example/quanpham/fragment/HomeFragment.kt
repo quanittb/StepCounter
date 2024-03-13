@@ -17,6 +17,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun initView() {
+        usLoggin?.observeForever {
+            binding.btnStepGoal.text=""+it?.email
+        }
 
     }
 
