@@ -8,7 +8,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySplashBinding
+import com.example.quanpham.db.model.Users
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.database.FirebaseDatabase
 
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
@@ -42,6 +47,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
 
     private fun openNextScreen() {
+//        addDB()
         Handler().postDelayed({
             if (SharedPreferenceUtils.firstOpenApp)
                 LanguageActivity.start(this)
@@ -54,4 +60,13 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
         }, 2000)
     }
+//    fun addDB(){
+//        var auth = Firebase.auth
+//        var db = FirebaseDatabase.getInstance().getReference("Users")
+//        val userId = auth.currentUser!!.uid
+//        val userName = auth.currentUser!!.email
+//        val displayName = auth.currentUser!!.displayName
+//        val user = Users(userId,userName,displayName,true,20,160f)
+//        db.child(userId).setValue(user)
+//    }
 }

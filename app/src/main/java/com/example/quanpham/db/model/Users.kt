@@ -6,15 +6,17 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 @Entity(tableName = "News")
-class News (
+class Users (
     @PrimaryKey(autoGenerate = true)
-    var id : Long? = null ,
+    var id : String? = null ,
     @ColumnInfo
-    var tieuDe : String? = null,
+    var loginName : String? = null,
     @ColumnInfo
-    var noiDung : String? = null,
+    var password : String? = null,
     @ColumnInfo
-    var tacGia : String? = null,
+    var sex : Boolean? = null,
     @ColumnInfo
-    var thoiDiemTao : String? = null,
+    var age : Int? = null,
+    @ColumnInfo
+    var tall : Float? = null
     )

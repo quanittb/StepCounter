@@ -9,6 +9,8 @@ import com.example.quanpham.fragment.ForgotPassFragment
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.showToast
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class SignInActivity : BaseActivity<ActivitySignInBinding>() {
     override fun getViewBinding() = ActivitySignInBinding.inflate(layoutInflater)
