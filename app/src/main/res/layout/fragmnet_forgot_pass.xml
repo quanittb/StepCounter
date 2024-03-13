@@ -29,7 +29,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/mukta_regular"
             android:layout_marginTop="@dimen/_4sdp"
+            android:textAlignment="center"
             android:text="@string/please_enter_your_registered_email_and_check_your_mailbox_to_create_a_new_password"
             android:textColor="#989898"
             android:textSize="@dimen/_14sdp" />

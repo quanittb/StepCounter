@@ -36,7 +36,7 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
     var  usLoggin:MutableLiveData<Users>?= MutableLiveData(null)
     val auth= Firebase.auth
 
-    private fun getLogginUser(user: (Users?)->Unit) {
+    private fun getLoginUser(user: (Users?)->Unit) {
         if(auth.currentUser!=null){
             firestore.collection(Constant.KEY_USER)
                 .document(auth.currentUser!!.uid)
@@ -75,7 +75,7 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = getBinding(inflater, container)
-        getLogginUser {
+        getLoginUser {
             users ->
             usLoggin?.postValue(users)
         }

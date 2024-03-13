@@ -29,6 +29,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_4sdp"
             android:text="@string/log_in_now_to_experience_the_application"
+            android:fontFamily="@font/mukta_regular"
             android:textColor="#989898"
             android:textSize="@dimen/_14sdp" />
 

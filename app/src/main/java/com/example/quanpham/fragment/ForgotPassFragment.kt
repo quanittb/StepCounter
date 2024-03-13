@@ -2,6 +2,7 @@ package com.example.quanpham.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.example.quanpham.R
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmnetForgotPassBinding
 import com.example.quanpham.utility.showToast
@@ -18,7 +19,14 @@ class ForgotPassFragment : BaseFragment<FragmnetForgotPassBinding>() {
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         showToast("Send successfully")
-                        requireActivity().supportFragmentManager.beginTransaction().hide(this).commit()
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .setCustomAnimations(
+                            R.anim.slide_in,
+                            R.anim.fade_out,
+                            R.anim.fade_in,
+                            R.anim.slide_out
+                        )
+                            .remove(this).commit()
                     }
                 }
                 .addOnFailureListener {
@@ -29,6 +37,12 @@ class ForgotPassFragment : BaseFragment<FragmnetForgotPassBinding>() {
 
     override fun handlerBackPressed() {
         super.handlerBackPressed()
-        requireActivity().supportFragmentManager.beginTransaction().hide(this).commit()
+        requireActivity().supportFragmentManager.beginTransaction().
+        setCustomAnimations(
+            R.anim.slide_in,
+            R.anim.fade_out,
+            R.anim.fade_in,
+            R.anim.slide_out
+        ).remove(this).commit()
     }
 }
