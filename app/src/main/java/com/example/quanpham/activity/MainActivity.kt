@@ -87,52 +87,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
         }
     }
 
-    fun addDB() {
-        try {
 
-
-            val database = Firebase.database
-            val myRef = database.getReference("message")
-
-            myRef.setValue("Hello, World!")
-            Log.d("abcd", "đã chạy vào đây")
-
-            val auth = FirebaseAuth.getInstance()
-            val fbDatabase = FirebaseDatabase.getInstance()
-
-            val currentUser = auth.currentUser
-            currentUser?.let { user ->
-                fbDatabase.getReference(Constant.KEY_WEIGHT)
-                    .child("123")
-                    .push()
-                    .setValue(Weights(1, 55F, ""))
-                    .addOnSuccessListener {
-                        showToast("Thành công")
-                        Log.d("abcd", "đã chạy")
-                    }
-                    .addOnFailureListener {
-                        showToast(it.message.toString())
-                        Log.d("abcd", "lỗi ${it.message}")
-                    }
-
-                fbDatabase.getReference(Constant.KEY_STEP)
-                    .child(user.uid)
-                    .push()
-                    .setValue(Steps(1, 1000, "", 20, 150, 2))
-            } ?: run {
-                // Handle case where currentUser is null
-                showToast("User not authenticated")
-            }
-        } catch (e: Exception) {
-            Log.d("abcd", "Err ${e.message}")
-        }
-    }
     override fun getViewBinding() = ActivityMainBinding.inflate(layoutInflater)
 
     override fun createView() {
         initBottomNav()
         setListeners()
-        addDB()
     }
 
 }

@@ -45,7 +45,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
     }
 
     override fun createView() {
-        binding.btnSignin.setOnClickListener {
+        binding.btnSignUp.setOnClickListener {
             if (checkValue()) {
                 showToast("Test")
                 singUpApp()
@@ -53,7 +53,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
                 showToast(getString(R.string.enter_all_value))
             }
         }
-        binding.txtSignup.setOnClickListener { v->
+        binding.txtSignIn.setOnClickListener { v->
             supportFragmentManager.popBackStack()
             SignInActivity.start(this,false)
         }
@@ -62,7 +62,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
     private fun singUpApp() {
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnSuccessListener { auth ->
-                val user = Users(auth.user?.uid, email, pass, name)
+                val user = Users(auth.user?.uid, email, pass, 20,true,170f)
                 firestore.collection(Constant.KEY_USER).document(user.id!!).set(user)
                     .addOnSuccessListener {
                         MainActivity.startMain(this, true)

@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
@@ -24,8 +25,13 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.example.quanpham.R
 import com.example.quanpham.db.AppDatabase
+import com.example.quanpham.db.model.Steps
+import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.getEndOfDay
+import com.example.quanpham.utility.getStartOfDay
+import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.showToast
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -34,6 +40,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.util.Calendar
+import java.util.Date
 
 
 abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
@@ -42,7 +50,6 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
     }
 
     lateinit var database: AppDatabase
-
     protected lateinit var binding: V
     private var onFullscreen = false
 
@@ -62,13 +69,18 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
         )
             .allowMainThreadQueries()
             .build()
+
         decorView = window.decorView
         getLoginUser {
             usLoggin?.postValue(it)
         }
+        getStepsDay()
         createView()
     }
-
+    private fun getStepsDay(){
+         SharedPreferenceUtils.dayStep = database.stepDao().getStepsDay(getStartOfDay(System.currentTimeMillis()),getEndOfDay(System.currentTimeMillis()))
+        logD("step day : ${SharedPreferenceUtils.dayStep}")
+    }
     private fun getLoginUser(user: (Users?) -> Unit) {
         if (auth.currentUser != null) {
             firestore.collection(Constant.KEY_USER)
