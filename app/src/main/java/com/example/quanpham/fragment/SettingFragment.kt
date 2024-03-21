@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.quanpham.R
 import com.example.quanpham.activity.LanguageActivity
+import com.example.quanpham.activity.SignInActivity
 import com.example.quanpham.activity.SignUpActivity
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentSettingsBinding
@@ -20,12 +21,9 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
         fun instance() : SettingFragment{
             return newInstance(SettingFragment::class.java)
         }
-        const val LINK_TERM ="https://sites.google.com/view/step-counter-walk-tracker-tos/home"
-        const val LINK_POLICY ="https://sites.google.com/view/step-counter-track-walk-policy/home"
     }
     override fun onStop() {
         super.onStop()
-        Log.d("abcd","Stop setting")
     }
 
     override fun initView() {
@@ -51,7 +49,7 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
         }
 
         binding.txtLogOut.setOnClickListener {
-            SignUpActivity.start(this@SettingFragment.requireContext(),true)
+            SignInActivity.start(this@SettingFragment.requireContext(),true)
             auth.signOut()
         }
 
