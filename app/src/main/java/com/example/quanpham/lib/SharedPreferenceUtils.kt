@@ -12,6 +12,8 @@ object SharedPreferenceUtils {
     private const val HEIGHT = "HEIGHT"
     private const val START_COUNT_STEP = "START_COUNT_STEP"
     private const val DAY_COUNT_STEP = "DAY_COUNT_STEP"
+    private const val YESTERDAY_COUNT_STEP = "YESTERDAY_COUNT_STEP"
+    private const val TARGET_STEP = "TARGET_STEP"
 
     var firstOpenApp: Boolean
         get() = sharedPreferencesManager.getValueBool(FIRST_OPEN_APP, true)
@@ -28,5 +30,12 @@ object SharedPreferenceUtils {
     var dayStep: Long
         get() = sharedPreferencesManager.getLongValue(DAY_COUNT_STEP, 0)
         set(value) = sharedPreferencesManager.setLongValue(DAY_COUNT_STEP, value)
+    var yesterdayStep: Long
+        get() = sharedPreferencesManager.getLongValue(YESTERDAY_COUNT_STEP, 0)
+        set(value) = sharedPreferencesManager.setLongValue(YESTERDAY_COUNT_STEP, value)
+    var targetStep: Long
+        get() = sharedPreferencesManager.getLongValue(TARGET_STEP, 6000)
+        set(value) = sharedPreferencesManager.setLongValue(TARGET_STEP, value)
+
 
 }

@@ -1,12 +1,11 @@
 package com.example.quanpham.fragment
 
-import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.example.quanpham.R
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentHomeBinding
@@ -16,12 +15,9 @@ import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.services.StepServices
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.getHour
-import com.example.quanpham.utility.getTimeNow
-import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.makeGone
 import com.example.quanpham.utility.makeVisible
 import com.example.quanpham.utility.showToast
-import java.util.Calendar
 import java.util.Date
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
@@ -44,12 +40,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             serviceIntent = Intent(requireContext(), StepServices::class.java)
             setListener()
             setWellcome()
-            startService()
+            if(SharedPreferenceUtils.startStep)
+                startService()
         }
 //        addDB()
     }
     private fun setListener(){
-        binding.tvContentHeader.text = SharedPreferenceUtils.dayStep.toString()
+        binding.tvContentHeader.text = SharedPreferenceUtils.yesterdayStep.toString()
         binding.tvStepRealTime.text = SharedPreferenceUtils.dayStep.toString()
         currentStep.observe(this@HomeFragment){
             binding.tvContentHeader.text = it.toString()
@@ -69,11 +66,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 binding.ivStepStart.setImageResource(R.drawable.ic_step_pause)
                 binding.tvPause.makeVisible()
                 binding.lnTarget.makeGone()
-            }
+                }
             }
     }
     private fun startService() {
-        requireContext().startService(serviceIntent)
+        requireContext().startService((serviceIntent))
     }
     private fun stopService() {
         requireContext().stopService(serviceIntent)

@@ -1,6 +1,8 @@
 package com.example.quanpham.base
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -28,6 +30,7 @@ import com.example.quanpham.db.AppDatabase
 import com.example.quanpham.db.model.Steps
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.model.Users
+import com.example.quanpham.services.ResetReceiver
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.getEndOfDay
 import com.example.quanpham.utility.getStartOfDay
@@ -76,6 +79,7 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
         }
         getStepsDay()
         createView()
+        scheduleAlarm(this@BaseActivity)
     }
     private fun getStepsDay(){
          SharedPreferenceUtils.dayStep = database.stepDao().getStepsDay(getStartOfDay(System.currentTimeMillis()),getEndOfDay(System.currentTimeMillis()))
@@ -97,6 +101,19 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
 
     }
 
+    fun scheduleAlarm(context: Context) {
+        val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, ResetReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE)
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
+    }
 
     protected abstract fun getViewBinding(): V
 

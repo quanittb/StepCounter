@@ -67,3 +67,10 @@ fun getStartOfHour(currentTime: Long): Long {
     calendar.set(Calendar.MILLISECOND, 0)
     return calendar.timeInMillis
 }
+fun convertSecondToTime(second:Long) : String{
+    if(second < 60)
+        return "${second}s"
+    else if(second < 3600)
+        return "${second/60}m ${second%60}s"
+    return "${second / 3600}h ${(second%3600)/60}m"
+}
