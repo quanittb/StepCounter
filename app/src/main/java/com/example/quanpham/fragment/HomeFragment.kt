@@ -39,7 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             binding.btnStepGoal.text = "" + it?.userName
             serviceIntent = Intent(requireContext(), StepServices::class.java)
             setListener()
-            setWellcome()
+            setWelcome()
             if(SharedPreferenceUtils.startStep)
                 startService()
         }
@@ -49,7 +49,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.tvContentHeader.text = SharedPreferenceUtils.yesterdayStep.toString()
         binding.tvStepRealTime.text = SharedPreferenceUtils.dayStep.toString()
         currentStep.observe(this@HomeFragment){
-            binding.tvContentHeader.text = it.toString()
             binding.tvStepRealTime.text = it.toString()
         }
         binding.ivStepStart.setOnClickListener{
@@ -110,7 +109,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    private fun setWellcome(){
+    private fun setWelcome(){
         val hour = getHour()
         when(hour){
             in 5..12 -> binding.tvWellCome.text = getString(R.string.good_morning)

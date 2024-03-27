@@ -97,21 +97,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
     override fun createView() {
         initBottomNav()
         setListeners()
-        createNotificationChannel()
     }
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID_STEP,
-                "CHANNEL_ID_STEP",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            channel.description ="CHANNEL_ID_STEP"
 
-            val manager = getSystemService(
-                NotificationManager::class.java
-            )
-            manager?.createNotificationChannel(channel)
-        }
-    }
 }

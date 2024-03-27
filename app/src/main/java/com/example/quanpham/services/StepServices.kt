@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -45,6 +46,8 @@ class StepServices : Service() , SensorEventListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         notification()
+        SharedPreferenceUtils.dayStep += 4900
+        stepCount()
         return START_STICKY
     }
 
@@ -135,6 +138,7 @@ class StepServices : Service() , SensorEventListener {
             NotificationCompat.Builder(this)
         }
             .setSmallIcon(R.mipmap.ic_app_launcher_q)
+            .setLargeIcon(BitmapFactory.decodeResource(resources,R.mipmap.ic_app_launcher_q))
             .setContentTitle(this.getString(R.string.app_name))
             .setContentText(currentStep.toString())
             .setAutoCancel(false)

@@ -1,7 +1,14 @@
 package com.example.quanpham.activity
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Handler
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -9,6 +16,9 @@ import androidx.core.content.ContextCompat
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySplashBinding
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.example.quanpham.services.ResetReceiver
+import com.example.quanpham.utility.Constant
+import java.util.Calendar
 
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
@@ -22,6 +32,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         ActivitySplashBinding.inflate(layoutInflater)
 
     override fun createView() {
+        createNotificationChannel()
+        scheduleAlarm(this)
         openNextScreen()
 
     }
@@ -54,6 +66,34 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                 }
 
         }, 2000)
+    }
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                Constant.CHANNEL_ID_STEP,
+                "CHANNEL_ID_STEP",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            channel.description ="CHANNEL_ID_STEP"
+
+            val manager = getSystemService(
+                NotificationManager::class.java
+            )
+            manager?.createNotificationChannel(channel)
+        }
+    }
+    fun scheduleAlarm(context: Context) {
+        val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, ResetReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE)
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
     }
 //    fun addDB(){
 //        var auth = Firebase.auth

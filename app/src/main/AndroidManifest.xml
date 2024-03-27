@@ -50,7 +50,7 @@
             android:enabled="true"
             android:exported="false" />
         <receiver android:name=".services.ResetReceiver"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BATTERY_LOW" />
             </intent-filter>
