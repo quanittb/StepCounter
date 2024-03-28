@@ -22,6 +22,7 @@ import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.quanpham.R
 import com.example.quanpham.activity.MainActivity
+import com.example.quanpham.activity.SplashActivity
 import com.example.quanpham.db.AppDatabase
 import com.example.quanpham.db.model.Steps
 import com.example.quanpham.fragment.HomeFragment
@@ -46,8 +47,6 @@ class StepServices : Service() , SensorEventListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         notification()
-        SharedPreferenceUtils.dayStep += 4900
-        stepCount()
         return START_STICKY
     }
 
@@ -124,7 +123,7 @@ class StepServices : Service() , SensorEventListener {
             remoteViews.setViewVisibility(R.id.determinateBar, View.GONE)
         }
 
-        val appIntent = Intent(this, MainActivity::class.java)
+        val appIntent = Intent(this, SplashActivity::class.java)
 
         val appPendingIntent = PendingIntent.getActivity(
             this,

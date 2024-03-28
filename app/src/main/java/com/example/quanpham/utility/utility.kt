@@ -94,3 +94,13 @@ fun convertSecondToTime(second:Long) : String{
         return "${second/60}m ${second%60}s"
     return "${second / 3600}h ${(second%3600)/60}m"
 }
+fun formatNumbers(inputNums : Float) : String{
+    val formattedNumber = String.format("%.2f", inputNums).replace(",", ".")
+    return if (formattedNumber.endsWith(".00")) {
+        formattedNumber.replace(".00", "")
+    } else if (formattedNumber.endsWith("0")) {
+        formattedNumber.substring(0, formattedNumber.length - 1)
+    } else {
+        formattedNumber
+    }
+}

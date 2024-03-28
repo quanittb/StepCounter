@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#33FFFFFF">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_gender_dialog"
+        android:padding="@dimen/_14sdp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_age_dialog"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/age"
+                android:textSize="@dimen/_20sdp"
+                android:fontFamily="@font/mukta_bold"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:textColor="#173430"/>
+            <ImageView
+                android:id="@+id/btnClose"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_close_dialog" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_25sdp"
+            android:background="@drawable/bg_numberpicker_dialog"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/pickAge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:np_dividerColor="@android:color/transparent"
+                app:np_fadingEdgeEnabled="true"
+                app:np_max="100"
+                app:np_min="16"
+                app:np_orientation="vertical"
+                app:np_selectedTextColor="@color/black"
+                app:np_selectedTextSize="@dimen/_18sdp"
+                app:np_textColor="@color/color_hint_number_picker"
+                app:np_textSize="@dimen/_13sdp"
+                app:np_value="30"
+                app:np_wheelItemCount="5" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:fontFamily="@font/mukta_semi_bold"
+            android:textSize="@dimen/_18sdp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@drawable/bg_save"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

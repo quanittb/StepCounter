@@ -48,11 +48,15 @@
         <service
             android:name=".services.StepServices"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="true" />
+        <service
+            android:name=".services.ResetStepForegroundService"
+            android:enabled="true"
+            android:exported="true" />
         <receiver android:name=".services.ResetReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BATTERY_LOW" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
             </intent-filter>
         </receiver>
     </application>
