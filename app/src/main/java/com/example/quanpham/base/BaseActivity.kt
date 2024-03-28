@@ -1,8 +1,11 @@
 package com.example.quanpham.base
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -28,6 +31,7 @@ import com.example.quanpham.db.AppDatabase
 import com.example.quanpham.db.model.Steps
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.model.Users
+import com.example.quanpham.services.ResetReceiver
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.getEndOfDay
 import com.example.quanpham.utility.getStartOfDay
@@ -74,12 +78,24 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
         getLoginUser {
             usLoggin?.postValue(it)
         }
-        getStepsDay()
+        scheduleAlarm(this)
         createView()
     }
-    private fun getStepsDay(){
-         SharedPreferenceUtils.dayStep = database.stepDao().getStepsDay(getStartOfDay(System.currentTimeMillis()),getEndOfDay(System.currentTimeMillis()))
-        logD("step day : ${SharedPreferenceUtils.dayStep}")
+
+    private fun scheduleAlarm(context: Context) {
+        registerReceiver(ResetReceiver(), IntentFilter("android.intent.action.DATE_CHANGED"))
+        val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, ResetReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.add(Calendar.DAY_OF_MONTH,1)
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
     }
     private fun getLoginUser(user: (Users?) -> Unit) {
         if (auth.currentUser != null) {
@@ -96,6 +112,7 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
         }
 
     }
+
 
 
     protected abstract fun getViewBinding(): V
@@ -144,7 +161,14 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(window.decorView.rootView.windowToken, 0)
     }
-
+    fun hideSoftKeyboard() {
+        val v = currentFocus
+        if (v != null) {
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(v.applicationWindowToken, 0)
+            v.clearFocus()
+        }
+    }
     fun handleBackPress() {
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStackImmediate();

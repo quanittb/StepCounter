@@ -59,6 +59,26 @@ fun getEndOfDay(currentTime: Long): Long {
     return calendar.timeInMillis
 }
 
+fun getStartOfYesterday(currentTime: Long): Long {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = currentTime
+    calendar.add(Calendar.DAY_OF_MONTH,-1)
+    calendar.set(Calendar.HOUR_OF_DAY, 0)
+    calendar.set(Calendar.MINUTE, 0)
+    calendar.set(Calendar.SECOND, 0)
+    calendar.set(Calendar.MILLISECOND, 0)
+    return calendar.timeInMillis
+}
+fun getEndOfYesterday(currentTime: Long): Long {
+    val calendar = Calendar.getInstance()
+    calendar.add(Calendar.DAY_OF_MONTH,-1)
+    calendar.timeInMillis = currentTime
+    calendar.set(Calendar.HOUR_OF_DAY, 23)
+    calendar.set(Calendar.MINUTE, 59)
+    calendar.set(Calendar.SECOND, 59)
+    calendar.set(Calendar.MILLISECOND, 999)
+    return calendar.timeInMillis
+}
 fun getStartOfHour(currentTime: Long): Long {
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currentTime
@@ -66,4 +86,21 @@ fun getStartOfHour(currentTime: Long): Long {
     calendar.set(Calendar.SECOND, 0)
     calendar.set(Calendar.MILLISECOND, 0)
     return calendar.timeInMillis
+}
+fun convertSecondToTime(second:Long) : String{
+    if(second < 60)
+        return "${second}s"
+    else if(second < 3600)
+        return "${second/60}m ${second%60}s"
+    return "${second / 3600}h ${(second%3600)/60}m"
+}
+fun formatNumbers(inputNums : Float) : String{
+    val formattedNumber = String.format("%.2f", inputNums).replace(",", ".")
+    return if (formattedNumber.endsWith(".00")) {
+        formattedNumber.replace(".00", "")
+    } else if (formattedNumber.endsWith("0")) {
+        formattedNumber.substring(0, formattedNumber.length - 1)
+    } else {
+        formattedNumber
+    }
 }

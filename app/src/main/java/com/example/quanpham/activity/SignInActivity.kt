@@ -2,12 +2,17 @@ package com.example.quanpham.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences.Editor
+import android.text.method.PasswordTransformationMethod
+import android.view.inputmethod.EditorInfo
 import com.example.quanpham.R
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySignInBinding
 import com.example.quanpham.fragment.ForgotPassFragment
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.makeGone
+import com.example.quanpham.utility.makeVisible
 import com.example.quanpham.utility.showToast
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
@@ -16,6 +21,8 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
     override fun getViewBinding() = ActivitySignInBinding.inflate(layoutInflater)
     private var email = ""
     private var pass = ""
+    private var isPasswordVisible = false
+
 
     companion object {
         fun start(context: Context, clearTask: Boolean) {
@@ -30,8 +37,8 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
     }
 
     private fun checkValue(): Boolean {
-        email = binding.email.text.toString()
-        pass = binding.passrod.text.toString()
+        email = binding.tvEmail.text.toString()
+        pass = binding.tvPassword.text.toString()
 
         if (email.isEmpty() || pass.isEmpty()) {
             return false
@@ -44,8 +51,10 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
     }
 
     override fun createView() {
+        binding.llLoading.makeGone()
         binding.btnSignin.setOnClickListener {
             if (checkValue()) {
+                hideKeyboard()
                 signApp()
             } else {
                 showToast(getString(R.string.enter_all_value))
@@ -60,8 +69,33 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
             supportFragmentManager.popBackStack()
             addFragment(ForgotPassFragment(),android.R.id.content,true)
         }
+        binding.ivVisiblePass.setOnClickListener {
+            isPasswordVisible = ! isPasswordVisible
+            if(isPasswordVisible){
+                binding.tvPassword.transformationMethod = null
+                binding.tvPassword.setSelection(binding.tvPassword.length())
+            }
+            else{
+                binding.tvPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.tvPassword.setSelection(binding.tvPassword.length())
+            }
+        }
+        binding.tvPassword.setOnEditorActionListener { v, actionId, event ->
+            if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (checkValue()) {
+                    hideKeyboard()
+                    signApp()
+                } else {
+                    showToast(getString(R.string.enter_all_value))
+                }
+                true
+            }
+            else
+                false
+        }
     }
     private fun signApp() {
+        binding.llLoading.makeVisible()
         auth.signInWithEmailAndPassword(email,pass)
             .addOnSuccessListener {
                 firestore.collection(Constant.KEY_USER)
@@ -79,6 +113,7 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
             }
             .addOnFailureListener {
                 showToast(it.message.toString())
+                binding.llLoading.makeGone()
             }
     }
 }

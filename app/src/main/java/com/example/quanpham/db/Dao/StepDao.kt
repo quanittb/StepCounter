@@ -19,7 +19,8 @@ interface StepDao {
     fun getStepsHour(minTime : Long, maxTime: Long): Steps
     @Query("Select SUM(step) from Steps where startTime >= :minTime And startTime <= :maxTime")
     fun getStepsDay(minTime: Long, maxTime: Long): Long
-
+    @Query("Select * from Steps where startTime >= :minTime And startTime <= :maxTime")
+    fun getRecordStepsDay(minTime : Long, maxTime: Long): List<Steps>
     @Update
     fun updateStep(step: Steps)
 }

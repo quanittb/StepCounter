@@ -1,14 +1,31 @@
 package com.example.quanpham.activity
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Handler
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySplashBinding
+import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.example.quanpham.services.ResetReceiver
+import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.getEndOfDay
+import com.example.quanpham.utility.getEndOfYesterday
+import com.example.quanpham.utility.getStartOfDay
+import com.example.quanpham.utility.getStartOfYesterday
+import java.util.Calendar
+import kotlin.concurrent.thread
 
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
@@ -22,8 +39,19 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         ActivitySplashBinding.inflate(layoutInflater)
 
     override fun createView() {
+        createNotificationChannel()
+        getStepsDay()
         openNextScreen()
-
+    }
+    private fun getStepsDay(){
+        SharedPreferenceUtils.dayStep = database.stepDao().getStepsDay(
+            getStartOfDay(System.currentTimeMillis()),
+            getEndOfDay(System.currentTimeMillis())
+        )
+        SharedPreferenceUtils.yesterdayStep = database.stepDao().getStepsDay(
+            getStartOfYesterday(System.currentTimeMillis()),
+            getEndOfYesterday(System.currentTimeMillis()))
+        HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())
     }
 
     private fun hasPostNotificationGranted(): Boolean {
@@ -55,6 +83,36 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
         }, 2000)
     }
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                Constant.CHANNEL_ID_STEP,
+                "CHANNEL_ID_STEP",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            channel.description ="CHANNEL_ID_STEP"
+
+            val manager = getSystemService(
+                NotificationManager::class.java
+            )
+            manager?.createNotificationChannel(channel)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel2 = NotificationChannel(
+                Constant.CHANNEL_ID_UPDATE,
+                "CHANNEL_ID_UPDATE",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            channel2.description ="CHANNEL_ID_UPDATE"
+
+            val manager = getSystemService(
+                NotificationManager::class.java
+            )
+            manager?.createNotificationChannel(channel2)
+        }
+    }
+
+
 //    fun addDB(){
 //        var auth = Firebase.auth
 //        var db = FirebaseDatabase.getInstance().getReference("Users")

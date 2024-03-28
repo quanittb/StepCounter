@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#33FFFFFF">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_gender_dialog"
+        android:padding="@dimen/_14sdp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:src="@drawable/ic_permission_dialog"/>
+        <LinearLayout
+            android:id="@+id/txtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/physical_activity_permission_required"
+                android:textSize="@dimen/_20sdp"
+                android:fontFamily="@font/mukta_bold"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_40sdp"
+                android:lineHeight="@dimen/_28sdp"
+                android:textColor="#173430"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/without_this_authorization_the_app_will_not_work"
+            android:textSize="@dimen/_15sdp"
+            android:fontFamily="@font/mukta_regular"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_35sdp"
+            android:textColor="#434E58"/>
+        <TextView
+            android:id="@+id/btnGrant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/allow"
+            android:fontFamily="@font/mukta_semi_bold"
+            android:textSize="@dimen/_18sdp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@drawable/bg_save"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

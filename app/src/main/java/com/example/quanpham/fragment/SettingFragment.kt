@@ -9,6 +9,7 @@ import com.example.quanpham.activity.SignInActivity
 import com.example.quanpham.activity.SignUpActivity
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentSettingsBinding
+import com.example.quanpham.dialog.StepGoalBottomDialog
 import com.example.quanpham.language.Language
 import com.example.quanpham.lib.SharedPreferenceUtils
 import java.text.DecimalFormat
@@ -16,7 +17,8 @@ import java.text.DecimalFormat
 class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
 
     var listLanguages: ArrayList<Language> = arrayListOf()
-    val df = DecimalFormat("#.#")
+    private var bottomSheetStepGoalDialog: StepGoalBottomDialog? = null
+
     companion object{
         fun instance() : SettingFragment{
             return newInstance(SettingFragment::class.java)
@@ -29,6 +31,7 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
     override fun initView() {
         setValue()
         binding.btnStepGoal.setOnClickListener {
+            openStepGoalBottomSheet()
         }
         binding.txtSex.setOnClickListener {
         }
@@ -53,6 +56,20 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
             auth.signOut()
         }
 
+    }
+    private fun openStepGoalBottomSheet() {
+        if (bottomSheetStepGoalDialog == null) {
+            bottomSheetStepGoalDialog = StepGoalBottomDialog(
+                requireContext(),
+                object : StepGoalBottomDialog.OnClickBottomSheetListener {
+                    override fun onClickSaveFrom() {
+                        binding.btnStepGoal.text = SharedPreferenceUtils.targetStep.toString()
+                    }
+
+                })
+        }
+
+        bottomSheetStepGoalDialog?.checkShowBottomSheet()
     }
 
     override fun onResume() {

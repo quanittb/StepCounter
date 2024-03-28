@@ -1,7 +1,10 @@
 package com.example.quanpham.activity
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.quanpham.R
@@ -12,6 +15,7 @@ import com.example.quanpham.db.model.Weights
 import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.fragment.SettingFragment
 import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.Constant.CHANNEL_ID_STEP
 import com.example.quanpham.utility.showToast
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth

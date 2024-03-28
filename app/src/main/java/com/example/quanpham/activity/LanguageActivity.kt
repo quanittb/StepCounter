@@ -106,7 +106,7 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
         LanguageUtil.changeLang(SharedPreferenceUtils.languageCode!!, this)
         SharedPreferenceUtils.firstOpenApp = false
         if(usLoggin?.value==null){
-            SignUpActivity.start(this, true)
+            SignInActivity.start(this, true)
         }else{
             MainActivity.startMain(this, true)
         }

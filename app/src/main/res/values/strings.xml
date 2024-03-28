@@ -230,5 +230,6 @@
     <string name="rank">Rank</string>
     <string name="log_out">Log out</string>
     <string name="please_enter_your_registered_email_and_check_your_mailbox_to_create_a_new_password">Please enter your registered email and check your mailbox to create a new password</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

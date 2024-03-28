@@ -169,7 +169,13 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         context.startActivity(intent)
         isGoToSetting = true
     }
-
+    fun gotoSetting() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
+        intent.data = uri
+        startActivity(intent)
+        isGoToSetting = true
+    }
     companion object {
         var isGoToSetting = false
         var isAdsRewardShowing = false
