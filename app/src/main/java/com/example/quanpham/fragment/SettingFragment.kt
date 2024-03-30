@@ -10,14 +10,19 @@ import com.example.quanpham.activity.SignUpActivity
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentSettingsBinding
 import com.example.quanpham.dialog.StepGoalBottomDialog
+import com.example.quanpham.dialog.StepGoalBottomDialog.OnClickBottomSheetListener
 import com.example.quanpham.language.Language
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.mobiai.app.ui.dialog.AgeDialog
+import com.mobiai.app.ui.dialog.GenderDialog
 import java.text.DecimalFormat
 
 class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
 
     var listLanguages: ArrayList<Language> = arrayListOf()
     private var bottomSheetStepGoalDialog: StepGoalBottomDialog? = null
+    private var bottomSheetGenderDialog: GenderDialog? = null
+    private var bottomSheetAgeDialog: AgeDialog? = null
 
     companion object{
         fun instance() : SettingFragment{
@@ -34,8 +39,10 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
             openStepGoalBottomSheet()
         }
         binding.txtSex.setOnClickListener {
+            openGenderBottomSheet()
         }
         binding.txtAge.setOnClickListener {
+            openAgeBottomSheet()
         }
         binding.txtWeight.setOnClickListener {
         }
@@ -61,9 +68,10 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
         if (bottomSheetStepGoalDialog == null) {
             bottomSheetStepGoalDialog = StepGoalBottomDialog(
                 requireContext(),
-                object : StepGoalBottomDialog.OnClickBottomSheetListener {
+                object : OnClickBottomSheetListener {
                     override fun onClickSaveFrom() {
                         binding.btnStepGoal.text = SharedPreferenceUtils.targetStep.toString()
+
                     }
 
                 })
@@ -72,6 +80,37 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
         bottomSheetStepGoalDialog?.checkShowBottomSheet()
     }
 
+    private fun openGenderBottomSheet() {
+        if (bottomSheetGenderDialog == null) {
+            bottomSheetGenderDialog = GenderDialog(
+                requireContext(),
+                object : OnClickBottomSheetListener {
+                    override fun onClickSaveFrom() {
+                        if(SharedPreferenceUtils.selectSex == 1)
+                            binding.txtSex.text = getText(R.string.male)
+                        else if(SharedPreferenceUtils.selectSex == 0)
+                            binding.txtSex.text = getText(R.string.female)
+                    }
+
+                })
+        }
+
+        bottomSheetGenderDialog?.checkShowBottomSheet()
+    }
+    private fun openAgeBottomSheet() {
+        if (bottomSheetAgeDialog == null) {
+            bottomSheetAgeDialog = AgeDialog(
+                requireContext(),
+                object : OnClickBottomSheetListener {
+                    override fun onClickSaveFrom() {
+                       binding.txtAge.text = SharedPreferenceUtils.age.toString()
+                    }
+
+                })
+        }
+
+        bottomSheetAgeDialog?.checkShowBottomSheet()
+    }
     override fun onResume() {
         super.onResume()
         setValue()
@@ -79,6 +118,13 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
     fun setValue(){
         initDataLanguage()
         checkLanguage()
+        binding.btnStepGoal.text = SharedPreferenceUtils.targetStep.toString()
+        if(SharedPreferenceUtils.selectSex == 1)
+            binding.txtSex.text = getText(R.string.male)
+        else if(SharedPreferenceUtils.selectSex == 0)
+            binding.txtSex.text = getText(R.string.female)
+
+        binding.txtAge.text = SharedPreferenceUtils.age.toString()
 
 
     }

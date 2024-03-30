@@ -3,11 +3,12 @@ package com.mobiai.app.ui.dialog
 import android.content.Context
 import android.os.Bundle
 import com.example.quanpham.databinding.DialogAgeBinding
+import com.example.quanpham.dialog.StepGoalBottomDialog
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
-class AgeDialog(context: Context, private val listener : OnClickBottomSheetListener) : BottomSheetDialog(context) {
+class AgeDialog(context: Context, private val listener : StepGoalBottomDialog.OnClickBottomSheetListener) : BottomSheetDialog(context) {
     val binding = DialogAgeBinding.inflate(layoutInflater)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +40,6 @@ class AgeDialog(context: Context, private val listener : OnClickBottomSheetListe
         if (isShowing) {
             dismiss()
         }
-    }
-    interface OnClickBottomSheetListener{
-        fun onClickSaveFrom()
     }
 
 }

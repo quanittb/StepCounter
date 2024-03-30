@@ -45,11 +45,13 @@ object SharedPreferenceUtils {
     var targetStep: Long
         get() = sharedPreferencesManager.getLongValue(TARGET_STEP, 6000)
         set(value) = sharedPreferencesManager.setLongValue(TARGET_STEP, value)
+
+    // Nam : 1, Nữ : 0
     var selectSex: Int
         get() = sharedPreferencesManager.getIntValue(SELECT_SEX, -1)
         set(value) = sharedPreferencesManager.setIntValue(SELECT_SEX, value)
     var age: Int
-        get() = sharedPreferencesManager.getIntValue(AGE, 0)
+        get() = sharedPreferencesManager.getIntValue(AGE, 20)
         set(value) = sharedPreferencesManager.setIntValue(AGE, value)
 
     //cm : Float
