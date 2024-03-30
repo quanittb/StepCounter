@@ -21,6 +21,8 @@ object SharedPreferenceUtils {
     private const val FIRST_PERMISSION_REQUIRED = "FIRST_PERMISSION_REQUIRED"
     private const val CHECK_COUNT_REJECT = "CHECK_COUNT_REJECT"
     private const val SET_OR_CLOSE_STEP_GOAL = "SET_OR_CLOSE_STEP_GOAL"
+    private const val STEP_LENGTH = "STEP_LENGTH"
+
 
     var firstOpenApp: Boolean
         get() = sharedPreferencesManager.getValueBool(FIRST_OPEN_APP, true)
@@ -75,6 +77,10 @@ object SharedPreferenceUtils {
         get() = sharedPreferencesManager.getIntValue(CHECK_COUNT_REJECT, 1)
         set(value) = sharedPreferencesManager.setIntValue(CHECK_COUNT_REJECT, value)
     var setOrStartGoal: Boolean
-        get() = sharedPreferencesManager.getValueBool(SET_OR_CLOSE_STEP_GOAL, false)
+        get() = sharedPreferencesManager.getValueBool(SET_OR_CLOSE_STEP_GOAL, true)
         set(value) = sharedPreferencesManager.setValueBool(SET_OR_CLOSE_STEP_GOAL, value)
+    //cm : Float
+    var stepLength: Float
+        get() = sharedPreferencesManager.getValue(STEP_LENGTH, 0.00f)
+        set(value) = sharedPreferencesManager.setValue(STEP_LENGTH, value)
 }

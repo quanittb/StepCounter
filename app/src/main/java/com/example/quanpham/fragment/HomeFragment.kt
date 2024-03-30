@@ -23,7 +23,11 @@ import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.permission.StoragePermissionUtils
 import com.example.quanpham.services.StepServices
 import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.Constant.KcalOne
+import com.example.quanpham.utility.convertSecondToTime
 import com.example.quanpham.utility.getHour
+import com.example.quanpham.utility.getStartOfDayMinus
+import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.makeGone
 import com.example.quanpham.utility.makeVisible
 import com.example.quanpham.utility.showToast
@@ -31,7 +35,10 @@ import com.mobiai.app.ui.dialog.PermissionDialog
 import com.mobiai.app.ui.dialog.PermissionReject1Dialog
 import com.mobiai.app.ui.dialog.PermissionReject2Dialog
 import com.mobiai.app.ui.dialog.PermissionRequiredDialog
+import com.mobiai.base.chart.weekly_review.WeekReviewView
+import java.util.Calendar
 import java.util.Date
+import kotlin.math.roundToInt
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     companion object {
@@ -66,23 +73,55 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 showRequirePermissionActivityDialog()
             }
         }
-        if (SharedPreferenceUtils.setOrStartGoal){
+        if (!SharedPreferenceUtils.setOrStartGoal){
             binding.lnGoal.makeGone()
         }
         usLoggin?.observe(this@HomeFragment) {
             serviceIntent = Intent(requireContext(), StepServices::class.java)
             setListener()
             setWelcome()
+            updateUI()
             if(SharedPreferenceUtils.startStep)
                 startService()
         }
-//        addDB()
+
+    }
+    fun getDataSevenDayRecent(){
+        var totalStep = database.stepDao().getStepsDay(getStartOfDayMinus(System.currentTimeMillis(),7),System.currentTimeMillis())
+        binding.tvStepNow.text = "${totalStep/7}"
+    }
+    fun updateUI(){
+        binding.chart.setArcValue(SharedPreferenceUtils.targetStep.toFloat(), SharedPreferenceUtils.dayStep.toFloat())
+        val stepCountKm = (SharedPreferenceUtils.dayStep * (SharedPreferenceUtils.stepLength / 100000))
+        val stepCountKcal = SharedPreferenceUtils.dayStep * KcalOne
+        val formattedNumberKcal = String.format("%.1f", stepCountKcal)
+        val formattedNumberKm = String.format("%.2f", stepCountKm)
+        val activeTime = convertSecondToTime(SharedPreferenceUtils.dayStep)
+
+        binding.tvKmHome.text = formattedNumberKm
+        binding.tvKcalHome.text = formattedNumberKcal
+        binding.tvTimerMinHome.text = activeTime
+        getDataSevenDayRecent()
+
+        if (SharedPreferenceUtils.dayStep>0){
+            binding.ivFire.makeVisible()
+        }
+        if ((SharedPreferenceUtils.dayStep.toFloat() / SharedPreferenceUtils.targetStep) * 100 < 25f) {
+            binding.ivFire.setImageResource(R.drawable.ic_fire_01)
+        } else if ((SharedPreferenceUtils.dayStep.toFloat() / SharedPreferenceUtils.targetStep) * 100 < 50f) {
+            binding.ivFire.setImageResource(R.drawable.ic_fire_02)
+        } else if ((SharedPreferenceUtils.dayStep.toFloat() / SharedPreferenceUtils.targetStep) * 100 < 75f) {
+            binding.ivFire.setImageResource(R.drawable.ic_fire_03)
+        } else {
+            binding.ivFire.setImageResource(R.drawable.ic_fire_04)
+        }
     }
     private fun setListener(){
         binding.tvContentHeader.text = SharedPreferenceUtils.yesterdayStep.toString()
         binding.tvStepRealTime.text = SharedPreferenceUtils.dayStep.toString()
         currentStep.observe(this@HomeFragment){
             binding.tvStepRealTime.text = it.toString()
+            updateUI()
         }
         binding.ivStepStart.setOnClickListener{
             if(!SharedPreferenceUtils.startStep){
@@ -157,6 +196,126 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
            else ->binding.tvWellCome.text = getString(R.string.good_evening)
         }
     }
+//    private fun getDayAbbreviation(day: Int): String {
+//        val days = mapOf(
+//            Calendar.SUNDAY to getString(R.string._sun),
+//            Calendar.MONDAY to getString(R.string._mon),
+//            Calendar.TUESDAY to getString(R.string._tue),
+//            Calendar.WEDNESDAY to getString(R.string._wed),
+//            Calendar.THURSDAY to getString(R.string._thu),
+//            Calendar.FRIDAY to getString(R.string._fri),
+//            Calendar.SATURDAY to getString(R.string._sat)
+//        )
+//        return days[day] ?: "Invalid Day"
+//    }
+
+//    private fun showListStepWeek(){
+//        var monday = 0f
+//        var tuesday = 0f
+//        var wednesday = 0f
+//        var thursday = 0f
+//        var friday = 0f
+//        var saturday = 0f
+//        var sunday = 0f
+//        //todo truyền vào list phần trăm
+//        val currentDate = Calendar.getInstance()
+//
+//        val last7DaysWithDayOfWeek = findLast7DaysWithDayOfWeek(currentDate)
+//        // Đảo ngược lại danh sách
+//        val reversedList = last7DaysWithDayOfWeek.entries.reversed()
+//
+//        for ((dayOfYear, dayOfWeek) in reversedList) {
+//            when (getDayAbbreviation(dayOfWeek)) {
+//                getString(R.string._mon) -> {
+//                    monday = (getTotalStepInADay(dayOfYear,currentDate.get(Calendar.YEAR)).toFloat() / SharedPreferenceUtils.targetStep) * 100
+//                }
+//                getString(R.string._tue) -> {
+//                    tuesday = (getTotalStepInADay(dayOfYear,currentDate.get(Calendar.YEAR)).toFloat() / SharedPreferenceUtils.targetStep) * 100
+//                }
+//                getString(R.string._wed) -> {
+//                    wednesday = (getTotalStepInADay(dayOfYear,currentDate.get(Calendar.YEAR)).toFloat() / SharedPreferenceUtils.targetStep) * 100
+//                }
+//                getString(R.string._thu) -> {
+//                    thursday = (getTotalStepInADay(dayOfYear,currentDate.get(Calendar.YEAR)).toFloat() / SharedPreferenceUtils.targetStep) * 100
+//                }
+//                getString(R.string._fri) -> {
+//                    friday = (getTotalStepInADay(dayOfYear,currentDate.get(Calendar.YEAR)).toFloat() / SharedPreferenceUtils.targetStep) * 100
+//                }
+//                getString(R.string._sat) -> {
+//                    saturday = (getTotalStepInADay(dayOfYear,currentDate.get(Calendar.YEAR)).toFloat() / SharedPreferenceUtils.targetStep) * 100
+//                }
+//                else -> {
+//                    sunday = (getTotalStepInADay(dayOfYear,currentDate.get(Calendar.YEAR)).toFloat() / SharedPreferenceUtils.targetStep) * 100
+//                }
+//            }
+//        }
+//
+//        val list=  arrayListOf(
+//            WeekReviewView.WeekData(monday, getString(R.string._mon)),
+//            WeekReviewView.WeekData(tuesday, getString(R.string._tue)),
+//            WeekReviewView.WeekData(wednesday, getString(R.string._wed)),
+//            WeekReviewView.WeekData(thursday, getString(R.string._thu)),
+//            WeekReviewView.WeekData(friday, getString(R.string._fri)),
+//            WeekReviewView.WeekData(saturday, getString(R.string._sat)),
+//            WeekReviewView.WeekData(sunday, getString(R.string._sun)),
+//        )
+//
+//        // ngay hien tai
+//        val ngayTrongNam = currentDate.get(Calendar.DAY_OF_WEEK)
+//        // thu hien tai
+//        val formatWeek = getDayAbbreviation(ngayTrongNam)
+//        // add list
+//        val search = list.find { it.day == formatWeek }?.apply { isToDay = true }
+//
+//        val indexS= list.indexOf(search)
+//
+//        val  listNew = arrayListOf<WeekReviewView.WeekData>()
+//
+//        list.forEachIndexed { index, weekData ->
+//            if(index>indexS){
+//                listNew.add(weekData)
+//            }
+//        }
+//        list.forEachIndexed { index, weekData ->
+//            if(index<=indexS){
+//                listNew.add(weekData)
+//            }
+//        }
+//        binding.chartWeek.setStrokeWidth(12f)
+//        binding.chartWeek.setData(listNew)
+//
+//        //todo
+//        var tbcStep = 0
+//        for (i in getListStepDayOfWeek((currentDate.get(Calendar.DAY_OF_YEAR) - 6),currentDate.get(
+//            Calendar.DAY_OF_YEAR),currentDate.get(Calendar.YEAR))){
+//            tbcStep += i
+//        }
+//        binding.tvStepNow.text = (tbcStep.toFloat() /
+//                getListStepDayOfWeek((currentDate.get(Calendar.DAY_OF_YEAR) - 6),currentDate.get(
+//                    Calendar.DAY_OF_YEAR),currentDate.get(Calendar.YEAR)).size).roundToInt().toString()
+//
+//    }
+//    private fun getListStepDayOfWeek(dayStart:Int, dayEnd:Int, yearInput:Int):ArrayList<Int>{
+//        val listStepDay:ArrayList<Int> = arrayListOf()
+//        for(i in dayStart..dayEnd){
+//            val stepDay = getStepDay(i, yearInput)
+//            listStepDay.add(stepDay)
+//        }
+//        return listStepDay      //trả về ds số bước chân mỗi ngày theo khoảng ngày(thuộc năm) đã nhập
+//    }
+//    private fun findLast7DaysWithDayOfWeek(currentCalendar: Calendar): Map<Int, Int> {
+//        val result = mutableMapOf<Int, Int>()
+//
+//        for (i in 0 until 7) {
+//            val previousCalendar = currentCalendar.clone() as Calendar
+//            previousCalendar.add(Calendar.DAY_OF_YEAR, -i)
+//            val dayOfYear = previousCalendar.get(Calendar.DAY_OF_YEAR)
+//            val dayOfWeek = previousCalendar.get(Calendar.DAY_OF_WEEK)
+//            result[dayOfYear] = dayOfWeek
+//        }
+//
+//        return result
+//    }
     private fun openStepGoalBottomSheet() {
         if (bottomSheetStepGoalDialog == null) {
             bottomSheetStepGoalDialog = StepGoalBottomDialog(

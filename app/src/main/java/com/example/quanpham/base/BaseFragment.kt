@@ -13,7 +13,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.room.Room
 import androidx.viewbinding.ViewBinding
+import com.example.quanpham.db.AppDatabase
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.showToast
@@ -24,17 +26,21 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 
 abstract class BaseFragment<T : ViewBinding> : Fragment() {
 
     protected lateinit var binding: T
     private lateinit var callback: OnBackPressedCallback
+    lateinit var database: AppDatabase
 
     val fbDatabase: FirebaseDatabase = Firebase.database
     val firestore: FirebaseFirestore = Firebase.firestore
     val storage = Firebase.storage
     var  usLoggin:MutableLiveData<Users>?= MutableLiveData(null)
     val auth= Firebase.auth
+    protected val compositeDisposable = CompositeDisposable()
 
     private fun getLoginUser(user: (Users?)->Unit) {
         if(auth.currentUser!=null){
@@ -59,6 +65,12 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
                 handlerBackPressed()
             }
         }
+        database = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "step-db"
+        )
+            .allowMainThreadQueries()
+            .build()
 
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
@@ -126,6 +138,10 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         transaction.commit()
     }
 
+    override fun onDestroyView() {
+        compositeDisposable.dispose()
+        super.onDestroyView()
+    }
     protected open fun hideKeyboard() {
         if (activity != null) {
             (activity as BaseActivity<*>?)?.hideKeyboard()
@@ -175,6 +191,12 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         intent.data = uri
         startActivity(intent)
         isGoToSetting = true
+    }
+    protected fun addDispose(disposable: Disposable?) {
+        disposable?.let {
+            compositeDisposable.add(disposable)
+        }
+
     }
     companion object {
         var isGoToSetting = false
