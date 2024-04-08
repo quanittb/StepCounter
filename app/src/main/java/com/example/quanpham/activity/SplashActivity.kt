@@ -21,9 +21,9 @@ import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.services.ResetReceiver
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.getEndOfDay
-import com.example.quanpham.utility.getEndOfYesterday
+import com.example.quanpham.utility.getEndOfDayMinus
 import com.example.quanpham.utility.getStartOfDay
-import com.example.quanpham.utility.getStartOfYesterday
+import com.example.quanpham.utility.getStartOfDayMinus
 import java.util.Calendar
 import kotlin.concurrent.thread
 
@@ -49,8 +49,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             getEndOfDay(System.currentTimeMillis())
         )
         SharedPreferenceUtils.yesterdayStep = database.stepDao().getStepsDay(
-            getStartOfYesterday(System.currentTimeMillis()),
-            getEndOfYesterday(System.currentTimeMillis()))
+            getStartOfDayMinus(System.currentTimeMillis(),1),
+            getEndOfDayMinus(System.currentTimeMillis(),1)
+        )
         HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())
     }
 

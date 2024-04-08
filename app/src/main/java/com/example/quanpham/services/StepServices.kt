@@ -27,7 +27,9 @@ import com.example.quanpham.db.AppDatabase
 import com.example.quanpham.db.model.Steps
 import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.example.quanpham.utility.Constant.CALO_STEP
 import com.example.quanpham.utility.Constant.CHANNEL_ID_STEP
+import com.example.quanpham.utility.Constant.KcalOne
 import com.example.quanpham.utility.NotificationManager
 import com.example.quanpham.utility.NotificationManager.Companion.FULLSCREEN_REMINDER_NOTIFICATION_ID
 import com.example.quanpham.utility.convertSecondToTime
@@ -75,11 +77,13 @@ class StepServices : Service() , SensorEventListener {
         val currentTime = Date()
         var steps = database.stepDao().getStepsHour(getStartOfHour(System.currentTimeMillis()), System.currentTimeMillis())
         if(steps == null)
-            database.stepDao().insert(Steps(null,1,currentTime,2,null,null))
+            database.stepDao().insert(Steps(null,1,currentTime,1, CALO_STEP.toLong(),(SharedPreferenceUtils.stepLength*0.001).toLong()))
         else{
-        steps.step++
-        steps.activeTime = steps.activeTime?.plus(2)
-        database.stepDao().updateStep(steps)
+            steps.step++
+            steps.calo = (steps.step * CALO_STEP).toLong()
+            steps.distance += (SharedPreferenceUtils.stepLength*0.001).toLong()
+            steps.activeTime = steps.activeTime.plus(1)
+            database.stepDao().updateStep(steps)
         }
         HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())
         notification()
@@ -88,9 +92,8 @@ class StepServices : Service() , SensorEventListener {
     private fun notification(){
         val remoteViews = RemoteViews(packageName, R.layout.layout_notify_all)
         remoteViews.setTextViewText(R.id.tv_number_step, SharedPreferenceUtils.dayStep.toString())
-        remoteViews.setTextViewText(R.id.tv_number_calo,(SharedPreferenceUtils.dayStep * 0.05).toInt().toString())
-
-        remoteViews.setTextViewText(R.id.tv_timer,(convertSecondToTime(SharedPreferenceUtils.dayStep * 2)))
+        remoteViews.setTextViewText(R.id.tv_number_calo,(SharedPreferenceUtils.dayStep * KcalOne).toInt().toString())
+        remoteViews.setTextViewText(R.id.tv_timer,(convertSecondToTime(SharedPreferenceUtils.dayStep)))
         remoteViews.setProgressBar(R.id.determinateBar,targetStep,currentStep,false)
         if (currentStep< targetStep/4){
             remoteViews.setProgressBar(R.id.determinateBar,targetStep,currentStep,false)

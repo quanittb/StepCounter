@@ -60,7 +60,7 @@ class EditBMIDialog(context: Context, private val onSaveChangeBmiListener: OnSav
                 }
 
                 val bmi = calculateBMIScore(weight.toFloat(), height.toFloat())
-                onSaveChangeBmiListener.onChangeWeight(weight.toDouble())
+                onSaveChangeBmiListener.onChangeWeight(weight.toFloat())
                 onSaveChangeBmiListener.onSave(bmi)
                 SharedPreferenceUtils.unit = unitType == GLOBAL_UNIT
                 dismiss()
@@ -250,6 +250,6 @@ class EditBMIDialog(context: Context, private val onSaveChangeBmiListener: OnSav
     interface OnSaveChangeBmiListener {
         fun onSave(bmi : String)
         fun onNotSave()
-        fun onChangeWeight(weight: Double)
+        fun onChangeWeight(weight: Float)
     }
 }

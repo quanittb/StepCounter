@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
 import com.example.quanpham.R
 import com.example.quanpham.databinding.DialogGenderBinding
+import com.example.quanpham.dialog.StepGoalBottomDialog
+import com.example.quanpham.dialog.StepGoalBottomDialog.OnClickBottomSheetListener
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -86,8 +88,4 @@ class GenderDialog(context: Context, private val listener : OnClickBottomSheetLi
             dismiss()
         }
     }
-    interface OnClickBottomSheetListener{
-        fun onClickSaveFrom()
-    }
-
 }

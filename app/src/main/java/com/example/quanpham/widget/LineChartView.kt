@@ -63,6 +63,70 @@ class LineChartView @JvmOverloads constructor(
 
     private var onTouchCallback: OnChartTouchEvent? = null
 
+    // vẽ ngày tháng ở tọa độ x
+    private fun drawVerticalValue(canvas: Canvas?) {
+        if (listString.isEmpty()) return
+        val textPaint = Paint().apply {
+            textSize = 24f
+            color = Color.parseColor("#9CA4AB")
+            style = Paint.Style.FILL
+        }
+
+        // lấy độ rộng text dài nhất : Mar30
+        val maxString = getStringMax(listString)
+        val texWidth = textPaint.measureText(maxString)
+
+        // TH số điểm nhập và size ngày băng nhau
+        if (listString.size == listPoint.size) {
+            listString.forEachIndexed { index, s ->
+                var startX = 0f
+                if (index == 0) {
+                    // set ngày nhập là ngày đầu tiên trên chart
+                    startX = listPoint.get(0).x
+                } else if (index == listPoint.size - 1) {
+                    // set ngày cuối cùng nhập là cuối cùng trên chart
+                    startX = listPoint.get(index).x - texWidth
+                } else {
+                    // set ngày ở giữa trên chart
+                    startX =
+                        listPoint.get(index).x - textPaint.measureText(listString.get(index)) / 2f
+                }
+                val startY = startPointDrawY + (height - startPointDrawY) / 2
+                canvas?.drawText(s, startX, startY, textPaint)
+            }
+        } else {
+            // TH điểm nhập và size ngày khác nhau
+            // tính độ rộng có thể vẽ
+            val width = listPoint[listPoint.size - 1].x - listPoint[0].x
+            // độ rộng của 1 ngày
+            val spaceWidth = width / listString.size
+
+            var startX = listPoint[0].x
+            listString.forEachIndexed { index, s ->
+                // vị trí trung tâm
+                val centerX = startX + spaceWidth / 2
+                val startY = startPointDrawY + (height - startPointDrawY) / 2
+                val textWidth = textPaint.measureText(s)
+                val textX = centerX - textWidth / 2
+                canvas?.drawText(s, textX, startY, textPaint)
+                startX += spaceWidth
+            }
+        }
+    }
+    // lấy giá trị ngày tháng có độ dài lớn nhất : Aug30
+    fun getStringMax(listString: MutableList<String>): String? {
+        if (listString.isEmpty()) {
+            return null
+        }
+
+        var stringVal = listString[0]
+        listString.forEach { item ->
+            if (item.length > stringVal.length) {
+                stringVal = item
+            }
+        }
+        return stringVal
+    }
     private fun getIndexByPoint(
         event: MotionEvent,
         calback: (Int, PointF) -> Unit
@@ -91,7 +155,7 @@ class LineChartView @JvmOverloads constructor(
 
     var isColorSeclect = false
 
-
+    // insert list ngày của tháng
     fun setVerticalValue(listString: MutableList<String>) {
         this.listString.clear()
         this.listString.addAll(listString)
@@ -109,59 +173,8 @@ class LineChartView @JvmOverloads constructor(
 
     private var listString: MutableList<String> = mutableListOf()
 
-    private fun drawVerticalValue(canvas: Canvas?) {
-        if (listString.isEmpty()) return
-        val textPaint = Paint().apply {
-            textSize = 24f
-            color = Color.parseColor("#9CA4AB")
-            style = Paint.Style.FILL
-        }
-        val maxString = getStringMax(listString)
-        val texWidth = textPaint.measureText(maxString)
 
-        if (listString.size == listPoint.size) {
-            listString.forEachIndexed { index, s ->
-                var startX = 0f
-                if (index == 0) {
-                    startX = listPoint.get(0).x
-                } else if (index == listPoint.size - 1) {
-                    startX = listPoint.get(index).x - texWidth
-                } else {
-                    startX =
-                        listPoint.get(index).x - textPaint.measureText(listString.get(index)) / 2f
-                }
-                val startY = startPointDrawY + (height - startPointDrawY) / 2
-                canvas?.drawText(s, startX, startY, textPaint)
-            }
-        } else {
 
-            val width = listPoint[listPoint.size - 1].x - listPoint[0].x
-            val spaceWidth = width / listString.size
-
-            var startX = listPoint[0].x
-            listString.forEachIndexed { index, s ->
-                val centerX = startX + spaceWidth / 2
-                val startY = startPointDrawY + (height - startPointDrawY) / 2
-                val textWidth = textPaint.measureText(s)
-                val textX = centerX - textWidth / 2
-                canvas?.drawText(s, textX, startY, textPaint)
-                startX += spaceWidth
-            }
-        }
-    }
-    fun getStringMax(listString: MutableList<String>): String? {
-        if (listString.isEmpty()) {
-            return null
-        }
-
-        var stringVal = listString[0]
-        listString.forEach { item ->
-            if (item.length > stringVal.length) {
-                stringVal = item
-            }
-        }
-        return stringVal
-    }
 
     fun getData(onChartTouchEvent: OnChartTouchEvent) {
         onTouchCallback = onChartTouchEvent
@@ -314,8 +327,8 @@ class LineChartView @JvmOverloads constructor(
             textAlign = Paint.Align.CENTER
         }
         val data = dataList.get(position)
-        val textLine1 = data.firstValue
-        val textLine2 = data.secondValue
+        val textLine1 = data.valueUnit
+        val textLine2 = data.valueDate
         val shapeHeight = boxWidth / 1.75f
         val textX = rectF.centerX()
         val textY1 = rectF.centerY() - shapeHeight / 12
@@ -453,6 +466,7 @@ class LineChartView @JvmOverloads constructor(
 
     private var listValueHorizontal = mutableListOf<Int>()
 
+    // insert giá trị data
     fun setData(dataList: MutableList<Data>) {
         if (dataList.isEmpty()) return
         this.dataList.clear()
@@ -468,7 +482,7 @@ class LineChartView @JvmOverloads constructor(
         }
         listStringMax.clear()
         dataList.forEach { value ->
-            listStringMax.add(value.firstValue)
+            listStringMax.add(value.valueUnit)
         }
         if(dataList.isEmpty()){
             position=-1
@@ -555,7 +569,8 @@ class LineChartView @JvmOverloads constructor(
         setMeasuredDimension(finalWidth, finalHeight)
     }
 
-    data class Data(val value: Float, var firstValue: String, var secondValue: String)
+    // data bao gồm : Value , value box (value + unit) , date
+    data class Data(val value: Float, var valueUnit: String, var valueDate: String)
 }
 
 interface OnChartTouchEvent {

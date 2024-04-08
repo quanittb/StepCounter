@@ -22,7 +22,7 @@ class ColumnChart @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-    data class Column(var value: Double, var firstValBox: String, var secondValBox: String)
+    data class Column(var value: Double, var valueString: String, var dateString: String)
 
     private var listColumn = ArrayList<Column>()
     var listHorizontal = ArrayList<String>()
@@ -53,7 +53,7 @@ class ColumnChart @JvmOverloads constructor(
             Color.parseColor("#0CB809")
         )
         columRadius =
-            typedArray.getDimension(R.styleable.CustomColumChart_columnRadius, 0f).toFloat()
+            typedArray.getDimension(R.styleable.CustomColumChart_columnRadius, 0f)
         textVerticalColor = typedArray.getColor(
             R.styleable.CustomColumChart_textVerticalColor,
             Color.parseColor("#434E58")
@@ -69,9 +69,9 @@ class ColumnChart @JvmOverloads constructor(
             R.styleable.CustomColumChart_textVerticalSize, 28
         ).toFloat()
         textTopBox =
-            typedArray.getDimension(R.styleable.CustomColumChart_textTopBoxSize, 24f).toFloat()
+            typedArray.getDimension(R.styleable.CustomColumChart_textTopBoxSize, 24f)
         textBottomBox =
-            typedArray.getDimension(R.styleable.CustomColumChart_textTopBoxSize, 20f).toFloat()
+            typedArray.getDimension(R.styleable.CustomColumChart_textTopBoxSize, 20f)
         columnPaintDef = Paint().apply {
             strokeWidth = 5f
             style = Paint.Style.FILL
@@ -87,8 +87,8 @@ class ColumnChart @JvmOverloads constructor(
 
     private var centerPointRect = PointF(0f, 0f)
     private lateinit var listShapeColumn: ArrayList<RectF>
-    fun setColumnSelectd(collumn: Int) {
-        this.columnSelected = collumn
+    fun setColumnSelected(column: Int) {
+        this.columnSelected = column
         invalidate()
     }
 
@@ -140,8 +140,8 @@ class ColumnChart @JvmOverloads constructor(
     private fun initMaxMin(listColumn: ArrayList<Column>) {
         var currentIndex = 0
         if (listColumn.isNotEmpty()) {
-            this.minValue = listColumn.minOf { it.value }
-            this.maxValue = listColumn.maxOf { it.value }
+            this.minValue = listColumn.minOf { it.value }.toDouble()
+            this.maxValue = listColumn.maxOf { it.value }.toDouble()
             this.listHorizonVal.clear()
         }
         for (index in 0 until arrValue.size - 1) {
@@ -179,7 +179,8 @@ class ColumnChart @JvmOverloads constructor(
         val scale = (targetValue.toFloat() / maxLeftValue.toFloat())
         var startY = startPointDrawY - (startPointDrawY - endPointDrawY) * scale - boxheight / 2
         var startX = 2f
-        var rectF = RectF(startX, startY, boxWidth, startY + boxheight)
+        var rectF = RectF(startX, startY, startX + boxWidth, startY + boxheight)
+
         canvas.drawRect(rectF, columnPaintSel)
         val textpaint2 = textPaint.apply {
             textSize = 16f
@@ -217,7 +218,7 @@ class ColumnChart @JvmOverloads constructor(
             } else if (value in 2..999) {
                 endValue = value.toString()
             } else {
-                endValue = (value / 1000).toString() + " k"
+                endValue = (value / 1000).toString() + "k"
             }
 
             canvas.drawText(endValue, 12f, startY, textPaintValue)
@@ -315,8 +316,8 @@ class ColumnChart @JvmOverloads constructor(
         columnSelected: Int
     ) {
         val data = listColumn.get(columnSelected)
-        val textLine1 = data.firstValBox
-        val textLine2 = data.secondValBox
+        val textLine1 = data.valueString
+        val textLine2 = data.dateString
         val textPaint1 = Paint().apply {
             color = Color.WHITE
             textSize = 32f
@@ -330,7 +331,7 @@ class ColumnChart @JvmOverloads constructor(
         }
         val boxHeight = height * 0.13f
 
-        val boxWidth = if(textPaint2.measureText(textLine2) > textPaint1.measureText(textLine2)) textPaint2.measureText(textLine2)*1.8f
+        val boxWidth = if(textPaint1.measureText(textLine1) < textPaint2.measureText(textLine2)) textPaint2.measureText(textLine2)*1.8f
                         else textPaint1.measureText(textLine1)*1.8f
         val top = height * 0.015f
         val shapePaint = Paint().apply {

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/main_back_ground_color"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+   <androidx.constraintlayout.widget.ConstraintLayout
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintBottom_toBottomOf="parent"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:paddingHorizontal="@dimen/_7sdp"
+       android:paddingVertical="@dimen/_5sdp">
+
+      <LinearLayout
+          android:id="@+id/time_picker"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent">
+
+         <ImageButton
+             android:id="@+id/iv_previous"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:backgroundTint="@color/main_back_ground_color"
+             android:padding="@dimen/_3sdp"
+             android:src="@drawable/ic_arrow_left" />
+
+
+         <TextView
+             android:id="@+id/tv_time"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:layout_weight="1"
+             android:gravity="center"
+             android:paddingHorizontal="@dimen/_10sdp"
+             android:text="Mar 1 - Mar 7"
+             android:textColor="@color/color_neutra_gray"
+             android:textSize="@dimen/_12ssp" />
+
+         <ImageButton
+             android:id="@+id/iv_next"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:backgroundTint="@color/main_back_ground_color"
+             android:padding="@dimen/_3sdp"
+             android:src="@drawable/ic_arrow_right" />
+
+      </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/time_picker"
+        app:layout_constraintDimensionRatio="1"
+        android:background="@drawable/bg_corner_10_white"
+        app:cardCornerRadius="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:paddingTop="@dimen/_2sdp"
+        android:layout_height="0dp">
+
+        <com.mobiai.base.chart.ColumnChart
+            android:id="@+id/chartView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="@dimen/_3sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@drawable/bg_corner_10_white"
+            app:columnRadius="@dimen/_4sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:selectedColor="@color/green" />
+    </FrameLayout>
+
+
+   </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,11 @@ object SharedPreferenceUtils {
     private const val SELECT_SEX = "SELECT_SEX"
     private const val AGE = "AGE"
     private const val HEIGHT = "HEIGHT"
+    private const val HEIGHT0_TEMPORARY = "HEIGHT0_TEMPORARY"
+    private const val HEIGHT1_TEMPORARY = "HEIGHT1_TEMPORARY"
     private const val WEIGHT = "WEIGHT"
+    private const val WEIGHT0_TEMPORARY = "WEIGHT0_TEMPORARY"
+    private const val WEIGHT1_TEMPORARY = "WEIGHT1_TEMPORARY"
     private const val START_COUNT_STEP = "START_COUNT_STEP"
     private const val DAY_COUNT_STEP = "DAY_COUNT_STEP"
     private const val YESTERDAY_COUNT_STEP = "YESTERDAY_COUNT_STEP"
@@ -21,6 +25,10 @@ object SharedPreferenceUtils {
     private const val FIRST_PERMISSION_REQUIRED = "FIRST_PERMISSION_REQUIRED"
     private const val CHECK_COUNT_REJECT = "CHECK_COUNT_REJECT"
     private const val SET_OR_CLOSE_STEP_GOAL = "SET_OR_CLOSE_STEP_GOAL"
+    private const val STEP_LENGTH = "STEP_LENGTH"
+    private const val AUTO_CALCULATE_STEP_LENGTH = "AUTO_CALCULATE_STEP_LENGTH"
+    private const val BMI ="BMI"
+
 
     var firstOpenApp: Boolean
         get() = sharedPreferencesManager.getValueBool(FIRST_OPEN_APP, true)
@@ -43,11 +51,13 @@ object SharedPreferenceUtils {
     var targetStep: Long
         get() = sharedPreferencesManager.getLongValue(TARGET_STEP, 6000)
         set(value) = sharedPreferencesManager.setLongValue(TARGET_STEP, value)
+
+    // Nam : 1, Nữ : 0
     var selectSex: Int
         get() = sharedPreferencesManager.getIntValue(SELECT_SEX, -1)
         set(value) = sharedPreferencesManager.setIntValue(SELECT_SEX, value)
     var age: Int
-        get() = sharedPreferencesManager.getIntValue(AGE, 0)
+        get() = sharedPreferencesManager.getIntValue(AGE, 20)
         set(value) = sharedPreferencesManager.setIntValue(AGE, value)
 
     //cm : Float
@@ -75,6 +85,28 @@ object SharedPreferenceUtils {
         get() = sharedPreferencesManager.getIntValue(CHECK_COUNT_REJECT, 1)
         set(value) = sharedPreferencesManager.setIntValue(CHECK_COUNT_REJECT, value)
     var setOrStartGoal: Boolean
-        get() = sharedPreferencesManager.getValueBool(SET_OR_CLOSE_STEP_GOAL, false)
+        get() = sharedPreferencesManager.getValueBool(SET_OR_CLOSE_STEP_GOAL, true)
         set(value) = sharedPreferencesManager.setValueBool(SET_OR_CLOSE_STEP_GOAL, value)
+    var bmi: Float?
+        get() = sharedPreferencesManager.getFloatValue(BMI, 18f)
+        set(value) = sharedPreferencesManager.setFloatValue(BMI, value!!)
+    //cm : Float
+    var stepLength: Float
+        get() = sharedPreferencesManager.getValue(STEP_LENGTH, 0.00f)
+        set(value) = sharedPreferencesManager.setValue(STEP_LENGTH, value)
+    var height0_temporary: Float
+        get() = sharedPreferencesManager.getValue(HEIGHT0_TEMPORARY, 0f)
+        set(value) = sharedPreferencesManager.setValue(HEIGHT0_TEMPORARY, value)
+    var weight0_temporary: Float
+        get() = sharedPreferencesManager.getValue(WEIGHT0_TEMPORARY, 0f)
+        set(value) = sharedPreferencesManager.setValue(WEIGHT0_TEMPORARY, value)
+    var height1_temporary: Float
+        get() = sharedPreferencesManager.getValue(HEIGHT1_TEMPORARY, 0f)
+        set(value) = sharedPreferencesManager.setValue(HEIGHT1_TEMPORARY, value)
+    var weight1_temporary: Float
+        get() = sharedPreferencesManager.getValue(WEIGHT1_TEMPORARY, 0f)
+        set(value) = sharedPreferencesManager.setValue(WEIGHT1_TEMPORARY, value)
+    var autoCalculateLength: Boolean
+        get() = sharedPreferencesManager.getValueBool(AUTO_CALCULATE_STEP_LENGTH, false)
+        set(value) = sharedPreferencesManager.setValueBool(AUTO_CALCULATE_STEP_LENGTH, value)
 }

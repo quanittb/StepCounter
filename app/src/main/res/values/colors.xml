@@ -465,12 +465,15 @@
     <color name="decrease">#DD2C26</color>
 
     <color name="highlight_color">#19B888</color>
-    <color name="color_button_ads">#A9DD38</color>
+    <color name="primary_color">#A9DD38</color>
     <color name="color_background_native_ads">#F2F2F1</color>
     <color name="color_native_ads_description">#78828A</color>
     <color name="color_line_space_ads">#6BFFFFFF</color>
+    <color name="bmi_underweight">#FDC944</color>
+    <color name="bmi_normal">#9DD030</color>
+    <color name="bmi_overweight">#FF8C39</color>
+    <color name="bmi_obesity">#FF395D</color>
 
     <color name="text_color_notify">#000000</color>
     <color name="transparent">#00FFFFFF</color>
-
 </resources>
