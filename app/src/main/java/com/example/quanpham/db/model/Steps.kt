@@ -18,8 +18,8 @@ class Steps (
     var step : Long = 0,
     @TypeConverters(Converters::class)
     var startTime : Date ,
-    var activeTime : Long,
-    var calo : Long,
-    var distance : Long,
+    var activeTime : Long = 0,
+    var calo : Long = 0,
+    var distance : Long = 0,
     )
 

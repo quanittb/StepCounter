@@ -48,10 +48,10 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
     override fun initView() {
         updateWeightData()
         binding.run {
-                tvBmiScore.text =
-                    SharedPreferenceUtils.bmi?.let { formatNumbers(it) }
-                binding.bmiChart.setValue(SharedPreferenceUtils.bmi!!.toFloat())
-                calculateAndUpdateBmi()
+            tvBmiScore.text =
+                SharedPreferenceUtils.bmi?.let { formatNumbers(it) }
+            binding.bmiChart.setValue(SharedPreferenceUtils.bmi!!.toFloat())
+            calculateAndUpdateBmi()
             ibEdit.setOnClickListener {
                 showBmiDialog()
             }
@@ -73,23 +73,31 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
             tvLast30DaysWeight.isSelected = true
         }
     }
-//            Tính BMI dựa vào đơn vị hệ met và kg
-    fun calculateBmiInGlobalUnit(weightInKg: Float, heighInMetter : Float) : Float{
-        return weightInKg / (heighInMetter *heighInMetter)
+
+    //            Tính BMI dựa vào đơn vị hệ met và kg
+    fun calculateBmiInGlobalUnit(weightInKg: Float, heighInMetter: Float): Float {
+        return weightInKg / (heighInMetter * heighInMetter)
     }
 
-//           Tính BMI dựa vào đơn vị hệ pound và inch
-    fun calculateBmiInUSUnit(weightInLb: Float, heighInInches : Float) : Float{
-        return  (weightInLb * 703) / (heighInInches * heighInInches)
+    //           Tính BMI dựa vào đơn vị hệ pound và inch
+    fun calculateBmiInUSUnit(weightInLb: Float, heighInInches: Float): Float {
+        return (weightInLb * 703) / (heighInInches * heighInInches)
 
     }
+
     private fun calculateAndUpdateBmi() {
         val unit = getUnitType()
         val bmi =
             if (unit == KG) {
-                calculateBmiInGlobalUnit( SharedPreferenceUtils.weight, (SharedPreferenceUtils.height / 100))
+                calculateBmiInGlobalUnit(
+                    SharedPreferenceUtils.weight,
+                    (SharedPreferenceUtils.height / 100)
+                )
             } else {
-                calculateBmiInUSUnit((SharedPreferenceUtils.weight * kgToLb), ( SharedPreferenceUtils.height * cmToIn))
+                calculateBmiInUSUnit(
+                    (SharedPreferenceUtils.weight * kgToLb),
+                    (SharedPreferenceUtils.height * cmToIn)
+                )
             }
         binding.tvBmiScore.text = formatNumbers(bmi)
         binding.bmiChart.setValue(bmi)
@@ -101,7 +109,10 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
         val dataLists: MutableList<LineChartView.Data> = mutableListOf()
         val currentYear = getCurrentYear()
         listWeight.clear()
-        listWeight.addAll(database.weightDao().getWeights(getStartOfYear(getCurrentYear()), getEndOfYear(getCurrentYear())))
+        listWeight.addAll(
+            database.weightDao()
+                .getWeights(getStartOfYear(getCurrentYear()), getEndOfYear(getCurrentYear()))
+        )
         var date = ""
         if (listWeight.size > 0) {
             listWeight.sortBy {
@@ -110,16 +121,18 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
             for (i in 0 until listWeight.size) {
                 val weight = listWeight[i]
 
-                    val month = getMonthOfYear(weight.updateTime!!.getMillis())
-                    date = DateUtils.getMonthInStringText(requireContext(), month) + "${
-                        getDayOfMonth(weight.updateTime!!.getMillis())}"
-                    if (listWeight.size <= 6) {
-                        listStr.add(date)
-                    } else if (i % 5 == 0) {
-                        listStr.add(date)
-                    }
+                val month = getMonthOfYear(weight.updateTime!!.getMillis())
+                date = DateUtils.getMonthInStringText(requireContext(), month) + "${
+                    getDayOfMonth(weight.updateTime!!.getMillis())
+                }"
+                if (listWeight.size <= 6) {
+                    listStr.add(date)
+                } else if (i % 5 == 0) {
+                    listStr.add(date)
+                }
                 if (weight.weight != null) {
-                    val w = if (unit == KG) weight.weight!!.toFloat() else (weight.weight!! / lbToKg)
+                    val w =
+                        if (unit == KG) weight.weight!!.toFloat() else (weight.weight!! / lbToKg)
                     dataLists.add(
                         LineChartView.Data(
                             w,
@@ -151,7 +164,7 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
     private fun showCurrentWeight() {
         val unit = getUnitType()
         val currentDayWeight = SharedPreferenceUtils.weight
-        val currentDayWeightInUnit = if (unit == KG) currentDayWeight else currentDayWeight/ lbToKg
+        val currentDayWeightInUnit = if (unit == KG) currentDayWeight else currentDayWeight / lbToKg
         binding.tvCurrentWeight.text = buildString {
             append(formatNumbers(currentDayWeightInUnit))
             append(unit)
@@ -159,24 +172,29 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
         var lastWeightMax = 0.0f
         var lastWeightMin = currentDayWeight
         var diff = 0f
-        val weights = database.weightDao().getWeights(getStartOfDayMinus(System.currentTimeMillis(),30),getEndOfDay(System.currentTimeMillis()))
+        val weights = database.weightDao().getWeights(
+            getStartOfDayMinus(System.currentTimeMillis(), 30),
+            getEndOfDay(System.currentTimeMillis())
+        )
         for (weight in weights) {
             if (weight.weight!! > lastWeightMax) {
-                lastWeightMax = if (unit == KG) weight.weight!! else weight.weight!!/ lbToKg
-                }
-            if (weight.weight!! < lastWeightMin ) {
-                lastWeightMin = if (unit == KG) weight.weight!! else weight.weight!!/ lbToKg
-                }
+                lastWeightMax = if (unit == KG) weight.weight!! else weight.weight!! / lbToKg
             }
-        if(lastWeightMax <= currentDayWeight) diff = currentDayWeight - lastWeightMin
-        if(lastWeightMin >= currentDayWeight) diff = currentDayWeight - lastWeightMax
+            if (weight.weight!! < lastWeightMin) {
+                lastWeightMin = if (unit == KG) weight.weight!! else weight.weight!! / lbToKg
+            }
+        }
+        if (lastWeightMax <= currentDayWeight) diff = currentDayWeight - lastWeightMin
+        if (lastWeightMin >= currentDayWeight) diff = currentDayWeight - lastWeightMax
         binding.tvLast30DaysWeight.apply {
             this.text = if (diff > 0) "+" + formatNumbers(diff) + unit
             else formatNumbers(diff) + unit
 
-            this.setTextColor(if (diff >= 0) requireContext().resources.getColor(R.color.increase) else requireContext().getColor(
-                R.color.decrease
-            ))
+            this.setTextColor(
+                if (diff >= 0) requireContext().resources.getColor(R.color.increase) else requireContext().getColor(
+                    R.color.decrease
+                )
+            )
         }
     }
 
@@ -202,20 +220,22 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
     }
 
     private fun openDialogAddWeight() {
-        var weightData = database.weightDao().getWeights(getStartOfDay(System.currentTimeMillis()), getEndOfDay(System.currentTimeMillis()))
+        var weightData = database.weightDao().getWeights(
+            getStartOfDay(System.currentTimeMillis()),
+            getEndOfDay(System.currentTimeMillis())
+        )
         val addWeightDialog =
             AddWeightDialog(requireContext(), object : AddWeightDialog.OnSaveChangeWeightListener {
                 override fun onSave(weight: Float, calendar: Calendar) {
                     val cal = Calendar.getInstance()
-                    if (calendar.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR) ) {
+                    if (calendar.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR)) {
                         SharedPreferenceUtils.weight = weight
                     }
-                    if(weightData.isEmpty()){
-                        database.weightDao().insert(Weights(null,weight, calendar.time ))
-                    }
-                    else{
+                    if (weightData.isEmpty()) {
+                        database.weightDao().insert(Weights(null, weight, calendar.time))
+                    } else {
                         weightData[0].weight = weight
-                        weightData[0].updateTime = Date()
+                        weightData[0].updateTime = calendar.time
                         database.weightDao().updateWeight(weightData[0])
                     }
 
@@ -246,28 +266,32 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
                 }
 
                 override fun onChangeWeight(weight: Float) {
-                    var weightData = database.weightDao().getWeights(getStartOfDay(System.currentTimeMillis()), getEndOfDay(System.currentTimeMillis()))
-                        if(weightData.isEmpty()){
-                            database.weightDao().insert(Weights(null,weight, Date()))
-                        }
-                        else{
-                            weightData[0].weight
-                            weightData[0].updateTime = Date()
-                            database.weightDao().updateWeight(weightData[0])
-                        }
+                    var weightData = database.weightDao().getWeights(
+                        getStartOfDay(System.currentTimeMillis()),
+                        getEndOfDay(System.currentTimeMillis())
+                    )
+                    if (weightData.isEmpty()) {
+                        database.weightDao().insert(Weights(null, weight, Date()))
+                    } else {
+                        weightData[0].weight
+                        weightData[0].updateTime = Date()
+                        database.weightDao().updateWeight(weightData[0])
+                    }
                 }
 
             })
         bmiDialog.show()
     }
 
-    private fun getUnitType (): String {
-        return if (SharedPreferenceUtils.unit)  KG else LB
+    private fun getUnitType(): String {
+        return if (SharedPreferenceUtils.unit) KG else LB
     }
+
     override fun handlerBackPressed() {
         super.handlerBackPressed()
         closeFragment(this)
     }
+
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?

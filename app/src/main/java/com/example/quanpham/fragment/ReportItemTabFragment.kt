@@ -1,20 +1,28 @@
 package com.example.quanpham.fragment
 
 import  DateUtils
+import DateUtils.findDayOfWeek
+import DateUtils.findMonthAndDayOfMonth
+import DateUtils.getCurrentYear
+import DateUtils.getMonthInStringIdSplit3
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.quanpham.R
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentReportItemTabBinding
+import com.example.quanpham.db.model.Steps
 import com.example.quanpham.fragment.HomeFragment.Companion.currentStep
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.model.PairModel
 import com.example.quanpham.utility.Constant.cmToIn
 import com.example.quanpham.utility.convertSecondToTime
+import com.example.quanpham.utility.getDayOfYear
 import com.example.quanpham.utility.getEndOfDay
 import com.example.quanpham.utility.getEndOfDayMinus
+import com.example.quanpham.utility.getStartDayOfYear
 import com.example.quanpham.utility.getStartOfDay
 import com.example.quanpham.utility.getStartOfDayMinus
 import com.example.quanpham.utility.logD
@@ -88,18 +96,18 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
     private fun initData(timeType: String) {
         when (timeType) {
             WEEK -> {
-                listWeek.addAll(DateUtils.generateWeeksInYear(DateUtils.getCurrentYear()))
+                listWeek.addAll(DateUtils.generateWeeksInYear(getCurrentYear()))
                 setTimePickerBehaviour(timeType)
             }
 
             MONTH -> {
-                listMonth.addAll(DateUtils.getStartDayAndEndDayOfMonth(DateUtils.getCurrentYear()))
+                listMonth.addAll(DateUtils.getStartDayAndEndDayOfMonth(getCurrentYear()))
                 setTimePickerBehaviour(timeType)
 
             }
 
             DAY -> {
-                totalDay = if (DateUtils.isLeapYear(DateUtils.getCurrentYear())) 366 else 365
+                totalDay = if (DateUtils.isLeapYear(getCurrentYear())) 366 else 365
                 setTimePickerBehaviour(timeType)
             }
         }
@@ -144,6 +152,73 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                         updateDataToDayChart(currentDayIndex)
                     }
 
+                }
+            }
+            WEEK -> {
+                val dayOfYear = DateUtils.getDayOfYear()
+                currentWeek.clear()
+                // thêm ds ngày của tuần hiện tại
+                getCurrentWeekInList(dayOfYear)?.let { currentWeek.addAll(ArrayList(it)) }
+                if (currentWeek.isNotEmpty()) {
+                    Log.i(TAG, "setTimePickerBehaviour: $currentWeek")
+                    logD("day of year : ${currentWeek[0]}")
+                    val startDay = findMonthAndDayOfMonth(
+                        currentWeek[0],
+                        getCurrentYear()
+                    )
+                    logD("day of month : ${startDay.first} va ${startDay.second}")
+                    val endDay = findMonthAndDayOfMonth(
+                        currentWeek[currentWeek.size - 1],
+                        getCurrentYear()
+                    )
+                    val startString = "${getString(getMonthInStringIdSplit3(startDay.second))} ${startDay.first}"
+                    val endString = "${getString(getMonthInStringIdSplit3(endDay.second))} ${endDay.first}"
+                    binding.tvTime.text = "${startString} -${endString} "
+                    updateDataToWeekChart(currentWeek)
+                }
+
+                binding.run {
+                    ivPrevious.setOnClickListener {
+                        if (currentWeekIndex <= 0) return@setOnClickListener
+                        currentWeekIndex--
+                        currentWeek.clear()
+                        currentWeek.addAll(listWeek[currentWeekIndex])
+                        if (currentWeek.isNotEmpty()) {
+                            val startDay = findMonthAndDayOfMonth(
+                                currentWeek[0],
+                                getCurrentYear()
+                            )
+                            val endDay = findMonthAndDayOfMonth(
+                                currentWeek[currentWeek.size - 1],
+                                getCurrentYear()
+                            )
+                            val startString = "${getString(getMonthInStringIdSplit3(startDay.second))} ${startDay.first}"
+                            val endString = "${getString(getMonthInStringIdSplit3(endDay.second))} ${endDay.first}"
+                            binding.tvTime.text = "${startString} -${endString} "
+                            updateDataToWeekChart(currentWeek)
+                        }
+                    }
+
+                    ivNext.setOnClickListener {
+                        if (currentWeekIndex >= listWeek.size - 1) return@setOnClickListener
+                        currentWeekIndex++
+                        currentWeek.clear()
+                        currentWeek.addAll(listWeek[currentWeekIndex])
+                        if (currentWeek.isNotEmpty()) {
+                            val startDay = findMonthAndDayOfMonth(
+                                currentWeek[0],
+                                getCurrentYear()
+                            )
+                            val endDay = findMonthAndDayOfMonth(
+                                currentWeek[currentWeek.size - 1],
+                                getCurrentYear()
+                            )
+                            val startString = "${getString(getMonthInStringIdSplit3(startDay.second))} ${startDay.first}"
+                            val endString = "${getString(getMonthInStringIdSplit3(endDay.second))} ${endDay.first}"
+                            binding.tvTime.text = "${startString} -${endString} "
+                            updateDataToWeekChart(currentWeek)
+                        }
+                    }
                 }
             }
         }
@@ -226,7 +301,118 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
 
     }
 
+    @SuppressLint("NewApi")
+    private fun updateDataToWeekChart(currentWeek: MutableList<Int>){
+        // currentWeek chứa list ngày của tuần
+        var listMonth = mutableListOf<Int>()
+        val listRow: ArrayList<String> = arrayListOf()
+        val listColum: ArrayList<Column> = arrayListOf()
+        listColum.clear()
+        listRow.clear()
+        //list step cả tuần
+        val listStepWeek = database.stepDao().getRecordStepsDay(
+            getStartDayOfYear(currentWeek.first()),
+            getStartDayOfYear(currentWeek.last())
+        )
+        val listFinalStepDayOfWeek : ArrayList<Steps> = arrayListOf()
+        currentWeek.forEach{
+            var step = Steps(startTime = Date())
+            listStepWeek.forEach{item ->
+                if(getDayOfYear(item.startTime) == it)
+                {
+                    step.step += item.step
+                    step.calo += item.calo
+                    step.distance += item.distance
+                    step.activeTime += item.activeTime
+                    step.startTime = item.startTime
+                }
+            }
+            val day = findDayOfWeek(it, getCurrentYear())
+            listRow.add(day)
+            listFinalStepDayOfWeek.add(step)
+        }
+        listFinalStepDayOfWeek.sortedBy { it.startTime }.forEach {
+            val date = findMonthAndDayOfMonth(getDayOfYear(it.startTime), getCurrentYear())
+            when (reportType) {
+                STEP -> listColum.add(
+                    Column(
+                        it.step.toDouble(),
+                        "${it.step} ${requireContext().getString(R.string.steps)}",
+                        "${
+                            DateUtils.getMonthInStringText(
+                                requireContext(),
+                                date.second
+                            )
+                        } ${date.first}"
+                    )
+                )
 
+                CALORIE -> listColum.add(
+                    Column(
+                        it.calo.toDouble(),
+                        "${it.calo} ${requireContext().getString(R.string.kcal)}",
+                        "${
+                            DateUtils.getMonthInStringText(
+                                requireContext(),
+                                date.second
+                            )
+                        } ${date.first}"
+                    )
+                )
+
+                DISTANCE -> {
+                    if (SharedPreferenceUtils.unit)
+                        listColum.add(
+                            Column(
+                                it.distance.toDouble(),
+                                "${it.distance} ${requireContext().getString(R.string.km)}",
+                                "${
+                                    DateUtils.getMonthInStringText(
+                                        requireContext(),
+                                        date.second
+                                    )
+                                } ${date.first}"
+                            )
+                        )
+                    else {
+                        var distance = it.distance.toFloat() * 1000 * cmToIn
+                        listColum.add(
+                            Column(
+                                distance.toDouble(),
+                                "${distance} ${requireContext().getString(R.string.ft)}",
+                                "${
+                                    DateUtils.getMonthInStringText(
+                                        requireContext(),
+                                        date.second
+                                    )
+                                } ${date.first}"
+                            )
+                        )
+                    }
+                }
+
+                TIME -> listColum.add(
+                    Column(
+                        it.activeTime.toDouble(),
+                        convertSecondToTime(it.activeTime),
+                        "${
+                            DateUtils.getMonthInStringText(
+                                requireContext(),
+                                date.second
+                            )
+                        } ${date.first}"
+                    )
+                )
+            }
+        }
+        val currentDate = LocalDate.now()
+        var today = currentDate.dayOfYear
+        binding.chartView.setColumnSelected(listMonth.indexOf(today))
+        binding.chartView.setTargetValue(true, 250)
+        binding.chartView.listHorizontal = listRow
+        binding.chartView.setData(listColum)
+
+    }
     private fun getCurrentWeekInList(dayOfYear: Int): MutableList<Int>? {
 //        Log.i(TAG, "getCurrentWeekInList: ${listWeek[2].size}")
         for (index in 0 until listWeek.size) {

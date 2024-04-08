@@ -98,7 +98,29 @@ fun getEndOfDay(currentTime: Long): Long {
     calendar.set(Calendar.MILLISECOND, 999)
     return calendar.timeInMillis
 }
-
+fun getStartDayOfYear(dayOfYear : Int): Long {
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.DAY_OF_YEAR,dayOfYear)
+    calendar.set(Calendar.HOUR_OF_DAY, 0)
+    calendar.set(Calendar.MINUTE, 0)
+    calendar.set(Calendar.SECOND, 0)
+    calendar.set(Calendar.MILLISECOND, 0)
+    return calendar.timeInMillis
+}
+fun getDayOfYear(date: Date): Int {
+    val calendar = Calendar.getInstance()
+    calendar.time = date
+    return calendar.get(Calendar.DAY_OF_YEAR)
+}
+fun getEndDayOfYear(dayOfYear : Int): Long {
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.DAY_OF_YEAR,dayOfYear)
+    calendar.set(Calendar.HOUR_OF_DAY, 23)
+    calendar.set(Calendar.MINUTE, 59)
+    calendar.set(Calendar.SECOND, 59)
+    calendar.set(Calendar.MILLISECOND, 999)
+    return calendar.timeInMillis
+}
 fun getStartOfDayMinus(currentTime: Long, dayMinus : Int): Long {
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currentTime
