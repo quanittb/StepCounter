@@ -27,6 +27,7 @@ import com.example.quanpham.db.AppDatabase
 import com.example.quanpham.db.model.Steps
 import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.example.quanpham.utility.Constant.CALO_STEP
 import com.example.quanpham.utility.Constant.CHANNEL_ID_STEP
 import com.example.quanpham.utility.Constant.KcalOne
 import com.example.quanpham.utility.NotificationManager
@@ -76,11 +77,13 @@ class StepServices : Service() , SensorEventListener {
         val currentTime = Date()
         var steps = database.stepDao().getStepsHour(getStartOfHour(System.currentTimeMillis()), System.currentTimeMillis())
         if(steps == null)
-            database.stepDao().insert(Steps(null,1,currentTime,1,null,null))
+            database.stepDao().insert(Steps(null,1,currentTime,1, CALO_STEP.toLong(),(SharedPreferenceUtils.stepLength*0.001).toLong()))
         else{
-        steps.step++
-        steps.activeTime = steps.activeTime?.plus(1)
-        database.stepDao().updateStep(steps)
+            steps.step++
+            steps.calo = (steps.step * CALO_STEP).toLong()
+            steps.distance += (SharedPreferenceUtils.stepLength*0.001).toLong()
+            steps.activeTime = steps.activeTime.plus(1)
+            database.stepDao().updateStep(steps)
         }
         HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())
         notification()

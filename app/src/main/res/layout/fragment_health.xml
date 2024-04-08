@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:backgroundTint="@color/main_back_ground_color"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvHealth"
+        android:layout_width="0dp"
+        android:layout_marginVertical="@dimen/_12sdp"
+        android:layout_marginLeft="@dimen/_14sdp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mukta_semi_bold"
+        android:text="@string/health"
+        android:textColor="@color/app_text_color"
+        android:textSize="@dimen/_25sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingBottom="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/_3sdp"
+        app:layout_constraintTop_toBottomOf="@id/tvHealth">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctl_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingHorizontal="@dimen/_14sdp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ctl_chart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_corner_10_white"
+                android:paddingVertical="@dimen/_5sdp"
+                android:paddingHorizontal="@dimen/_10sdp"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvWeight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/mukta_semi_bold"
+                    android:text="@string/weight"
+                    android:textColor="@color/app_text_color"
+                    android:textSize="@dimen/_18sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvCurrentYear"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/mukta_medium"
+                    android:text="2023"
+                    android:gravity="center"
+                    android:textColor="@color/app_text_color"
+                    android:textSize="@dimen/_16sdp"
+                    app:layout_constraintStart_toStartOf="@id/tvWeight"
+                    app:layout_constraintEnd_toEndOf="@id/tvWeight"
+                    app:layout_constraintTop_toBottomOf="@id/tvWeight" />
+
+                <ImageButton
+                    android:id="@+id/btAddWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintBottom_toBottomOf="@id/tvWeight"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvWeight" />
+
+                <com.mobiai.base.chart.LineChartView
+                    android:id="@+id/chartView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1"
+                    android:background="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/tvCurrentYear" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ln_current_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_corner_10_white"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:paddingHorizontal="@dimen/_30sdp"
+                app:layout_constraintTop_toBottomOf="@id/ctl_chart"
+                app:layout_constraintBottom_toTopOf="@id/tv_body_mass_index">
+
+
+                <LinearLayout
+                    android:id="@+id/ln_current"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_5sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_current_weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/mukta_semi_bold"
+                        android:text="49,9kg"
+                        android:singleLine="true"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:textColor="@color/app_text_color"
+                        android:textSize="@dimen/_22sdp" />
+
+                    <TextView
+                        android:id="@+id/tv_current"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/mukta_regular"
+                        android:text="@string/current"
+                        android:textColor="#173430"
+                        android:textSize="@dimen/_13sdp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:id="@+id/ln_last_30_days"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_5sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ln_current"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_last_30_days_weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/mukta_semi_bold"
+                        android:text="-1kg"
+                        android:singleLine="true"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:textColor="@color/app_text_color"
+                        android:textSize="@dimen/_22sdp" />
+
+                    <TextView
+                        android:id="@+id/tv_last_30_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/mukta_regular"
+                        android:text="@string/last_30_days"
+                        android:textColor="#173430"
+                        android:textSize="@dimen/_13sdp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_body_mass_index"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mukta_semi_bold"
+                android:paddingVertical="@dimen/_5sdp"
+                android:text="@string/body_mass_index"
+                android:textColor="@color/app_text_color"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintTop_toBottomOf="@id/ln_current_weight" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ctl_bmi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_corner_10_white"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_14sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                app:layout_constraintBottom_toTopOf="@id/view"
+                app:layout_constraintTop_toBottomOf="@id/tv_body_mass_index">
+
+
+                <ImageButton
+                    android:id="@+id/ib_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_bmi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_bmi_index"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_bmi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/mukta_semi_bold"
+                    android:paddingHorizontal="@dimen/_5sdp"
+                    android:text="@string/bmi_score"
+                    android:textColor="#173430"
+                    android:textSize="@dimen/_12sdp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_bmi"
+                    app:layout_constraintStart_toEndOf="@id/iv_bmi"
+                    app:layout_constraintTop_toTopOf="@id/iv_bmi" />
+
+                <TextView
+                    android:id="@+id/tv_bmi_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/mukta_semi_bold"
+                    android:text="21.2"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:textColor="@color/app_text_color"
+                    android:textSize="@dimen/_17sdp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_bmi"
+                    app:layout_constraintStart_toEndOf="@id/tv_bmi"
+                    app:layout_constraintTop_toTopOf="@id/tv_bmi" />
+
+
+                <com.example.quanpham.widget.BMIChart
+                    android:id="@+id/bmiChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:background="@color/white"
+                    app:clickable="false"
+                    app:layout_constraintTop_toBottomOf="@id/iv_bmi" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                app:layout_constraintTop_toBottomOf="@id/ctl_bmi"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="@dimen/_130sdp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

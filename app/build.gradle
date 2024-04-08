@@ -79,6 +79,11 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
     implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
 
+    // datePicker
+    implementation 'com.github.gastricspark:scrolldatepicker:0.0.1'
+    //circle imageview
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
     // Vertical Sensitive
 //    implementation 'com.github.Jay-Goo:RangeSeekBar:v3.0.0'
 }

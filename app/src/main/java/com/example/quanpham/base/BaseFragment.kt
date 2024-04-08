@@ -107,6 +107,9 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
     fun addFragment(fragment: Fragment) {
         (requireActivity() as BaseActivity<*>).addFragment(fragment)
     }
+    fun hideFragment(fragment: Fragment) {
+        (requireActivity() as BaseActivity<*>).hideFragment(fragment)
+    }
 
     fun replaceFullViewFragment(fragment: Fragment, addToBackStack: Boolean) {
         (requireActivity() as BaseActivity<*>).replaceFragment(

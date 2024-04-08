@@ -247,51 +247,6 @@
                     android:layout_marginVertical="@dimen/_12sdp">
 
                     <ImageView
-                        android:id="@+id/icSensitive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_sensitive"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:fontFamily="@font/mukta_medium"
-                        android:text="@string/sensitive"
-                        android:textColor="@color/text_settings"
-                        android:textSize="@dimen/_14sdp"
-                        app:layout_constraintLeft_toRightOf="@+id/icSensitive"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/txtSensitive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:drawableEnd="@drawable/ic_vector_down"
-                        android:paddingHorizontal="@dimen/_5sdp"
-                        android:drawablePadding="@dimen/_5sdp"
-                        android:fontFamily="@font/mukta_medium"
-                        android:text="@string/sen_1"
-                        android:textColor="@color/text_detail_settings"
-                        android:textSize="@dimen/_14sdp"
-                        app:layout_constraintRight_toRightOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:background="#E3E9ED" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_12sdp">
-
-                    <ImageView
                         android:id="@+id/icMetric"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

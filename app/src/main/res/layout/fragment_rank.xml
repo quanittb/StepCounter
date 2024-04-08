@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingTop="@dimen/_10sdp"
+    android:paddingHorizontal="@dimen/_10sdp"
+    android:backgroundTint="@color/main_back_ground_color"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/tvRank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_25sdp"
+        android:fontFamily="@font/mukta_medium"
+        android:text="@string/rank"
+        android:textAlignment="center"
+        android:textColor="@color/app_text_color"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"/>
+</LinearLayout>

@@ -158,35 +158,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         super.onStop()
     }
 
-    fun addDB() {
-        try {
-            val currentUser = auth.currentUser
-            currentUser?.let { user ->
-                fbDatabase.getReference(Constant.KEY_WEIGHT)
-                    .child(user.uid)
-                    .push()
-                    .setValue(Weights(1, 55F, ""))
-                    .addOnSuccessListener {
-                        showToast("Thành công")
-                        Log.d("abcd", "đã chạy")
-                    }
-                    .addOnFailureListener {
-                        showToast(it.message.toString())
-                        Log.d("abcd", "lỗi ${it.message}")
-                    }
-                val currentTime = Date()
-                fbDatabase.getReference(Constant.KEY_STEP)
-                    .child(user.uid)
-                    .push()
-                    .setValue(Steps(1, 1000, currentTime , 20, 150, 2))
-            } ?: run {
-                // Handle case where currentUser is null
-                showToast("User not authenticated")
-            }
-        } catch (e: Exception) {
-            Log.d("abcd", "Err ${e.message}")
-        }
-    }
+//    fun addDB() {
+//        try {
+//            val currentUser = auth.currentUser
+//            currentUser?.let { user ->
+//                fbDatabase.getReference(Constant.KEY_WEIGHT)
+//                    .child(user.uid)
+//                    .push()
+//                    .setValue(Weights(1, 55F, ""))
+//                    .addOnSuccessListener {
+//                        showToast("Thành công")
+//                        Log.d("abcd", "đã chạy")
+//                    }
+//                    .addOnFailureListener {
+//                        showToast(it.message.toString())
+//                        Log.d("abcd", "lỗi ${it.message}")
+//                    }
+//                val currentTime = Date()
+//                fbDatabase.getReference(Constant.KEY_STEP)
+//                    .child(user.uid)
+//                    .push()
+//                    .setValue(Steps(1, 1000, currentTime , 20, 150, 2))
+//            } ?: run {
+//                // Handle case where currentUser is null
+//                showToast("User not authenticated")
+//            }
+//        } catch (e: Exception) {
+//            Log.d("abcd", "Err ${e.message}")
+//        }
+//    }
 
     private fun setWelcome(){
         val hour = getHour()

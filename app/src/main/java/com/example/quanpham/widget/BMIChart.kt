@@ -1,6 +1,7 @@
 package com.example.quanpham.widget
 
 import android.content.Context
+import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Color
@@ -12,6 +13,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import com.example.quanpham.R
 import com.mobiai.views.beforeafter.chart.utility.drawTriangle
 
@@ -26,7 +28,7 @@ class BMIChart @JvmOverloads constructor(
 
 
     private val typedArray: TypedArray
-    private var colorBox = Color.parseColor("#9DD030")
+    private var colorBox = ContextCompat.getColor(context, R.color.primary_color)
     private var textValueColor = Color.WHITE
     private var bmiHeight = 20f
     private val boxPaint = Paint()
@@ -39,28 +41,30 @@ class BMIChart @JvmOverloads constructor(
         invalidate()
     }
 
-
+// khởi tạo thuộc tính
     init {
         typedArray = context.obtainStyledAttributes(attrs, R.styleable.BMIChart)
-        colorBox = typedArray.getColor(R.styleable.BMIChart_boxColor, Color.parseColor("#9DD030"))
+        colorBox = typedArray.getColor(R.styleable.BMIChart_boxColor, ContextCompat.getColor(context, R.color.primary_color))
         textValueColor = typedArray.getColor(R.styleable.BMIChart_textBoxColor, Color.WHITE)
         bmiHeight = typedArray.getInt(R.styleable.BMIChart_bmiHeight, 20).toFloat()
         clickAble = typedArray.getBoolean(R.styleable.BMIChart_clickable, false)
 
+        // giải phóng bộ nhớ
         typedArray.recycle()
     }
 
+    // list màu từng level
     private val listColor = arrayListOf(
-        Color.parseColor("#FDC944"),
-        Color.parseColor("#9DD030"),
-        Color.parseColor("#FDC944"),
-        Color.parseColor("#FF8C39"),
-        Color.parseColor("#FF395D")
+        ContextCompat.getColor(context,R.color.bmi_underweight),
+        ContextCompat.getColor(context,R.color.bmi_normal),
+        ContextCompat.getColor(context,R.color.bmi_underweight),
+        ContextCompat.getColor(context,R.color.bmi_overweight),
+        ContextCompat.getColor(context,R.color.bmi_obesity)
     )
 
     private fun getListRect(height: Float, width: Float): ArrayList<RectF> {
         val listShapeData = ArrayList<RectF>()
-        var drawWidth = width - startX * 2 - spaceRect * 5
+        var drawWidth = width - startX * 2 - spaceRect * 4
         val minvalue = listBMIValue.minOrNull() ?: 0
         val maxvalue = listBMIValue.maxOrNull() ?: 0
         val countValue = maxvalue - minvalue
@@ -71,9 +75,9 @@ class BMIChart @JvmOverloads constructor(
             val rectWidth = valueSpace * spaceWidthValue
             val rectf = RectF(
                 startX,
-                height - (height * 0.4f),
+                height * 0.6f,
                 startX + rectWidth,
-                height - (height * 0.4f) + bmiHeight
+                height * 0.6f + bmiHeight
             )
             listShapeData.add(rectf)
             listStartPoint.add(startX)
@@ -148,21 +152,24 @@ class BMIChart @JvmOverloads constructor(
             style = Paint.Style.FILL
             textSize = 24f
         }
+
+        // vẽ text
         listStartPoint.forEachIndexed { index, fl ->
             val text = listBMIValue[index].toString()
             canvas?.drawText(
                 text,
                 fl,
-                height - (height * 0.4f) + bmiHeight * 2 + bmiHeight / 4,
+                height * 0.6f + bmiHeight * 2.25f,
                 textPaint
             )
+            // vẽ 40
             if (index == listStartPoint.count() - 1) {
                 val nextText = listBMIValue[index + 1].toString()
                 val textWidth = textPaint.measureText(nextText)
                 canvas?.drawText(
                     nextText,
                     width.toFloat() - spaceRect - textWidth,
-                    height - (height * 0.4f) + bmiHeight * 2 + bmiHeight / 4,
+                    height * 0.6f + bmiHeight * 2.25f,
                     textPaint
                 )
             }
@@ -172,7 +179,7 @@ class BMIChart @JvmOverloads constructor(
     fun getPointByIndex(currentIndex: Int, calback: (PointF) -> Unit) {
         listShape.forEachIndexed { index, rectF ->
             if (index == currentIndex) {
-                val pointX = rectF.left + (rectF.right - rectF.left) / 2
+                val pointX = rectF.centerX()
                 var pointF = PointF(pointX, 0f)
                 calback(pointF)
             }
@@ -238,7 +245,9 @@ class BMIChart @JvmOverloads constructor(
         if (listShape.isEmpty()) {
             listShape = getListRect(canvasHeight, canvasWidth)
         }
+
         drawBoxValue(canvas)
+
         if (listBoxValue.size === 5 && columnSelected!=-1) {
             drawShapeBox(canvas!!, columnSelected)
         }

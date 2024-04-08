@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/ic_step"
+            android:id="@+id/image"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/index"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/_19sdp"
+            android:text="1234"
+            android:singleLine="true"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:fontFamily="@font/mukta_medium"
+            android:textColor="@color/app_text_color"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/unit"
+            android:text="@string/steps"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_gravity="center|start"
+            android:gravity="center|bottom"
+            android:textSize="@dimen/_14sdp"
+            android:textColor="@color/color_neutra_gray"
+            android:fontFamily="@font/mukta_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/increaseIndex"
+        android:layout_gravity="start|center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_width="wrap_content"
+        android:text="+123"
+        android:fontFamily="@font/mukta_medium"
+        android:textColor="@color/green"
+        android:textSize="@dimen/_15ssp"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

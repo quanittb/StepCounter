@@ -17,9 +17,9 @@ class Steps (
     var id : Long? = null ,
     var step : Long = 0,
     @TypeConverters(Converters::class)
-    var startTime : Date? = null,
-    var activeTime : Long? = null,
-    var calo : Long? = null,
-    var distance : Long? = null,
+    var startTime : Date ,
+    var activeTime : Long,
+    var calo : Long,
+    var distance : Long,
     )
 

@@ -197,7 +197,19 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
         }
         transaction.commit()
     }
-
+    open fun hideFragment(
+        fragment: Fragment,
+    ) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(
+            R.anim.slide_in,
+            R.anim.fade_out,
+            R.anim.fade_in,
+            R.anim.slide_out
+        )
+        transaction.hide(fragment)
+        transaction.commit()
+    }
     open fun addFragment(
         fragment: Fragment,
         viewId: Int = android.R.id.content,

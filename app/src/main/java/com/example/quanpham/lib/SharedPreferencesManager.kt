@@ -47,6 +47,11 @@ class SharedPreferencesManager(context: Context) {
             .putInt(key, value)
             .apply()
     }
+    fun setFloatValue(key: String?, value: Float) {
+        mPref!!.edit()
+            .putFloat(key, value)
+            .apply()
+    }
 
     fun setLongValue(key: String?, value: Long) {
         mPref!!.edit()
@@ -65,6 +70,10 @@ class SharedPreferencesManager(context: Context) {
     fun getIntValue(key: String?, defaultValue: Int): Int {
         return mPref!!.getInt(key, defaultValue)
     }
+    fun getFloatValue(key: String?,defaultValue: Float): Float {
+        return mPref!!.getFloat(key, 0f)
+    }
+
 
     fun getValue(key: String?, defaultValues: Float): Float {
         return mPref!!.getFloat(key, defaultValues)

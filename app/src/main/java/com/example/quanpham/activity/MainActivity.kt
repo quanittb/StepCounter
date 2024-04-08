@@ -12,7 +12,9 @@ import com.example.quanpham.databinding.ActivityMainBinding
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.db.model.Steps
 import com.example.quanpham.db.model.Weights
+import com.example.quanpham.fragment.HealthFragment
 import com.example.quanpham.fragment.HomeFragment
+import com.example.quanpham.fragment.ReportFragment
 import com.example.quanpham.fragment.SettingFragment
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.Constant.CHANNEL_ID_STEP
@@ -36,25 +38,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
 
     }
     private val HOME_FRAGMENT = HomeFragment.instance()
-//    private val REPORT_FRAGMENT = ReportFragment.instance()
-//    private val HEALTHY_FRAGMENT = HealthFragment.instance()
+    private val REPORT_FRAGMENT = ReportFragment.instance()
+//    private val RANK_FRAGMENT = RankFragment.instance()
+    private val HEALTHY_FRAGMENT = HealthFragment.instance()
     private val SETTINGS_FRAGMENT = SettingFragment.instance()
     private var currentFragment  : Fragment = HOME_FRAGMENT
 
     private fun initBottomNav(){
         binding.bottomNav.setOnApplyWindowInsetsListener(null)
-        supportFragmentManager.beginTransaction().add(binding.layoutAddFragmentMain.id,HOME_FRAGMENT).
+        supportFragmentManager.beginTransaction().add(binding.layoutAddFragmentMain.id,REPORT_FRAGMENT).add(binding.layoutAddFragmentMain.id,HOME_FRAGMENT).
         show(HOME_FRAGMENT).commit()
-//        supportFragmentManager.beginTransaction().add(binding.layoutAddFragmentMain.id,REPORT_FRAGMENT).
-//        hide(REPORT_FRAGMENT).commit()
-//        supportFragmentManager.beginTransaction().add(binding.layoutAddFragmentMain.id,HEALTHY_FRAGMENT).
-//        hide(HEALTHY_FRAGMENT).commit()
-//        supportFragmentManager.beginTransaction().add(binding.layoutAddFragmentMain.id,SETTINGS_FRAGMENT).
-//        hide(SETTINGS_FRAGMENT).commit()
     }
     private fun showFragment(showFragment: Fragment, hideFragment: Fragment){
-        supportFragmentManager.beginTransaction().remove(hideFragment).commit()
-        supportFragmentManager.beginTransaction().add(binding.layoutAddFragmentMain.id,showFragment).commit()
+        if(hideFragment == REPORT_FRAGMENT)
+            supportFragmentManager.beginTransaction().hide(hideFragment).commitAllowingStateLoss()
+        else
+            supportFragmentManager.beginTransaction().remove(hideFragment).commitAllowingStateLoss()
+        if(showFragment != REPORT_FRAGMENT)
+            supportFragmentManager.beginTransaction()
+                .add(binding.layoutAddFragmentMain.id, showFragment).commitAllowingStateLoss()
+        else
+            supportFragmentManager.beginTransaction()
+                .show(showFragment).commitAllowingStateLoss()
     }
     private fun setListeners() {
         binding.bottomNav.selectedItemId = R.id.action_home
@@ -67,19 +72,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
 
                     }
                 }
-//                R.id.action_report -> {
-//                    if (currentFragment != REPORT_FRAGMENT){
-//                        showFragment(REPORT_FRAGMENT,currentFragment)
-//                        currentFragment = REPORT_FRAGMENT
-//                    }
-//                }
-//
-//                R.id.action_health -> {
-//                    if (currentFragment != HEALTHY_FRAGMENT){
-//                        showFragment(HEALTHY_FRAGMENT,currentFragment)
-//                        currentFragment = HEALTHY_FRAGMENT
-//                    }
-//                }
+                R.id.action_report -> {
+                    if (currentFragment != REPORT_FRAGMENT){
+                        showFragment(REPORT_FRAGMENT,currentFragment)
+                        currentFragment = REPORT_FRAGMENT
+                    }
+                }
+                R.id.action_health -> {
+                    if (currentFragment != HEALTHY_FRAGMENT){
+                        showFragment(HEALTHY_FRAGMENT,currentFragment)
+                        currentFragment = HEALTHY_FRAGMENT
+                    }
+                }
                 R.id.action_setting -> {
                     if (currentFragment != SETTINGS_FRAGMENT){
                         showFragment(SETTINGS_FRAGMENT,currentFragment)
