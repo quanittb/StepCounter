@@ -140,8 +140,8 @@ class ColumnChart @JvmOverloads constructor(
     private fun initMaxMin(listColumn: ArrayList<Column>) {
         var currentIndex = 0
         if (listColumn.isNotEmpty()) {
-            this.minValue = listColumn.minOf { it.value }.toDouble()
-            this.maxValue = listColumn.maxOf { it.value }.toDouble()
+            this.minValue = listColumn.minOf { it.value }
+            this.maxValue = if(listColumn.maxOf { it.value } > 0) listColumn.maxOf { it.value } else 0.0
             this.listHorizonVal.clear()
         }
         for (index in 0 until arrValue.size - 1) {
@@ -154,12 +154,12 @@ class ColumnChart @JvmOverloads constructor(
             }
             maxLeftValue = arrValue[index + 1]
         }
-        listHorizonVal.add(0)
-        listHorizonVal.add((maxLeftValue * 0.2).toInt())
-        listHorizonVal.add((maxLeftValue * 0.4).toInt())
-        listHorizonVal.add((maxLeftValue * 0.6).toInt())
-        listHorizonVal.add((maxLeftValue * 0.8).toInt())
-        listHorizonVal.add(maxLeftValue)
+            listHorizonVal.add(0)
+            listHorizonVal.add((maxLeftValue * 0.2).toInt())
+            listHorizonVal.add((maxLeftValue * 0.4).toInt())
+            listHorizonVal.add((maxLeftValue * 0.6).toInt())
+            listHorizonVal.add((maxLeftValue * 0.8).toInt())
+            listHorizonVal.add(maxLeftValue)
     }
 
     var textHorzWidth = 0f
@@ -181,7 +181,7 @@ class ColumnChart @JvmOverloads constructor(
         var startX = 2f
         var rectF = RectF(startX, startY, startX + boxWidth, startY + boxheight)
 
-        canvas.drawRect(rectF, columnPaintSel)
+//        canvas.drawRect(rectF, columnPaintSel)
         val textpaint2 = textPaint.apply {
             textSize = 16f
             color = Color.WHITE
@@ -189,13 +189,13 @@ class ColumnChart @JvmOverloads constructor(
         val textX =
             rectF.left + (rectF.width() - textpaint2.measureText(targetValue.toString())) / 2
         val textY = rectF.top + (rectF.height() + textpaint2.textSize) * 0.45f
-        canvas.drawText(targetValue.toString(), textX, textY, textpaint2)
+//        canvas.drawText(targetValue.toString(), textX, textY, textpaint2)
         canvas.drawTriangle(
-            columnPaintSel, PointF(boxWidth, startY),
-            PointF(startPointDrawX, (startY + boxheight / 2)), PointF(boxWidth, startY + boxheight)
+            columnPaintSel, PointF(startPointDrawX, startY),
+            PointF(startPointDrawX + boxWidth, (startY + boxheight / 2)), PointF(startPointDrawX, startY + boxheight)
         )
         canvas.drawLine(
-            startPointDrawX,
+            startPointDrawX + boxWidth,
             startY + boxheight / 2,
             endPointDrawX,
             startY + boxheight / 2,

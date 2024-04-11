@@ -57,7 +57,7 @@
                     android:id="@+id/tv_content_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2489"
+                    android:text="0"
                     android:gravity="center"
                     android:paddingHorizontal="@dimen/_2sdp"
                     android:singleLine="true"
@@ -131,7 +131,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_50sdp"
                             android:fontFamily="@font/mukta_semi_bold"
-                            android:text="9"
+                            android:text="0"
                             android:textColor="@color/color_text_home"
                             android:textSize="@dimen/_35sdp" />
 
@@ -223,7 +223,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_2sdp"
-                        android:text="1234"
+                        android:text="0"
                         android:fontFamily="@font/mukta_semi_bold"
                         android:textColor="#173430"
                         android:textSize="@dimen/_12sdp"

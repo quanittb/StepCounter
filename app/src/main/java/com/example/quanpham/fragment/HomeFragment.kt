@@ -20,6 +20,7 @@ import com.example.quanpham.db.model.Steps
 import com.example.quanpham.db.model.Weights
 import com.example.quanpham.dialog.StepGoalBottomDialog
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.example.quanpham.model.Users
 import com.example.quanpham.permission.StoragePermissionUtils
 import com.example.quanpham.services.StepServices
 import com.example.quanpham.utility.Constant
@@ -38,6 +39,7 @@ import com.mobiai.app.ui.dialog.PermissionRequiredDialog
 import com.mobiai.base.chart.weekly_review.WeekReviewView
 import java.util.Calendar
 import java.util.Date
+import kotlin.math.log
 import kotlin.math.roundToInt
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
@@ -76,13 +78,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         if (!SharedPreferenceUtils.setOrStartGoal){
             binding.lnGoal.makeGone()
         }
-        usLoggin?.observe(this@HomeFragment) {
-            serviceIntent = Intent(requireContext(), StepServices::class.java)
-            setListener()
-            setWelcome()
-            updateUI()
-            if(SharedPreferenceUtils.startStep)
+        serviceIntent = Intent(requireContext(), StepServices::class.java)
+        getLoginUser()
+        setListener()
+        setWelcome()
+        updateUI()
+        if(SharedPreferenceUtils.startStep) {
+            Handler().postDelayed({
                 startService()
+            },1000)
+        }
+    }
+    var user = Users()
+    private fun getLoginUser() {
+        if(auth.currentUser!=null){
+            firestore.collection(Constant.KEY_USER)
+                .document(auth.currentUser!!.uid)
+                .get()
+                .addOnSuccessListener {
+                    user = it.toObject(Users::class.java)!!
+                    SharedPreferenceUtils.name = user.name
+                    SharedPreferenceUtils.height = user.height!!
+                    SharedPreferenceUtils.selectSex = if(user.gender) 1 else 0  // nam 1 , nu 0
+                    SharedPreferenceUtils.age = user.age!!
+                    SharedPreferenceUtils.stepLength = user.height!! * 0.4f
+
+                }
+                .addOnFailureListener{
+                    showToast(it.message.toString())
+                }
         }
 
     }
@@ -117,6 +141,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
     private fun setListener(){
+        binding.tvTarget.text = SharedPreferenceUtils.targetStep.toString()
         binding.tvContentHeader.text = SharedPreferenceUtils.yesterdayStep.toString()
         binding.tvStepRealTime.text = SharedPreferenceUtils.dayStep.toString()
         currentStep.observe(this@HomeFragment){
@@ -149,10 +174,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
     private fun startService() {
-        requireContext().startService((serviceIntent))
+        if(isAdded)
+            requireContext().startService((serviceIntent))
     }
     private fun stopService() {
-        requireContext().stopService(serviceIntent)
+        if(isAdded)
+            requireContext().stopService(serviceIntent)
     }
     override fun onStop() {
         super.onStop()

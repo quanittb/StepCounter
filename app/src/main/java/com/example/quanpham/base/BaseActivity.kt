@@ -24,6 +24,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.example.quanpham.R
@@ -51,13 +53,13 @@ import java.util.Date
 abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
     companion object {
         private val TAG = BaseActivity::class.java.name
+        var usLoggin: MutableLiveData<Users>? = MutableLiveData(null)
     }
 
     lateinit var database: AppDatabase
     protected lateinit var binding: V
     private var onFullscreen = false
 
-    var usLoggin: MutableLiveData<Users>? = MutableLiveData(null)
     val auth = Firebase.auth
     val fbDatabase: FirebaseDatabase = Firebase.database
     val firestore: FirebaseFirestore = Firebase.firestore
@@ -78,25 +80,11 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
         getLoginUser {
             usLoggin?.postValue(it)
         }
-        scheduleAlarm(this)
         createView()
     }
 
-    private fun scheduleAlarm(context: Context) {
-        registerReceiver(ResetReceiver(), IntentFilter("android.intent.action.DATE_CHANGED"))
-        val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, ResetReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.add(Calendar.DAY_OF_MONTH,1)
 
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
-    }
     private fun getLoginUser(user: (Users?) -> Unit) {
         if (auth.currentUser != null) {
             firestore.collection(Constant.KEY_USER)

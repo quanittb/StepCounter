@@ -2,6 +2,7 @@ package com.example.quanpham.activity
 
 import android.content.Context
 import android.content.Intent
+import android.util.Patterns.EMAIL_ADDRESS
 import com.example.quanpham.R
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySignUpBinding
@@ -30,15 +31,15 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
 
     private fun checkValue(): Boolean {
         email = binding.email.text.toString()
+        name = binding.tvName.text.toString()
         pass = binding.passrod.text.toString()
         repass = binding.repass.text.toString()
-        name = binding.userName.text.toString()
 
-        if (email.isEmpty() || pass.isEmpty() || repass.isEmpty() || name.isEmpty()) {
+        if (email.isEmpty() || pass.isEmpty() || repass.isEmpty() ||  name.isEmpty()) {
             return false
         }
 
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!EMAIL_ADDRESS.matcher(email).matches()) {
             return false
         }
         return true
@@ -62,7 +63,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
     private fun singUpApp() {
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnSuccessListener { auth ->
-                val user = Users(auth.user?.uid, email, pass, 20,true,170f)
+                val user = Users(auth.user?.uid, email,name, pass, 20,true,170f)
                 firestore.collection(Constant.KEY_USER).document(user.id!!).set(user)
                     .addOnSuccessListener {
                         MainActivity.startMain(this, true)

@@ -15,5 +15,5 @@ class Weights (
     var id : Long? = null ,
     var weight : Float? = null,
     @TypeConverters(Converters::class)
-    var updateTime : Date? = null,
-    )
+    var updateTime : Date? = null
+)

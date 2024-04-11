@@ -2,6 +2,7 @@ package com.example.quanpham.utility
 
 object Constant {
     val KEY_USER= "Users"
+    val KEY_RANK= "Ranks"
     val KEY_WEIGHT = "Weights"
     val KEY_STEP = "Steps"
     val CHANNEL_ID_STEP = "CHANNEL_ID_STEP"

@@ -10,6 +10,7 @@ import com.example.quanpham.activity.MainActivity
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentReportBinding
 import com.example.quanpham.dialog.ReportDropDownMenu
+import com.example.quanpham.utility.convertSecondToTime
 import com.example.quanpham.utility.formatNumbers
 import com.example.quanpham.utility.rxbus.UpdateAvgValue
 import com.example.quanpham.utility.rxbus.listenEvent
@@ -66,7 +67,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>() {
         binding.step.text = formatNumbers(totalStep)
         binding.distance.text = formatNumbers(totalDistance)
         binding.calorie.text = formatNumbers(totalCalories)
-        binding.time.text = formatNumbers(totalHour)
+        binding.time.text = convertSecondToTime(totalHour.toLong())
     }
 
     //xu ly khi click vao tung tab thoi gian

@@ -18,6 +18,7 @@ import androidx.viewbinding.ViewBinding
 import com.example.quanpham.db.AppDatabase
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.showToast
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -90,6 +91,7 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         getLoginUser {
             users ->
             usLoggin?.postValue(users)
+
         }
         return binding.root
     }

@@ -20,10 +20,7 @@ class ResetReceiver : BroadcastReceiver() {
         compositeDisposable.add(listenEvent({
             when(it){
                 is StopUpdate -> {
-                    Handler().postDelayed({
                         context.stopService(intent)
-                        logD("đã chạy vào stop ")
-                    },1000)
                 }
             }
         }))
