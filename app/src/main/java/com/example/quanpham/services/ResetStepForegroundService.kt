@@ -14,37 +14,46 @@ import androidx.core.app.NotificationCompat
 import androidx.room.Room
 import com.example.quanpham.R
 import com.example.quanpham.activity.SplashActivity
+import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.db.AppDatabase
+import com.example.quanpham.db.model.Rank
 import com.example.quanpham.db.model.Steps
+import com.example.quanpham.db.model.StepsFirebase
 import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.NotificationManager
 import com.example.quanpham.utility.getEndOfDayMinus
+import com.example.quanpham.utility.getStartOfDay
 import com.example.quanpham.utility.getStartOfDayMinus
 import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.rxbus.RxBus
 import com.example.quanpham.utility.rxbus.StopUpdate
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.runBlocking
 import kotlin.concurrent.thread
+import kotlin.math.log
 
 class ResetStepForegroundService : Service() {
     private lateinit var notification: NotificationCompat.Builder
     val mdatabase = Firebase.database
-    private lateinit var serviceIntent:Intent
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return START_STICKY
     }
 
     override fun onCreate() {
-        serviceIntent = Intent(this, StepServices::class.java)
         update()
         super.onCreate()
     }
-    fun update(){
+
+    fun update() {
         val appIntent = Intent(this, SplashActivity::class.java)
         val appPendingIntent = PendingIntent.getActivity(
             this,
@@ -69,7 +78,10 @@ class ResetStepForegroundService : Service() {
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            startForeground(NotificationManager.FULLSCREEN_UPDATE_DATA_NOTIFICATION_ID,notification.build())
+            startForeground(
+                NotificationManager.FULLSCREEN_UPDATE_DATA_NOTIFICATION_ID,
+                notification.build()
+            )
         }
         var database: AppDatabase = Room.databaseBuilder(
             this,
@@ -77,36 +89,82 @@ class ResetStepForegroundService : Service() {
         )
             .allowMainThreadQueries()
             .build()
-        var listRecord: List<Steps> = database.stepDao().getRecordStepsDay(
-            getStartOfDayMinus(System.currentTimeMillis() + 2000,1),
-            getEndOfDayMinus(System.currentTimeMillis() + 2000,1)
+        var listRecord: List<Steps> = database.stepDao().getRecordStepsToPush(
+            getStartOfDayMinus(System.currentTimeMillis(), 1),
+            System.currentTimeMillis()
         )
-        logD("${listRecord[0].startTime}")
         HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())
-        if(SharedPreferenceUtils.startStep){
-                stopService()
-                startService()
-        }
-        val ref = mdatabase.getReference("Steps")
+        val ref = mdatabase.getReference(Constant.KEY_STEP)
             .child(Firebase.auth.currentUser!!.uid)
-        for (i in listRecord) {
-            ref.push()
-                .setValue(i).addOnSuccessListener {
-                    logD("đã đẩy thành công $i")
-                    if(i.id == listRecord[listRecord.lastIndex].id) {
-                        logD("đã chạy RXbus")
-                        RxBus.publish(StopUpdate())
+        ref.addValueEventListener(object : ValueEventListener {
+            var count = 0
+            var checkOnly = false
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(!checkOnly) {
+                    if (dataSnapshot.exists()) {
+                        for (snapshot in dataSnapshot.children) {
+                            val data = snapshot.getValue(StepsFirebase::class.java)
+                            data?.let {
+                                listRecord.forEach { it1 ->
+                                    if (it1.startTime.time == it.startTime.time && !it1.isPush) {
+                                        it1.isPush = true
+                                        database.stepDao().updateStep(it1)
+                                        ref.child(snapshot.key!!).setValue(it1)
+                                        return@forEach
+                                    }
+                                }
+                            }
+                            count++
+                            if (count == dataSnapshot.childrenCount.toInt()) {
+                                for (i in listRecord) {
+                                    if (!i.isPush) {
+                                        ref.push().setValue(i)
+                                    }
+                                    if (listRecord.indexOf(i) == listRecord.lastIndex) {
+                                        database.stepDao().updateStatePushForStep()
+                                        RxBus.publish(StopUpdate())
+                                    }
+                                }
+                            }
+
+                        }
+                    } else {
+                        for (i in listRecord) {
+                            if (!i.isPush) {
+                                ref.push().setValue(i)
+                            }
+                            if (listRecord.indexOf(i) == listRecord.lastIndex) {
+                                database.stepDao().updateStatePushForStep()
+                                RxBus.publish(StopUpdate())
+                            }
+                        }
+
                     }
+                    checkOnly = true
+                    RxBus.publish(StopUpdate())
                 }
-        }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi nếu có
+            }
+        })
+        // Xử lý cho rank
+        val ref1 = mdatabase.getReference(Constant.KEY_RANK)
+            .child(getStartOfDay(System.currentTimeMillis()).toString())
+
+        ref1.child(Firebase.auth.currentUser!!.uid).setValue(
+            Rank(
+                Firebase.auth.currentUser!!.uid,
+                SharedPreferenceUtils.name,
+                SharedPreferenceUtils.dayStep.toInt()
+            )
+        )
+
 
     }
-    private fun startService() {
-        startService((serviceIntent))
-    }
-    private fun stopService(){
-        stopService(serviceIntent)
-    }
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }

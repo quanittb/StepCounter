@@ -342,6 +342,7 @@
                                     android:layout_height="wrap_content"/>
 
                                 <TextView
+                                    android:visibility="gone"
                                     android:text="@string/h"
                                     android:singleLine="true"
                                     android:ellipsize="end"

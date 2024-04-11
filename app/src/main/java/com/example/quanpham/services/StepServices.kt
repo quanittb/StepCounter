@@ -34,6 +34,7 @@ import com.example.quanpham.utility.NotificationManager
 import com.example.quanpham.utility.NotificationManager.Companion.FULLSCREEN_REMINDER_NOTIFICATION_ID
 import com.example.quanpham.utility.convertSecondToTime
 import com.example.quanpham.utility.getStartOfHour
+import com.example.quanpham.utility.logD
 import java.util.Date
 
 
@@ -77,12 +78,14 @@ class StepServices : Service() , SensorEventListener {
         val currentTime = Date()
         var steps = database.stepDao().getStepsHour(getStartOfHour(System.currentTimeMillis()), System.currentTimeMillis())
         if(steps == null)
-            database.stepDao().insert(Steps(null,1,currentTime,1, CALO_STEP.toLong(),(SharedPreferenceUtils.stepLength*0.001).toLong()))
+            database.stepDao().insert(Steps(null,1,currentTime,1, CALO_STEP,(SharedPreferenceUtils.stepLength*0.001)))
         else{
             steps.step++
-            steps.calo = (steps.step * CALO_STEP).toLong()
-            steps.distance += (SharedPreferenceUtils.stepLength*0.001).toLong()
+            steps.calo = (steps.step * CALO_STEP)
+            steps.distance += SharedPreferenceUtils.stepLength*0.001
             steps.activeTime = steps.activeTime.plus(1)
+            steps.isPush = false
+            logD("đã update isPush = ${steps.isPush}")
             database.stepDao().updateStep(steps)
         }
         HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())

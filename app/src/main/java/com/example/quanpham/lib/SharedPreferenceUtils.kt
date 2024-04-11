@@ -28,6 +28,7 @@ object SharedPreferenceUtils {
     private const val STEP_LENGTH = "STEP_LENGTH"
     private const val AUTO_CALCULATE_STEP_LENGTH = "AUTO_CALCULATE_STEP_LENGTH"
     private const val BMI ="BMI"
+    private const val NAME ="NAME"
 
 
     var firstOpenApp: Boolean
@@ -39,7 +40,7 @@ object SharedPreferenceUtils {
         set(value) = sharedPreferencesManager.setValue(LANGUAGE, value)
 
     var startStep: Boolean
-        get() = sharedPreferencesManager.getValueBool(START_COUNT_STEP, false)
+        get() = sharedPreferencesManager.getValueBool(START_COUNT_STEP, true)
         set(value) = sharedPreferencesManager.setValueBool(START_COUNT_STEP, value)
 
     var dayStep: Long
@@ -92,7 +93,7 @@ object SharedPreferenceUtils {
         set(value) = sharedPreferencesManager.setFloatValue(BMI, value!!)
     //cm : Float
     var stepLength: Float
-        get() = sharedPreferencesManager.getValue(STEP_LENGTH, 0.00f)
+        get() = sharedPreferencesManager.getValue(STEP_LENGTH, 68.00f)
         set(value) = sharedPreferencesManager.setValue(STEP_LENGTH, value)
     var height0_temporary: Float
         get() = sharedPreferencesManager.getValue(HEIGHT0_TEMPORARY, 0f)
@@ -109,4 +110,8 @@ object SharedPreferenceUtils {
     var autoCalculateLength: Boolean
         get() = sharedPreferencesManager.getValueBool(AUTO_CALCULATE_STEP_LENGTH, false)
         set(value) = sharedPreferencesManager.setValueBool(AUTO_CALCULATE_STEP_LENGTH, value)
+    var name: String?
+        get() =  sharedPreferencesManager.getValue(NAME, "" )
+        set(value) = sharedPreferencesManager.setValue(NAME, value)
+
 }

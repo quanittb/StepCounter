@@ -8,14 +8,24 @@ import android.view.inputmethod.EditorInfo
 import com.example.quanpham.R
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySignInBinding
+import com.example.quanpham.db.model.Steps
+import com.example.quanpham.db.model.StepsFirebase
 import com.example.quanpham.fragment.ForgotPassFragment
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.getDateFromTimeMillis
+import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.makeGone
 import com.example.quanpham.utility.makeVisible
 import com.example.quanpham.utility.showToast
 import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import com.google.firebase.database.ktx.database
 
 class SignInActivity : BaseActivity<ActivitySignInBinding>() {
     override fun getViewBinding() = ActivitySignInBinding.inflate(layoutInflater)
@@ -104,7 +114,49 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                     .addOnSuccessListener {
 
                         usLoggin?.postValue(it.toObject(Users::class.java))
-                        MainActivity.startMain(this,true)
+                        val ref = fbDatabase.getReference(Constant.KEY_STEP)
+                            .child(Firebase.auth.currentUser!!.uid)
+//                        val ref1 = mdatabase.getReference("Weights")
+//                            .child(com.google.firebase.ktx.Firebase.auth.currentUser!!.uid)
+                        var count = 0
+                        ref.addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                database.stepDao().deleteAllStep()
+                                if(!dataSnapshot.exists())
+                                    MainActivity.startMain(this@SignInActivity,true)
+                                for (snapshot in dataSnapshot.children) {
+                                    val data = snapshot.getValue(StepsFirebase::class.java)
+                                    data?.let {
+                                                it.isPush = true
+                                                val step = Steps(null,it.step,
+                                                    getDateFromTimeMillis(it.startTime.time),it.activeTime,it.calo,it.distance,true)
+                                                database.stepDao().insert(step)
+                                            }
+                                    count++
+
+                                    if(count == dataSnapshot.childrenCount.toInt()){
+//                                        MainActivity.startMain(this@SignInActivity,true)
+                                        SplashActivity.startMain(this@SignInActivity,true)
+//                                        ref1.addValueEventListener(object : ValueEventListener {
+//                                            override fun onDataChange(snapshot: DataSnapshot) {
+//                                                database.weightDao().deleteAllWeights()
+//                                                val weights
+//                                            }
+//
+//                                            override fun onCancelled(error: DatabaseError) {
+//                                                TODO("Not yet implemented")
+//                                            }
+//                                        })
+                                    }
+                                }
+
+
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                // Xử lý lỗi nếu có
+                            }
+                        })
 
                     }
                     .addOnFailureListener {

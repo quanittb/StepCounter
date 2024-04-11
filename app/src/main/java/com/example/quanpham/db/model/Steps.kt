@@ -19,7 +19,8 @@ class Steps (
     @TypeConverters(Converters::class)
     var startTime : Date ,
     var activeTime : Long = 0,
-    var calo : Long = 0,
-    var distance : Long = 0,
+    var calo : Double = 0.0,
+    var distance : Double = 0.0,
+    var isPush : Boolean = false
     )
 

@@ -76,8 +76,8 @@ fun getEndOfYear(year: Int): Long {
     calendar.set(Calendar.DAY_OF_MONTH, 31)
     calendar.set(Calendar.HOUR_OF_DAY, 23)
     calendar.set(Calendar.MINUTE, 59)
-    calendar.set(Calendar.SECOND, 59)
-    calendar.set(Calendar.MILLISECOND, 999)
+    calendar.set(Calendar.SECOND, 58)
+    calendar.set(Calendar.MILLISECOND, 0)
     return calendar.timeInMillis
 }
 fun getStartOfDay(currentTime: Long): Long {
@@ -94,8 +94,8 @@ fun getEndOfDay(currentTime: Long): Long {
     calendar.timeInMillis = currentTime
     calendar.set(Calendar.HOUR_OF_DAY, 23)
     calendar.set(Calendar.MINUTE, 59)
-    calendar.set(Calendar.SECOND, 59)
-    calendar.set(Calendar.MILLISECOND, 999)
+    calendar.set(Calendar.SECOND, 58)
+    calendar.set(Calendar.MILLISECOND, 0)
     return calendar.timeInMillis
 }
 fun getStartDayOfYear(dayOfYear : Int): Long {
@@ -117,8 +117,8 @@ fun getEndDayOfYear(dayOfYear : Int): Long {
     calendar.set(Calendar.DAY_OF_YEAR,dayOfYear)
     calendar.set(Calendar.HOUR_OF_DAY, 23)
     calendar.set(Calendar.MINUTE, 59)
-    calendar.set(Calendar.SECOND, 59)
-    calendar.set(Calendar.MILLISECOND, 999)
+    calendar.set(Calendar.SECOND, 58)
+    calendar.set(Calendar.MILLISECOND, 0)
     return calendar.timeInMillis
 }
 fun getStartOfDayMinus(currentTime: Long, dayMinus : Int): Long {
@@ -127,7 +127,7 @@ fun getStartOfDayMinus(currentTime: Long, dayMinus : Int): Long {
     calendar.add(Calendar.DAY_OF_YEAR,-dayMinus)
     calendar.set(Calendar.HOUR_OF_DAY, 0)
     calendar.set(Calendar.MINUTE, 0)
-    calendar.set(Calendar.SECOND, 0)
+    calendar.set(Calendar.SECOND, 1)
     calendar.set(Calendar.MILLISECOND, 0)
     return calendar.timeInMillis
 }
@@ -137,8 +137,8 @@ fun getEndOfDayMinus(currentTime: Long,dayMinus : Int): Long {
     calendar.timeInMillis = currentTime
     calendar.set(Calendar.HOUR_OF_DAY, 23)
     calendar.set(Calendar.MINUTE, 59)
-    calendar.set(Calendar.SECOND, 59)
-    calendar.set(Calendar.MILLISECOND, 999)
+    calendar.set(Calendar.SECOND, 58)
+    calendar.set(Calendar.MILLISECOND, 0)
     return calendar.timeInMillis
 }
 fun getStartOfHour(currentTime: Long): Long {
@@ -165,7 +165,27 @@ fun formatNumbers(inputNums : Float) : String{
     } else {
         formattedNumber
     }
-
-
-
 }
+fun getTimeFromDayOfYear(dayOfYear : Int) : Long{
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.DAY_OF_YEAR, dayOfYear)
+    return calendar.timeInMillis
+}
+fun getDateFromDayOfYear(dayOfYear : Int) : Date{
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.DAY_OF_YEAR, dayOfYear)
+    return calendar.time
+}
+fun getDayFromDate(date : Date) : Int{
+    val calendar = Calendar.getInstance()
+    calendar.time = date
+    return calendar.get(Calendar.DAY_OF_YEAR)
+}
+
+fun getDateFromTimeMillis(timeInMillis : Long) : Date{
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = timeInMillis
+    return calendar.time
+}
+
+

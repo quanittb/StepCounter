@@ -3,12 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:layout_gravity="center"
+    android:gravity="center"
     android:background="@drawable/bg_item_rank"
+    android:layout_marginVertical="@dimen/_6sdp"
     android:paddingVertical="@dimen/_8sdp"
     android:paddingHorizontal="@dimen/_8sdp">
     <ImageView
+        android:id="@+id/ivRank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/rank_one"/>
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mukta_regular"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14ssp"
+        android:text="Quan Pham"
+        android:layout_marginHorizontal="@dimen/_6sdp"/>
+    <TextView
+        android:id="@+id/tvStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mukta_regular"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/black"
+        android:text="1234"
+        android:layout_marginHorizontal="@dimen/_6sdp"/>
+    <ImageView
+        android:id="@+id/ivStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_step"/>
 
 </LinearLayout>

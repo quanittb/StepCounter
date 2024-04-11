@@ -80,6 +80,9 @@ object DateUtils {
     fun getCurrentDay () : Int {
         return  Calendar.getInstance()[Calendar.DAY_OF_MONTH]
     }
+    fun getCurrentDayOfYear () : Int {
+        return  Calendar.getInstance()[Calendar.DAY_OF_YEAR]
+    }
     fun getCurrentTime(pattern: String): String {
         val calendar = Calendar.getInstance()
         val formatter = SimpleDateFormat(pattern, Locale.getDefault())
@@ -380,39 +383,24 @@ object DateUtils {
         return PairModel(1, 31)
     }
 
-    fun getStartDayAndEndDayOfMonth(year: Int): MutableList<PairModel> {
+    fun getStartAndEndDayOfMonth(year: Int) : MutableList<PairModel>{
         val currentMonth = getCurrentMonth()
-        val listDayOfMonth = if (isLeapYear(year)) mutableListOf<PairModel>(
-            PairModel(1, 31),
-            PairModel(32, 59),
-            PairModel(60, 90),
-            PairModel(91, 120),
-            PairModel(121, 151),
-            PairModel(152, 181),
-            PairModel(182, 212),
-            PairModel(213, 243),
-            PairModel(244, 273),
-            PairModel(274, 304),
-            PairModel(305, 334),
-            PairModel(335, 365)
-        )
-        else mutableListOf<PairModel>(
-            PairModel(1, 31),
-            PairModel(32, 60),
-            PairModel(61, 91),
-            PairModel(92, 121),
-            PairModel(122, 152),
-            PairModel(153, 182),
-            PairModel(183, 213),
-            PairModel(214, 244),
-            PairModel(245, 274),
-            PairModel(275, 305),
-            PairModel(306, 335),
-            PairModel(336, 366)
-        )
+        val isLeapYear = isLeapYear(year)
+        val totalDaysInYear = if (isLeapYear) 366 else 365
+        var startDayOfYear = 1
+        var calendar = Calendar.getInstance()
+        calendar.set(Calendar.YEAR, year)
+        var monthRanges : MutableList<PairModel> = arrayListOf()
 
-        return listDayOfMonth.subList(0, currentMonth)
+        for (month in Calendar.JANUARY until getCurrentMonth() ) {
+            calendar.set(Calendar.MONTH, month)
+            val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+            val endDayOfYear = startDayOfYear + daysInMonth - 1
 
+            monthRanges.add(PairModel(startDayOfYear, endDayOfYear))
+            startDayOfYear = endDayOfYear + 1
+        }
+        return monthRanges
     }
 
      fun isLeapYear(year: Int): Boolean {

@@ -11,7 +11,7 @@ import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Converters
 
 
-@Database(entities = [Steps::class, Weights::class], version = 1)
+@Database(entities = [Steps::class, Weights::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase(){
 

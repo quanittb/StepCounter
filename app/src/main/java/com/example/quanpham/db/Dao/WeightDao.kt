@@ -17,4 +17,6 @@ interface WeightDao {
     fun getWeightDay(startDay : Long, endDay: Long): Weights
     @Update
     fun updateWeight(weight : Weights)
+    @Query("Delete from Weights")
+    fun deleteAllWeights()
 }

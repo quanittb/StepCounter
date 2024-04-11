@@ -14,6 +14,7 @@ import com.example.quanpham.db.model.Steps
 import com.example.quanpham.db.model.Weights
 import com.example.quanpham.fragment.HealthFragment
 import com.example.quanpham.fragment.HomeFragment
+import com.example.quanpham.fragment.RankFragment
 import com.example.quanpham.fragment.ReportFragment
 import com.example.quanpham.fragment.SettingFragment
 import com.example.quanpham.utility.Constant
@@ -39,7 +40,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
     }
     private val HOME_FRAGMENT = HomeFragment.instance()
     private val REPORT_FRAGMENT = ReportFragment.instance()
-//    private val RANK_FRAGMENT = RankFragment.instance()
+    private val RANK_FRAGMENT = RankFragment.instance()
     private val HEALTHY_FRAGMENT = HealthFragment.instance()
     private val SETTINGS_FRAGMENT = SettingFragment.instance()
     private var currentFragment  : Fragment = HOME_FRAGMENT
@@ -82,6 +83,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
                     if (currentFragment != HEALTHY_FRAGMENT){
                         showFragment(HEALTHY_FRAGMENT,currentFragment)
                         currentFragment = HEALTHY_FRAGMENT
+                    }
+                }
+                R.id.action_rank -> {
+                    if (currentFragment != RANK_FRAGMENT){
+                        showFragment(RANK_FRAGMENT,currentFragment)
+                        currentFragment = RANK_FRAGMENT
                     }
                 }
                 R.id.action_setting -> {

@@ -89,6 +89,7 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
     fun setValue(){
         initDataLanguage()
         checkLanguage()
+        binding.tvName.text = SharedPreferenceUtils.name
         if(SharedPreferenceUtils.selectSex==0)
             binding.txtSex.text = resources.getString(R.string.female)
         if(SharedPreferenceUtils.selectSex==1)

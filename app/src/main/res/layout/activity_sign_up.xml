@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <LinearLayout
         android:padding="@dimen/_16sdp"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
 
         <TextView
@@ -21,6 +24,7 @@
             android:fontFamily="@font/mukta_bold"
             android:gravity="center"
             android:text="@string/sign_up"
+            android:textColor="@color/black"
             android:textSize="@dimen/_18sdp" />
 
         <TextView
@@ -31,11 +35,48 @@
             android:text="@string/register_now_the_application"
             android:textColor="#989898"
             android:textSize="@dimen/_14sdp" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_40sdp"
+            android:background="@drawable/bg_input_account"
+            android:padding="@dimen/_8sdp">
+
+            <ImageView
+                android:id="@+id/imageviewName"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:src="@drawable/src_user_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#989898" />
+
+            <EditText
+                android:id="@+id/tvName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:background="#00000000"
+                android:fontFamily="@font/mukta_medium"
+                android:hint="@string/name"
+                android:textColorHint="#989898"
+                android:textColor="@color/black"
+                android:maxLines="1"
+                android:textSize="@dimen/_14sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageviewName"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
             android:background="@drawable/bg_input_account"
             android:padding="@dimen/_8sdp">
 
@@ -51,8 +92,8 @@
 
             <EditText
                 android:id="@+id/user_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="315dp"
+                android:layout_height="29dp"
                 android:layout_marginStart="@dimen/_6sdp"
                 android:background="#00000000"
                 android:fontFamily="@font/mukta_medium"
@@ -91,6 +132,8 @@
                 android:background="#00000000"
                 android:fontFamily="@font/mukta_medium"
                 android:hint="@string/email"
+                android:textColorHint="#989898"
+                android:textColor="@color/black"
                 android:maxLines="1"
                 android:textSize="@dimen/_14sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -126,6 +169,8 @@
                 android:background="#00000000"
                 android:fontFamily="@font/mukta_medium"
                 android:hint="@string/password"
+                android:textColorHint="#989898"
+                android:textColor="@color/black"
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:textSize="@dimen/_14sdp"
@@ -173,6 +218,8 @@
                 android:fontFamily="@font/mukta_medium"
                 android:hint="@string/reenter_password"
                 android:inputType="textPassword"
+                android:textColorHint="#989898"
+                android:textColor="@color/black"
                 android:maxLines="1"
                 android:textSize="@dimen/_14sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
