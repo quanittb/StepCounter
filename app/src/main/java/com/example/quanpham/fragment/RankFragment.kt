@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import kotlin.math.log
 
 class RankFragment: BaseFragment<FragmentRankBinding>() {
     companion object{
@@ -24,27 +25,29 @@ class RankFragment: BaseFragment<FragmentRankBinding>() {
             return newInstance(RankFragment::class.java)
         }
     }
-    val listRank : MutableList<Rank> = arrayListOf()
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRankBinding {
         return FragmentRankBinding.inflate(inflater,container,false)
     }
 
     override fun initView() {
         var count = 0
+        val listRank : ArrayList<Rank> = arrayListOf()
         var rankAdapter = RankAdapter()
+        var isChecked = true
         fbDatabase.getReference(Constant.KEY_RANK).child(getStartOfDay(System.currentTimeMillis()).toString()).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()){
-                    for (snap in snapshot.children){
+                if (snapshot.exists()) {
+                    for (snap in snapshot.children) {
                         val data = snap.getValue(Rank::class.java)
                         data.let {
-                            it?.let { it1 -> if(it1.steps > 0) listRank.add(it1) }
+                            it?.let { it1 -> if (it1.steps > 0) listRank.add(it1) }
                         }
                         count++
-                        if(count == snapshot.childrenCount.toInt()){
+                        if (count == snapshot.childrenCount.toInt() && isChecked) {
                             listRank.sortByDescending { it.steps }
                             rankAdapter.setItems(listRank)
                             binding.rcvRank.adapter = rankAdapter
+                            isChecked = false
                         }
                     }
                 }

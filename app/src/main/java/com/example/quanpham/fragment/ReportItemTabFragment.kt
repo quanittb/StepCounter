@@ -28,24 +28,18 @@ import com.example.quanpham.utility.getDateFromDayOfYear
 import com.example.quanpham.utility.getDayOfMonth
 import com.example.quanpham.utility.getDayOfYear
 import com.example.quanpham.utility.getEndDayOfYear
-import com.example.quanpham.utility.getEndOfDay
 import com.example.quanpham.utility.getEndOfDayMinus
 import com.example.quanpham.utility.getMonthOfYear
 import com.example.quanpham.utility.getStartDayOfYear
-import com.example.quanpham.utility.getStartOfDay
 import com.example.quanpham.utility.getStartOfDayMinus
-import com.example.quanpham.utility.getTimeFromDayOfYear
-import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.rxbus.ChangeUnit
 import com.example.quanpham.utility.rxbus.RxBus
 import com.example.quanpham.utility.rxbus.UpdateAvgValue
 import com.example.quanpham.utility.rxbus.listenEvent
-import com.mobiai.base.chart.ColumnChart
 import com.mobiai.base.chart.ColumnChart.Column
 import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
-import kotlin.math.log
 
 class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
     private var currentWeekIndex: Int = -1
