@@ -166,7 +166,6 @@ class AddWeightDialog(
     }
 
 
-
     interface OnSaveChangeWeightListener {
         fun onSave(weight: Float, calendar: Calendar)
         fun onNotSave()

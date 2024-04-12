@@ -94,9 +94,11 @@ class ResetStepForegroundService : Service() {
             System.currentTimeMillis()
         )
         HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())
-        val ref = mdatabase.getReference(Constant.KEY_STEP)
+
+        // xử lý push step
+        val refStep = mdatabase.getReference(Constant.KEY_STEP)
             .child(Firebase.auth.currentUser!!.uid)
-        ref.addValueEventListener(object : ValueEventListener {
+        refStep.addValueEventListener(object : ValueEventListener {
             var count = 0
             var checkOnly = false
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -109,7 +111,7 @@ class ResetStepForegroundService : Service() {
                                     if (it1.startTime.time == it.startTime.time && !it1.isPush) {
                                         it1.isPush = true
                                         database.stepDao().updateStep(it1)
-                                        ref.child(snapshot.key!!).setValue(it1)
+                                        refStep.child(snapshot.key!!).setValue(it1)
                                         return@forEach
                                     }
                                 }
@@ -118,7 +120,7 @@ class ResetStepForegroundService : Service() {
                             if (count == dataSnapshot.childrenCount.toInt()) {
                                 for (i in listRecord) {
                                     if (!i.isPush) {
-                                        ref.push().setValue(i)
+                                        refStep.push().setValue(i)
                                     }
                                     if (listRecord.indexOf(i) == listRecord.lastIndex) {
                                         database.stepDao().updateStatePushForStep()
@@ -131,7 +133,7 @@ class ResetStepForegroundService : Service() {
                     } else {
                         for (i in listRecord) {
                             if (!i.isPush) {
-                                ref.push().setValue(i)
+                                refStep.push().setValue(i)
                             }
                             if (listRecord.indexOf(i) == listRecord.lastIndex) {
                                 database.stepDao().updateStatePushForStep()
@@ -141,7 +143,9 @@ class ResetStepForegroundService : Service() {
 
                     }
                     checkOnly = true
-                    RxBus.publish(StopUpdate())
+                    Handler().postDelayed({
+                        stopForeground(true)
+                        stopSelf()},2000)
                 }
 
             }
@@ -151,10 +155,10 @@ class ResetStepForegroundService : Service() {
             }
         })
         // Xử lý cho rank
-        val ref1 = mdatabase.getReference(Constant.KEY_RANK)
+        val refRank = mdatabase.getReference(Constant.KEY_RANK)
             .child(getStartOfDay(System.currentTimeMillis()).toString())
 
-        ref1.child(Firebase.auth.currentUser!!.uid).setValue(
+        refRank.child(Firebase.auth.currentUser!!.uid).setValue(
             Rank(
                 Firebase.auth.currentUser!!.uid,
                 SharedPreferenceUtils.name,
@@ -162,7 +166,9 @@ class ResetStepForegroundService : Service() {
             )
         )
 
-
+        // xử lý weight
+        val refWeight = mdatabase.getReference(Constant.KEY_WEIGHT).child(Firebase.auth.currentUser!!.uid)
+        
     }
 
     override fun onBind(intent: Intent?): IBinder? {

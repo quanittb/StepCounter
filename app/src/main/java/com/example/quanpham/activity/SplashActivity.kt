@@ -39,6 +39,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     companion object {
         private const val TIME_OUT = 30000L
         private const val TIME_DELAY = 5000L
+        var IS_PUSH = false
         private val TAG = SplashActivity::class.java.name
         fun startMain(context: Context, clearTask : Boolean ){
             val intent = Intent(context, SplashActivity::class.java).apply {
@@ -64,36 +65,26 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         else
             openNextScreen()
     }
-    private fun scheduleAlarm(context: Context) {
-        registerReceiver(ResetReceiver(), IntentFilter("android.intent.action.DATE_CHANGED"))
-        val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, ResetReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.add(Calendar.DAY_OF_MONTH,1)
-
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
-    }
+//    private fun scheduleAlarm(context: Context) {
+//        registerReceiver(ResetReceiver(), IntentFilter("android.intent.action.DATE_CHANGED"))
+//        val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val intent = Intent(context, ResetReceiver::class.java)
+//        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+//            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+//
+//        val calendar = Calendar.getInstance()
+//        calendar.set(Calendar.HOUR_OF_DAY, 0)
+//        calendar.set(Calendar.MINUTE, 0)
+//        calendar.set(Calendar.SECOND, 0)
+//        calendar.add(Calendar.DAY_OF_MONTH,1)
+//
+//        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
+//    }
     fun pushData(){
-        val compositeDisposable = CompositeDisposable()
         var intent = Intent(this, ResetStepForegroundService::class.java)
         ContextCompat.startForegroundService(this, intent)
-        compositeDisposable.add(listenEvent({
-            when(it){
-                is StopUpdate -> {
-                    Handler().postDelayed({
-                        stopService(intent)
-                    },2000)
-                }
-            }
-        }))
         openNextScreen()
-
+        IS_PUSH = true
     }
     private fun getStepsDay(){
         SharedPreferenceUtils.dayStep = database.stepDao().getStepsDay(
@@ -123,7 +114,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
 
     private fun openNextScreen() {
-//        addDB()
         Handler().postDelayed({
             if (SharedPreferenceUtils.firstOpenApp)
                 LanguageActivity.start(this)

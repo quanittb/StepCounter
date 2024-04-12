@@ -9,8 +9,10 @@ import com.example.quanpham.R
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentHealthBinding
 import com.example.quanpham.db.model.Weights
+import com.example.quanpham.db.model.WeightsFirebase
 import com.example.quanpham.dialog.AddWeightDialog
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.Constant.KG
 import com.example.quanpham.utility.Constant.LB
 import com.example.quanpham.utility.Constant.cmToIn
@@ -24,10 +26,16 @@ import com.example.quanpham.utility.getMonthOfYear
 import com.example.quanpham.utility.getStartOfDay
 import com.example.quanpham.utility.getStartOfDayMinus
 import com.example.quanpham.utility.getStartOfYear
+import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.rxbus.ChangeUnit
 import com.example.quanpham.utility.rxbus.NumberHeight
 import com.example.quanpham.utility.rxbus.WeightUpdate
 import com.example.quanpham.utility.rxbus.listenEvent
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 import com.mobiai.app.ui.dialog.EditBMIDialog
 import com.mobiai.base.chart.LineChartView
 import java.util.Calendar
@@ -160,6 +168,43 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
 
         showCurrentWeight()
     }
+    private fun pushWeight(weights: Weights){
+        var isCheck = true
+        var count = 0
+        val refWeights = fbDatabase.getReference(Constant.KEY_WEIGHT).child(Firebase.auth.currentUser!!.uid)
+        refWeights.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (isCheck){
+                    isCheck = false
+                    if(snapshot.exists()){
+                        snapshot.children.forEach{item ->
+                            logD("count : $count")
+                            count++
+                            val data = item.getValue(WeightsFirebase::class.java)
+                            data?.let {
+                                if(getStartOfDay(it.updateTime.time) == getStartOfDay(weights.updateTime!!.time)){
+                                    refWeights.child(item.key!!).setValue(weights)
+                                    count = snapshot.childrenCount.toInt() + 1
+                                    return@forEach
+                                }
+                                if(count == snapshot.childrenCount.toInt()){
+                                    count = 0
+                                    refWeights.push().setValue(weights)
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        refWeights.push().setValue(weights)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
 
     private fun showCurrentWeight() {
         val unit = getUnitType()
@@ -227,6 +272,7 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
         val addWeightDialog =
             AddWeightDialog(requireContext(), object : AddWeightDialog.OnSaveChangeWeightListener {
                 override fun onSave(weight: Float, calendar: Calendar) {
+                    logD("${calendar.timeInMillis}")
                     val cal = Calendar.getInstance()
                     if (calendar.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR)) {
                         SharedPreferenceUtils.weight = weight
@@ -238,7 +284,7 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
                         weightData[0].updateTime = calendar.time
                         database.weightDao().updateWeight(weightData[0])
                     }
-
+                    pushWeight(Weights(null, weight, calendar.time))
                     updateWeightData()
                     calculateAndUpdateBmi()
                 }
@@ -277,6 +323,7 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
                         weightData[0].updateTime = Date()
                         database.weightDao().updateWeight(weightData[0])
                     }
+                    pushWeight(Weights(null, weight, Date()))
                 }
 
             })

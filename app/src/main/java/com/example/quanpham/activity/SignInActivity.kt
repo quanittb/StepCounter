@@ -10,10 +10,14 @@ import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySignInBinding
 import com.example.quanpham.db.model.Steps
 import com.example.quanpham.db.model.StepsFirebase
+import com.example.quanpham.db.model.Weights
+import com.example.quanpham.db.model.WeightsFirebase
 import com.example.quanpham.fragment.ForgotPassFragment
+import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.getDateFromTimeMillis
+import com.example.quanpham.utility.getStartOfDay
 import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.makeGone
 import com.example.quanpham.utility.makeVisible
@@ -114,12 +118,11 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                     .addOnSuccessListener {
 
                         usLoggin?.postValue(it.toObject(Users::class.java))
-                        val ref = fbDatabase.getReference(Constant.KEY_STEP)
+                        val refStep = fbDatabase.getReference(Constant.KEY_STEP)
                             .child(Firebase.auth.currentUser!!.uid)
-//                        val ref1 = mdatabase.getReference("Weights")
-//                            .child(com.google.firebase.ktx.Firebase.auth.currentUser!!.uid)
+                        getWeightData()
                         var count = 0
-                        ref.addValueEventListener(object : ValueEventListener {
+                        refStep.addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 database.stepDao().deleteAllStep()
                                 if(!dataSnapshot.exists())
@@ -135,18 +138,7 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                                     count++
 
                                     if(count == dataSnapshot.childrenCount.toInt()){
-//                                        MainActivity.startMain(this@SignInActivity,true)
                                         SplashActivity.startMain(this@SignInActivity,true)
-//                                        ref1.addValueEventListener(object : ValueEventListener {
-//                                            override fun onDataChange(snapshot: DataSnapshot) {
-//                                                database.weightDao().deleteAllWeights()
-//                                                val weights
-//                                            }
-//
-//                                            override fun onCancelled(error: DatabaseError) {
-//                                                TODO("Not yet implemented")
-//                                            }
-//                                        })
                                     }
                                 }
 
@@ -167,5 +159,30 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                 showToast(it.message.toString())
                 binding.llLoading.makeGone()
             }
+    }
+    private fun getWeightData(){
+        database.weightDao().deleteAllWeights()
+        val refWeights = fbDatabase.getReference(Constant.KEY_WEIGHT).child(com.google.firebase.ktx.Firebase.auth.currentUser!!.uid)
+        refWeights.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.exists()){
+                        snapshot.children.forEach{item ->
+                            val data = item.getValue(WeightsFirebase::class.java)
+                            data?.let {
+                                database.weightDao().insert(
+                                    Weights(null,it.weight,
+                                        getDateFromTimeMillis(it.updateTime.time)
+                                    )
+                                )
+                                if(getStartOfDay(it.updateTime.time) == getStartOfDay(System.currentTimeMillis()))
+                                    SharedPreferenceUtils.weight = it.weight!!
+                                }
+                        }
+                    }
+                }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 }
