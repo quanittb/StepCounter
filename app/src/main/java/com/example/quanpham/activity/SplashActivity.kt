@@ -1,5 +1,9 @@
 package com.example.quanpham.activity
 
+import DateUtils.getEndOfDay
+import DateUtils.getEndOfDayMinus
+import DateUtils.getStartOfDay
+import DateUtils.getStartOfDayMinus
 import android.Manifest
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -18,21 +22,8 @@ import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySplashBinding
 import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.lib.SharedPreferenceUtils
-import com.example.quanpham.services.ResetReceiver
 import com.example.quanpham.services.ResetStepForegroundService
 import com.example.quanpham.utility.Constant
-import com.example.quanpham.utility.getEndOfDay
-import com.example.quanpham.utility.getEndOfDayMinus
-import com.example.quanpham.utility.getStartOfDay
-import com.example.quanpham.utility.getStartOfDayMinus
-import com.example.quanpham.utility.logD
-import com.example.quanpham.utility.rxbus.StopUpdate
-import com.example.quanpham.utility.rxbus.listenEvent
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import java.util.Calendar
-import kotlin.concurrent.thread
 
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {

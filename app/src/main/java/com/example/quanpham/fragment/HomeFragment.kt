@@ -1,5 +1,8 @@
 package com.example.quanpham.fragment
 
+import DateUtils.convertSecondToTime
+import DateUtils.getHour
+import DateUtils.getStartOfDayMinus
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -7,7 +10,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,8 +20,6 @@ import com.example.quanpham.R
 import com.example.quanpham.activity.SplashActivity
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentHomeBinding
-import com.example.quanpham.db.model.Steps
-import com.example.quanpham.db.model.Weights
 import com.example.quanpham.dialog.StepGoalBottomDialog
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.model.Users
@@ -28,25 +28,13 @@ import com.example.quanpham.services.ResetStepForegroundService
 import com.example.quanpham.services.StepServices
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.Constant.KcalOne
-import com.example.quanpham.utility.convertSecondToTime
-import com.example.quanpham.utility.getHour
-import com.example.quanpham.utility.getStartOfDayMinus
-import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.makeGone
 import com.example.quanpham.utility.makeVisible
-import com.example.quanpham.utility.rxbus.StopUpdate
-import com.example.quanpham.utility.rxbus.listenEvent
 import com.example.quanpham.utility.showToast
 import com.mobiai.app.ui.dialog.PermissionDialog
 import com.mobiai.app.ui.dialog.PermissionReject1Dialog
 import com.mobiai.app.ui.dialog.PermissionReject2Dialog
 import com.mobiai.app.ui.dialog.PermissionRequiredDialog
-import com.mobiai.base.chart.weekly_review.WeekReviewView
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import java.util.Calendar
-import java.util.Date
-import kotlin.math.log
-import kotlin.math.roundToInt
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     companion object {
@@ -55,7 +43,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             return newInstance(HomeFragment::class.java)
         }
     }
-    private lateinit var serviceIntent:Intent
+
+    private lateinit var serviceIntent: Intent
     private var bottomSheetStepGoalDialog: StepGoalBottomDialog? = null
     private var permissionDialog: PermissionDialog? = null
     private var permissionRequiredDialog: PermissionRequiredDialog? = null
@@ -77,30 +66,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     requireContext(),
                     permission
                 ) != PackageManager.PERMISSION_GRANTED
-            ){
+            ) {
                 showRequirePermissionActivityDialog()
             }
         }
-        if (!SharedPreferenceUtils.setOrStartGoal){
+        if (!SharedPreferenceUtils.setOrStartGoal) {
             binding.lnGoal.makeGone()
         }
         serviceIntent = Intent(requireContext(), StepServices::class.java)
         getLoginUser()
-        if(!SplashActivity.IS_PUSH){
+        if (!SplashActivity.IS_PUSH) {
             pushData()
         }
         setListener()
         setWelcome()
         updateUI()
-        if(SharedPreferenceUtils.startStep) {
+        if (SharedPreferenceUtils.startStep) {
             Handler().postDelayed({
                 startService()
-            },1000)
+            }, 1000)
         }
     }
+
     var user = Users()
     private fun getLoginUser() {
-        if(auth.currentUser!=null){
+        if (auth.currentUser != null) {
             firestore.collection(Constant.KEY_USER)
                 .document(auth.currentUser!!.uid)
                 .get()
@@ -108,24 +98,33 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     user = it.toObject(Users::class.java)!!
                     SharedPreferenceUtils.name = user.name
                     SharedPreferenceUtils.height = user.height!!
-                    SharedPreferenceUtils.selectSex = if(user.gender) 1 else 0  // nam 1 , nu 0
+                    SharedPreferenceUtils.selectSex = if (user.gender) 1 else 0  // nam 1 , nu 0
                     SharedPreferenceUtils.age = user.age!!
                     SharedPreferenceUtils.stepLength = user.height!! * 0.4f
 
                 }
-                .addOnFailureListener{
+                .addOnFailureListener {
                     showToast(it.message.toString())
                 }
         }
 
     }
-    fun getDataSevenDayRecent(){
-        var totalStep = database.stepDao().getStepsDay(getStartOfDayMinus(System.currentTimeMillis(),7),System.currentTimeMillis())
-        binding.tvStepNow.text = "${totalStep/7}"
+
+    fun getDataSevenDayRecent() {
+        var totalStep = database.stepDao().getStepsDay(
+            getStartOfDayMinus(System.currentTimeMillis(), 7),
+            System.currentTimeMillis()
+        )
+        binding.tvStepNow.text = "${totalStep / 7}"
     }
-    fun updateUI(){
-        binding.chart.setArcValue(SharedPreferenceUtils.targetStep.toFloat(), SharedPreferenceUtils.dayStep.toFloat())
-        val stepCountKm = (SharedPreferenceUtils.dayStep * (SharedPreferenceUtils.stepLength / 100000))
+
+    fun updateUI() {
+        binding.chart.setArcValue(
+            SharedPreferenceUtils.targetStep.toFloat(),
+            SharedPreferenceUtils.dayStep.toFloat()
+        )
+        val stepCountKm =
+            (SharedPreferenceUtils.dayStep * (SharedPreferenceUtils.stepLength / 100000))
         val stepCountKcal = SharedPreferenceUtils.dayStep * KcalOne
         val formattedNumberKcal = String.format("%.1f", stepCountKcal)
         val formattedNumberKm = String.format("%.2f", stepCountKm)
@@ -136,7 +135,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.tvTimerMinHome.text = activeTime
         getDataSevenDayRecent()
 
-        if (SharedPreferenceUtils.dayStep>0){
+        if (SharedPreferenceUtils.dayStep > 0) {
             binding.ivFire.makeVisible()
         }
         if ((SharedPreferenceUtils.dayStep.toFloat() / SharedPreferenceUtils.targetStep) * 100 < 25f) {
@@ -149,30 +148,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             binding.ivFire.setImageResource(R.drawable.ic_fire_04)
         }
     }
-    private fun setListener(){
+
+    private fun setListener() {
         binding.tvTarget.text = SharedPreferenceUtils.targetStep.toString()
         binding.tvContentHeader.text = SharedPreferenceUtils.yesterdayStep.toString()
         binding.tvStepRealTime.text = SharedPreferenceUtils.dayStep.toString()
-        currentStep.observe(this@HomeFragment){
+        currentStep.observe(this@HomeFragment) {
             binding.tvStepRealTime.text = it.toString()
             updateUI()
         }
-        binding.ivStepStart.setOnClickListener{
-            if(!SharedPreferenceUtils.startStep){
+        binding.ivStepStart.setOnClickListener {
+            if (!SharedPreferenceUtils.startStep) {
                 SharedPreferenceUtils.startStep = true
                 startService()
                 binding.ivStepStart.setImageResource(R.drawable.ic_pause_step_home)
                 binding.tvPause.makeGone()
                 binding.lnTarget.makeVisible()
-            }
-            else{
+            } else {
                 stopService()
                 SharedPreferenceUtils.startStep = false
                 binding.ivStepStart.setImageResource(R.drawable.ic_step_pause)
                 binding.tvPause.makeVisible()
                 binding.lnTarget.makeGone()
-                }
             }
+        }
         binding.btnStepGoal.setOnClickListener {
             openStepGoalBottomSheet()
             binding.lnGoal.makeGone()
@@ -182,31 +181,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             binding.lnGoal.makeGone()
         }
     }
+
     private fun startService() {
-        if(isAdded)
+        if (isAdded)
             requireContext().startService((serviceIntent))
     }
+
     private fun stopService() {
-        if(isAdded)
+        if (isAdded)
             requireContext().stopService(serviceIntent)
     }
+
     override fun onStop() {
         super.onStop()
     }
 
-    fun pushData(){
+    fun pushData() {
         var intent = Intent(requireActivity(), ResetStepForegroundService::class.java)
         ContextCompat.startForegroundService(requireContext(), intent)
     }
 
-    private fun setWelcome(){
+    private fun setWelcome() {
         val hour = getHour()
-        when(hour){
+        when (hour) {
             in 5..12 -> binding.tvWellCome.text = getString(R.string.good_morning)
-            in 13..17 ->binding.tvWellCome.text = getString(R.string.good_afternoon)
-           else ->binding.tvWellCome.text = getString(R.string.good_evening)
+            in 13..17 -> binding.tvWellCome.text = getString(R.string.good_afternoon)
+            else -> binding.tvWellCome.text = getString(R.string.good_evening)
         }
     }
+
     private fun openStepGoalBottomSheet() {
         if (bottomSheetStepGoalDialog == null) {
             bottomSheetStepGoalDialog = StepGoalBottomDialog(
@@ -230,7 +233,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         if (allGranted) {
             //todo contact
             isGotoSettingActivity = false
-            if (SharedPreferenceUtils.startStep){
+            if (SharedPreferenceUtils.startStep) {
                 startService()
             }
         } else {
@@ -238,6 +241,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             showRequirePermissionRejectActivityDialog()
         }
     }
+
     private fun checkPermission() {
         val permissions = arrayOf(
             Manifest.permission.ACTIVITY_RECOGNITION
@@ -248,60 +252,70 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     permission
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                if(SharedPreferenceUtils.firstPermissionRequired){
+                if (SharedPreferenceUtils.firstPermissionRequired) {
                     showRequirePermissionDialog()
                     SharedPreferenceUtils.firstPermissionRequired = false
                 }
             }
         }
     }
-    private fun checkPermissionOnResume(permission:String) {
-        if (permission == Manifest.permission.ACTIVITY_RECOGNITION){
-            isGotoSettingActivity = false
-            if (ActivityCompat.checkSelfPermission(requireContext(),permission) == PackageManager.PERMISSION_GRANTED){
-                if (ActivityCompat.checkSelfPermission(requireContext(),
-                        Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED ){
 
-                }
-                else{
-                    SharedPreferenceUtils.checkCountRejectPermission  ++
-                    if(SharedPreferenceUtils.checkCountRejectPermission >2)
+    private fun checkPermissionOnResume(permission: String) {
+        if (permission == Manifest.permission.ACTIVITY_RECOGNITION) {
+            isGotoSettingActivity = false
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    permission
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACTIVITY_RECOGNITION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+
+                } else {
+                    SharedPreferenceUtils.checkCountRejectPermission++
+                    if (SharedPreferenceUtils.checkCountRejectPermission > 2)
                         showRequirePermissionReject2ActivityDialog()
                     else
                         showRequirePermissionRejectActivityDialog()
                 }
-            }
-            else{
+            } else {
                 checkPermission()
-                if(SharedPreferenceUtils.checkCountRejectPermission >2)
+                if (SharedPreferenceUtils.checkCountRejectPermission > 2)
                     showRequirePermissionReject2ActivityDialog()
                 else
                     showRequirePermissionRejectActivityDialog()
             }
         }
     }
+
     private fun showRequirePermissionRejectActivityDialog() {
-        if (permissionDialog !=null)
+        if (permissionDialog != null)
             permissionDialog!!.hide()
-        if (permissionReject1Dialog== null){
+        if (permissionReject1Dialog == null) {
             permissionReject1Dialog = PermissionReject1Dialog(
                 requireContext(),
             ) {
-                StoragePermissionUtils.requestActivityRecognitionLogPermission(requestMultipleActivityPermissionsLauncher)
+                StoragePermissionUtils.requestActivityRecognitionLogPermission(
+                    requestMultipleActivityPermissionsLauncher
+                )
                 isGotoSettingActivity = true
-                SharedPreferenceUtils.checkCountRejectPermission ++
+                SharedPreferenceUtils.checkCountRejectPermission++
             }
         }
         if (!permissionReject1Dialog!!.isShowing) {
             permissionReject1Dialog!!.show()
         }
     }
+
     private fun showRequirePermissionReject2ActivityDialog() {
-        if (permissionDialog !=null)
+        if (permissionDialog != null)
             permissionDialog!!.hide()
-        if (permissionReject1Dialog !=null)
+        if (permissionReject1Dialog != null)
             permissionReject1Dialog!!.hide()
-        if (goToSettingDialog == null){
+        if (goToSettingDialog == null) {
             goToSettingDialog = PermissionReject2Dialog(
                 requireContext(),
             ) {
@@ -313,14 +327,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             goToSettingDialog!!.show()
         }
     }
+
     private fun showRequirePermissionDialog() {
-        if (permissionDialog !=null)
+        if (permissionDialog != null)
             permissionDialog!!.hide()
-        if (permissionReject1Dialog !=null)
+        if (permissionReject1Dialog != null)
             permissionReject1Dialog!!.hide()
-        if (goToSettingDialog !=null)
+        if (goToSettingDialog != null)
             goToSettingDialog!!.hide()
-        if (permissionRequiredDialog== null){
+        if (permissionRequiredDialog == null) {
             permissionRequiredDialog = PermissionRequiredDialog(
                 requireContext(),
             ) {
@@ -333,17 +348,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             permissionRequiredDialog!!.show()
         }
     }
+
     private fun showRequirePermissionActivityDialog() {
-        if (permissionDialog== null){
+        if (permissionDialog == null) {
             permissionDialog = PermissionDialog(
                 requireContext(),
             ) {
-                StoragePermissionUtils.requestActivityRecognitionLogPermission(requestMultipleActivityPermissionsLauncher)
+                StoragePermissionUtils.requestActivityRecognitionLogPermission(
+                    requestMultipleActivityPermissionsLauncher
+                )
                 isGotoSettingActivity = true
-                SharedPreferenceUtils.checkCountRejectPermission ++
+                SharedPreferenceUtils.checkCountRejectPermission++
             }
         }
-        if(SharedPreferenceUtils.checkCountRejectPermission>1)
+        if (SharedPreferenceUtils.checkCountRejectPermission > 1)
             showRequirePermissionRejectActivityDialog()
         else if (!permissionDialog!!.isShowing && SharedPreferenceUtils.firstPermissionRequired) {
             permissionDialog!!.show()
@@ -359,25 +377,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         Manifest.permission.ACTIVITY_RECOGNITION
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    if (SharedPreferenceUtils.startStep){
+                    if (SharedPreferenceUtils.startStep) {
                         startService()
                     }
                     Handler().postDelayed({
-                        if(SharedPreferenceUtils.firstPermissionRequired){
+                        if (SharedPreferenceUtils.firstPermissionRequired) {
                             showRequirePermissionDialog()
                             SharedPreferenceUtils.firstPermissionRequired = false
                         }
                     }, 100)
                 } else {
-                    if(SharedPreferenceUtils.checkCountRejectPermission
-                        >2)
+                    if (SharedPreferenceUtils.checkCountRejectPermission
+                        > 2
+                    )
                         showRequirePermissionReject2ActivityDialog()
                     else
                         showRequirePermissionRejectActivityDialog()
                 }
             } else {
                 checkPermission()
-                if(SharedPreferenceUtils.checkCountRejectPermission >2)
+                if (SharedPreferenceUtils.checkCountRejectPermission > 2)
                     showRequirePermissionReject2ActivityDialog()
                 else
                     showRequirePermissionRejectActivityDialog()

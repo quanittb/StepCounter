@@ -1,5 +1,7 @@
 package com.example.quanpham.services
 
+import DateUtils.convertSecondToTime
+import DateUtils.getStartOfHour
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -19,9 +21,7 @@ import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.room.Room
-import com.bumptech.glide.Glide
 import com.example.quanpham.R
-import com.example.quanpham.activity.MainActivity
 import com.example.quanpham.activity.SplashActivity
 import com.example.quanpham.db.AppDatabase
 import com.example.quanpham.db.model.Steps
@@ -32,13 +32,11 @@ import com.example.quanpham.utility.Constant.CHANNEL_ID_STEP
 import com.example.quanpham.utility.Constant.KcalOne
 import com.example.quanpham.utility.NotificationManager
 import com.example.quanpham.utility.NotificationManager.Companion.FULLSCREEN_REMINDER_NOTIFICATION_ID
-import com.example.quanpham.utility.convertSecondToTime
-import com.example.quanpham.utility.getStartOfHour
 import com.example.quanpham.utility.logD
 import java.util.Date
 
 
-class StepServices : Service() , SensorEventListener {
+class StepServices : Service(), SensorEventListener {
     private var sensorManager: SensorManager? = null
     private var accelerator: Sensor? = null
     private var numSteps = 0
@@ -69,20 +67,31 @@ class StepServices : Service() , SensorEventListener {
             .build()
         notification()
     }
+
     private fun stepCount() {
         SharedPreferenceUtils.dayStep++
-        if(SharedPreferenceUtils.dayStep > SharedPreferenceUtils.targetStep)
+        if (SharedPreferenceUtils.dayStep > SharedPreferenceUtils.targetStep)
             SharedPreferenceUtils.targetStep = SharedPreferenceUtils.dayStep
         currentStep = SharedPreferenceUtils.dayStep.toInt()
         targetStep = SharedPreferenceUtils.targetStep.toInt()
         val currentTime = Date()
-        var steps = database.stepDao().getStepsHour(getStartOfHour(System.currentTimeMillis()), System.currentTimeMillis())
-        if(steps == null)
-            database.stepDao().insert(Steps(null,1,currentTime,1, CALO_STEP,(SharedPreferenceUtils.stepLength*0.001)))
-        else{
+        var steps = database.stepDao()
+            .getStepsHour(getStartOfHour(System.currentTimeMillis()), System.currentTimeMillis())
+        if (steps == null)
+            database.stepDao().insert(
+                Steps(
+                    null,
+                    1,
+                    currentTime,
+                    1,
+                    CALO_STEP,
+                    (SharedPreferenceUtils.stepLength * 0.001)
+                )
+            )
+        else {
             steps.step++
             steps.calo = (steps.step * CALO_STEP)
-            steps.distance += SharedPreferenceUtils.stepLength*0.001
+            steps.distance += SharedPreferenceUtils.stepLength * 0.001
             steps.activeTime = steps.activeTime.plus(1)
             steps.isPush = false
             logD("đã update isPush = ${steps.isPush}")
@@ -91,38 +100,42 @@ class StepServices : Service() , SensorEventListener {
         HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())
         notification()
     }
+
     @SuppressLint("RemoteViewLayout")
-    private fun notification(){
+    private fun notification() {
         val remoteViews = RemoteViews(packageName, R.layout.layout_notify_all)
         remoteViews.setTextViewText(R.id.tv_number_step, SharedPreferenceUtils.dayStep.toString())
-        remoteViews.setTextViewText(R.id.tv_number_calo,(SharedPreferenceUtils.dayStep * KcalOne).toInt().toString())
-        remoteViews.setTextViewText(R.id.tv_timer,(convertSecondToTime(SharedPreferenceUtils.dayStep)))
-        remoteViews.setProgressBar(R.id.determinateBar,targetStep,currentStep,false)
-        if (currentStep< targetStep/4){
-            remoteViews.setProgressBar(R.id.determinateBar,targetStep,currentStep,false)
+        remoteViews.setTextViewText(
+            R.id.tv_number_calo,
+            (SharedPreferenceUtils.dayStep * KcalOne).toInt().toString()
+        )
+        remoteViews.setTextViewText(
+            R.id.tv_timer,
+            (convertSecondToTime(SharedPreferenceUtils.dayStep))
+        )
+        remoteViews.setProgressBar(R.id.determinateBar, targetStep, currentStep, false)
+        if (currentStep < targetStep / 4) {
+            remoteViews.setProgressBar(R.id.determinateBar, targetStep, currentStep, false)
             remoteViews.setViewVisibility(R.id.determinateBar, View.VISIBLE)
             remoteViews.setViewVisibility(R.id.determinateBar2, View.GONE)
             remoteViews.setViewVisibility(R.id.determinateBar3, View.GONE)
             remoteViews.setViewVisibility(R.id.determinateBar4, View.GONE)
-        }
-        else if (currentStep <targetStep/2){
-            remoteViews.setProgressBar(R.id.determinateBar2,targetStep,currentStep,false)
+        } else if (currentStep < targetStep / 2) {
+            remoteViews.setProgressBar(R.id.determinateBar2, targetStep, currentStep, false)
             remoteViews.setViewVisibility(R.id.determinateBar2, View.VISIBLE)
 
             remoteViews.setViewVisibility(R.id.determinateBar, View.GONE)
             remoteViews.setViewVisibility(R.id.determinateBar3, View.GONE)
             remoteViews.setViewVisibility(R.id.determinateBar4, View.GONE)
 
-        }
-        else if (currentStep <= (targetStep / 4)*3){
-            remoteViews.setProgressBar(R.id.determinateBar3,targetStep,currentStep,false)
+        } else if (currentStep <= (targetStep / 4) * 3) {
+            remoteViews.setProgressBar(R.id.determinateBar3, targetStep, currentStep, false)
             remoteViews.setViewVisibility(R.id.determinateBar3, View.VISIBLE)
             remoteViews.setViewVisibility(R.id.determinateBar2, View.GONE)
             remoteViews.setViewVisibility(R.id.determinateBar, View.GONE)
             remoteViews.setViewVisibility(R.id.determinateBar4, View.GONE)
-        }
-        else{
-            remoteViews.setProgressBar(R.id.determinateBar4,targetStep,currentStep,false)
+        } else {
+            remoteViews.setProgressBar(R.id.determinateBar4, targetStep, currentStep, false)
             remoteViews.setViewVisibility(R.id.determinateBar4, View.VISIBLE)
             remoteViews.setViewVisibility(R.id.determinateBar2, View.GONE)
             remoteViews.setViewVisibility(R.id.determinateBar3, View.GONE)
@@ -143,7 +156,7 @@ class StepServices : Service() , SensorEventListener {
             NotificationCompat.Builder(this)
         }
             .setSmallIcon(R.mipmap.ic_app_launcher_q)
-            .setLargeIcon(BitmapFactory.decodeResource(resources,R.mipmap.ic_app_launcher_q))
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_app_launcher_q))
             .setContentTitle(this.getString(R.string.app_name))
             .setContentText(currentStep.toString())
             .setAutoCancel(false)
@@ -165,9 +178,10 @@ class StepServices : Service() , SensorEventListener {
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            startForeground(FULLSCREEN_REMINDER_NOTIFICATION_ID,notification.build())
+            startForeground(FULLSCREEN_REMINDER_NOTIFICATION_ID, notification.build())
         }
     }
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -183,7 +197,11 @@ class StepServices : Service() , SensorEventListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        NotificationManager.cancelNotification(this, FULLSCREEN_REMINDER_NOTIFICATION_ID, notification.build())
+        NotificationManager.cancelNotification(
+            this,
+            FULLSCREEN_REMINDER_NOTIFICATION_ID,
+            notification.build()
+        )
         sensorManager!!.unregisterListener(this)
     }
 

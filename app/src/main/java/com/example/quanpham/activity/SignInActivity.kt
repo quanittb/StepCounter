@@ -1,8 +1,9 @@
 package com.example.quanpham.activity
 
+import DateUtils.getDateFromTimeMillis
+import DateUtils.getStartOfDay
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences.Editor
 import android.text.method.PasswordTransformationMethod
 import android.view.inputmethod.EditorInfo
 import com.example.quanpham.R
@@ -16,9 +17,6 @@ import com.example.quanpham.fragment.ForgotPassFragment
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
-import com.example.quanpham.utility.getDateFromTimeMillis
-import com.example.quanpham.utility.getStartOfDay
-import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.makeGone
 import com.example.quanpham.utility.makeVisible
 import com.example.quanpham.utility.showToast
@@ -28,8 +26,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.database
-import com.google.firebase.database.ktx.database
 
 class SignInActivity : BaseActivity<ActivitySignInBinding>() {
     override fun getViewBinding() = ActivitySignInBinding.inflate(layoutInflater)
@@ -77,25 +73,24 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
 
         binding.txtSignup.setOnClickListener {
             supportFragmentManager.popBackStack()
-            SignUpActivity.start(this,false)
+            SignUpActivity.start(this, false)
         }
         binding.txtfogotpass.setOnClickListener {
             supportFragmentManager.popBackStack()
-            addFragment(ForgotPassFragment(),android.R.id.content,true)
+            addFragment(ForgotPassFragment(), android.R.id.content, true)
         }
         binding.ivVisiblePass.setOnClickListener {
-            isPasswordVisible = ! isPasswordVisible
-            if(isPasswordVisible){
+            isPasswordVisible = !isPasswordVisible
+            if (isPasswordVisible) {
                 binding.tvPassword.transformationMethod = null
                 binding.tvPassword.setSelection(binding.tvPassword.length())
-            }
-            else{
+            } else {
                 binding.tvPassword.transformationMethod = PasswordTransformationMethod.getInstance()
                 binding.tvPassword.setSelection(binding.tvPassword.length())
             }
         }
         binding.tvPassword.setOnEditorActionListener { v, actionId, event ->
-            if(actionId == EditorInfo.IME_ACTION_DONE){
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (checkValue()) {
                     hideKeyboard()
                     signApp()
@@ -103,14 +98,14 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                     showToast(getString(R.string.enter_all_value))
                 }
                 true
-            }
-            else
+            } else
                 false
         }
     }
+
     private fun signApp() {
         binding.llLoading.makeVisible()
-        auth.signInWithEmailAndPassword(email,pass)
+        auth.signInWithEmailAndPassword(email, pass)
             .addOnSuccessListener {
                 firestore.collection(Constant.KEY_USER)
                     .document(it.user!!.uid)
@@ -125,20 +120,27 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                         refStep.addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 database.stepDao().deleteAllStep()
-                                if(!dataSnapshot.exists())
-                                    MainActivity.startMain(this@SignInActivity,true)
+                                if (!dataSnapshot.exists())
+                                    MainActivity.startMain(this@SignInActivity, true)
                                 for (snapshot in dataSnapshot.children) {
                                     val data = snapshot.getValue(StepsFirebase::class.java)
                                     data?.let {
-                                                it.isPush = true
-                                                val step = Steps(null,it.step,
-                                                    getDateFromTimeMillis(it.startTime.time),it.activeTime,it.calo,it.distance,true)
-                                                database.stepDao().insert(step)
-                                            }
+                                        it.isPush = true
+                                        val step = Steps(
+                                            null,
+                                            it.step,
+                                            getDateFromTimeMillis(it.startTime.time),
+                                            it.activeTime,
+                                            it.calo,
+                                            it.distance,
+                                            true
+                                        )
+                                        database.stepDao().insert(step)
+                                    }
                                     count++
 
-                                    if(count == dataSnapshot.childrenCount.toInt()){
-                                        SplashActivity.startMain(this@SignInActivity,true)
+                                    if (count == dataSnapshot.childrenCount.toInt()) {
+                                        SplashActivity.startMain(this@SignInActivity, true)
                                     }
                                 }
 
@@ -160,26 +162,29 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                 binding.llLoading.makeGone()
             }
     }
-    private fun getWeightData(){
+
+    private fun getWeightData() {
         database.weightDao().deleteAllWeights()
-        val refWeights = fbDatabase.getReference(Constant.KEY_WEIGHT).child(com.google.firebase.ktx.Firebase.auth.currentUser!!.uid)
-        refWeights.addValueEventListener(object : ValueEventListener{
+        val refWeights = fbDatabase.getReference(Constant.KEY_WEIGHT)
+            .child(com.google.firebase.ktx.Firebase.auth.currentUser!!.uid)
+        refWeights.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                    if(snapshot.exists()){
-                        snapshot.children.forEach{item ->
-                            val data = item.getValue(WeightsFirebase::class.java)
-                            data?.let {
-                                database.weightDao().insert(
-                                    Weights(null,it.weight,
-                                        getDateFromTimeMillis(it.updateTime.time)
-                                    )
+                if (snapshot.exists()) {
+                    snapshot.children.forEach { item ->
+                        val data = item.getValue(WeightsFirebase::class.java)
+                        data?.let {
+                            database.weightDao().insert(
+                                Weights(
+                                    null, it.weight,
+                                    getDateFromTimeMillis(it.updateTime.time)
                                 )
-                                if(getStartOfDay(it.updateTime.time) == getStartOfDay(System.currentTimeMillis()))
-                                    SharedPreferenceUtils.weight = it.weight!!
-                                }
+                            )
+                            if (getStartOfDay(it.updateTime.time) == getStartOfDay(System.currentTimeMillis()))
+                                SharedPreferenceUtils.weight = it.weight!!
                         }
                     }
                 }
+            }
 
             override fun onCancelled(error: DatabaseError) {
             }

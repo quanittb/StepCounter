@@ -1,7 +1,14 @@
 package com.example.quanpham.fragment
 
 import DateUtils.getCurrentYear
+import DateUtils.getDayOfMonth
+import DateUtils.getEndOfDay
+import DateUtils.getEndOfYear
 import DateUtils.getMillis
+import DateUtils.getMonthOfYear
+import DateUtils.getStartOfDay
+import DateUtils.getStartOfDayMinus
+import DateUtils.getStartOfYear
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,13 +26,6 @@ import com.example.quanpham.utility.Constant.cmToIn
 import com.example.quanpham.utility.Constant.kgToLb
 import com.example.quanpham.utility.Constant.lbToKg
 import com.example.quanpham.utility.formatNumbers
-import com.example.quanpham.utility.getDayOfMonth
-import com.example.quanpham.utility.getEndOfDay
-import com.example.quanpham.utility.getEndOfYear
-import com.example.quanpham.utility.getMonthOfYear
-import com.example.quanpham.utility.getStartOfDay
-import com.example.quanpham.utility.getStartOfDayMinus
-import com.example.quanpham.utility.getStartOfYear
 import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.rxbus.ChangeUnit
 import com.example.quanpham.utility.rxbus.NumberHeight
@@ -168,33 +168,34 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
 
         showCurrentWeight()
     }
-    private fun pushWeight(weights: Weights){
+
+    private fun pushWeight(weights: Weights) {
         var isCheck = true
         var count = 0
-        val refWeights = fbDatabase.getReference(Constant.KEY_WEIGHT).child(Firebase.auth.currentUser!!.uid)
-        refWeights.addValueEventListener(object : ValueEventListener{
+        val refWeights =
+            fbDatabase.getReference(Constant.KEY_WEIGHT).child(Firebase.auth.currentUser!!.uid)
+        refWeights.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (isCheck){
+                if (isCheck) {
                     isCheck = false
-                    if(snapshot.exists()){
-                        snapshot.children.forEach{item ->
+                    if (snapshot.exists()) {
+                        snapshot.children.forEach { item ->
                             logD("count : $count")
                             count++
                             val data = item.getValue(WeightsFirebase::class.java)
                             data?.let {
-                                if(getStartOfDay(it.updateTime.time) == getStartOfDay(weights.updateTime!!.time)){
+                                if (getStartOfDay(it.updateTime.time) == getStartOfDay(weights.updateTime!!.time)) {
                                     refWeights.child(item.key!!).setValue(weights)
                                     count = snapshot.childrenCount.toInt() + 1
                                     return@forEach
                                 }
-                                if(count == snapshot.childrenCount.toInt()){
+                                if (count == snapshot.childrenCount.toInt()) {
                                     count = 0
                                     refWeights.push().setValue(weights)
                                 }
                             }
                         }
-                    }
-                    else{
+                    } else {
                         refWeights.push().setValue(weights)
                     }
                 }
