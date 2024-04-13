@@ -191,4 +191,22 @@
     <string name="add_your_calories">Fügen Sie Ihre Kalorien hinzu...</string>
     <string name="add_your_calories_to_track_your_health_in_the_most_intuitive_way_">Fügen Sie Ihre Kalorien hinzu, um Ihre Gesundheit auf die intuitivste Weise zu verfolgen🤗</string>
     <string name="add_your_calories_to_track_your_health_in_the_most_intuitive_way">Fügen Sie Ihre Kalorien hinzu, um Ihre Gesundheit auf die intuitivste Weise zu verfolgen</string>
+    <string name="sign_in">Anmelden</string>
+    <string name="register_now_the_application">Registrieren Sie sich jetzt, um die Anwendung zu erleben</string>
+    <string name="user_name">Benutzername</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Passwort</string>
+    <string name="reenter_password">Passwort erneut eingeben</string>
+    <string name="have_an_account">Haben Sie ein Konto?</string>
+    <string name="enter_all_value">Bitte geben Sie alle Werte ein</string>
+    <string name="sign_up">Registrieren</string>
+    <string name="log_in_now_to_experience_the_application">Melden Sie sich jetzt an, um die Anwendung zu erleben</string>
+    <string name="forget_pass">Passwort vergessen?</string>
+    <string name="back">Zurück</string>
+    <string name="send">Senden</string>
+    <string name="rank">Rang</string>
+    <string name="log_out">Abmelden</string>
+    <string name="please_enter_your_registered_email_and_check_your_mailbox_to_create_a_new_password">Bitte geben Sie Ihre registrierte E-Mail ein und überprüfen Sie Ihr Postfach, um ein neues Passwort zu erstellen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="name">Name</string>
 </resources>

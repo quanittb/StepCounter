@@ -288,6 +288,7 @@ class HealthFragment : BaseFragment<FragmentHealthBinding>() {
                     pushWeight(Weights(null, weight, calendar.time))
                     updateWeightData()
                     calculateAndUpdateBmi()
+                    updateProfile()
                 }
 
                 override fun onNotSave() {

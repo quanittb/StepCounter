@@ -77,26 +77,7 @@ class StepLengthFragment : BaseFragment<FragmentStepLenghtBinding>() {
             openHeightBottomSheet()
         }
     }
-    private fun updateProfile() {
-        if (auth.currentUser != null) {
-            val updates = hashMapOf<String, Any>(
-                "age" to SharedPreferenceUtils.age,
-                "gender" to if (SharedPreferenceUtils.selectSex == 1) true else false,
-                "height" to SharedPreferenceUtils.height
-            )
-            firestore.collection(Constant.KEY_USER)
-                .document(auth.currentUser!!.uid)
-                .update(updates)
-                .addOnSuccessListener {
-                    logD("Update profile thành công!")
 
-                }
-                .addOnFailureListener {
-                    showToast(it.message.toString())
-                }
-        }
-
-    }
     fun updateData() {
         val textToAppend: String?
         if (SharedPreferenceUtils.unit)

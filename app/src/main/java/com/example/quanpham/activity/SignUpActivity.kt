@@ -2,6 +2,7 @@ package com.example.quanpham.activity
 
 import android.content.Context
 import android.content.Intent
+import android.text.method.PasswordTransformationMethod
 import android.util.Patterns.EMAIL_ADDRESS
 import com.example.quanpham.R
 import com.example.quanpham.base.BaseActivity
@@ -16,6 +17,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
     private var name = ""
     private var pass = ""
     private var repass = ""
+    private var isPasswordVisible = false
+    private var isRePassVisible = false
 
     companion object {
         fun start(context: Context, clearTask: Boolean) {
@@ -32,7 +35,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
     private fun checkValue(): Boolean {
         email = binding.email.text.toString()
         name = binding.tvName.text.toString()
-        pass = binding.passrod.text.toString()
+        pass = binding.password.text.toString()
         repass = binding.repass.text.toString()
 
         if (email.isEmpty() || pass.isEmpty() || repass.isEmpty() ||  name.isEmpty()) {
@@ -42,6 +45,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
         if (!EMAIL_ADDRESS.matcher(email).matches()) {
             return false
         }
+        if(pass != repass)
+            return false
         return true
     }
 
@@ -54,6 +59,27 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
                 showToast(getString(R.string.enter_all_value))
             }
         }
+        binding.visiblePass.setOnClickListener {
+            isPasswordVisible = !isPasswordVisible
+            if (isPasswordVisible) {
+                binding.password.transformationMethod = null
+                binding.password.setSelection(binding.password.length())
+            } else {
+                binding.password.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.password.setSelection(binding.password.length())
+            }
+        }
+        binding.visibleRepass.setOnClickListener{
+            isRePassVisible = !isRePassVisible
+            if (isRePassVisible) {
+                binding.repass.transformationMethod = null
+                binding.repass.setSelection(binding.repass.length())
+            } else {
+                binding.repass.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.repass.setSelection(binding.repass.length())
+            }
+        }
+
         binding.txtSignIn.setOnClickListener { v->
             supportFragmentManager.popBackStack()
             SignInActivity.start(this,false)
