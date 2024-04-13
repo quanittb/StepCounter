@@ -1,5 +1,7 @@
 package com.example.quanpham.services
 
+import DateUtils.getStartOfDay
+import DateUtils.getStartOfDayMinus
 import android.Manifest
 import android.app.PendingIntent
 import android.app.Service
@@ -14,7 +16,6 @@ import androidx.core.app.NotificationCompat
 import androidx.room.Room
 import com.example.quanpham.R
 import com.example.quanpham.activity.SplashActivity
-import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.db.AppDatabase
 import com.example.quanpham.db.model.Rank
 import com.example.quanpham.db.model.Steps
@@ -23,10 +24,6 @@ import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.NotificationManager
-import com.example.quanpham.utility.getEndOfDayMinus
-import com.example.quanpham.utility.getStartOfDay
-import com.example.quanpham.utility.getStartOfDayMinus
-import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.rxbus.RxBus
 import com.example.quanpham.utility.rxbus.StopUpdate
 import com.google.firebase.auth.ktx.auth
@@ -34,11 +31,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.runBlocking
-import kotlin.concurrent.thread
-import kotlin.math.log
 
 class ResetStepForegroundService : Service() {
     private lateinit var notification: NotificationCompat.Builder
@@ -94,9 +87,11 @@ class ResetStepForegroundService : Service() {
             System.currentTimeMillis()
         )
         HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())
-        val ref = mdatabase.getReference(Constant.KEY_STEP)
+
+        // xử lý push step
+        val refStep = mdatabase.getReference(Constant.KEY_STEP)
             .child(Firebase.auth.currentUser!!.uid)
-        ref.addValueEventListener(object : ValueEventListener {
+        refStep.addValueEventListener(object : ValueEventListener {
             var count = 0
             var checkOnly = false
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -109,7 +104,7 @@ class ResetStepForegroundService : Service() {
                                     if (it1.startTime.time == it.startTime.time && !it1.isPush) {
                                         it1.isPush = true
                                         database.stepDao().updateStep(it1)
-                                        ref.child(snapshot.key!!).setValue(it1)
+                                        refStep.child(snapshot.key!!).setValue(it1)
                                         return@forEach
                                     }
                                 }
@@ -118,7 +113,7 @@ class ResetStepForegroundService : Service() {
                             if (count == dataSnapshot.childrenCount.toInt()) {
                                 for (i in listRecord) {
                                     if (!i.isPush) {
-                                        ref.push().setValue(i)
+                                        refStep.push().setValue(i)
                                     }
                                     if (listRecord.indexOf(i) == listRecord.lastIndex) {
                                         database.stepDao().updateStatePushForStep()
@@ -131,7 +126,7 @@ class ResetStepForegroundService : Service() {
                     } else {
                         for (i in listRecord) {
                             if (!i.isPush) {
-                                ref.push().setValue(i)
+                                refStep.push().setValue(i)
                             }
                             if (listRecord.indexOf(i) == listRecord.lastIndex) {
                                 database.stepDao().updateStatePushForStep()
@@ -141,7 +136,9 @@ class ResetStepForegroundService : Service() {
 
                     }
                     checkOnly = true
-                    RxBus.publish(StopUpdate())
+                    Handler().postDelayed({
+                        stopForeground(true)
+                        stopSelf()},2000)
                 }
 
             }
@@ -151,10 +148,10 @@ class ResetStepForegroundService : Service() {
             }
         })
         // Xử lý cho rank
-        val ref1 = mdatabase.getReference(Constant.KEY_RANK)
+        val refRank = mdatabase.getReference(Constant.KEY_RANK)
             .child(getStartOfDay(System.currentTimeMillis()).toString())
 
-        ref1.child(Firebase.auth.currentUser!!.uid).setValue(
+        refRank.child(Firebase.auth.currentUser!!.uid).setValue(
             Rank(
                 Firebase.auth.currentUser!!.uid,
                 SharedPreferenceUtils.name,
@@ -162,7 +159,9 @@ class ResetStepForegroundService : Service() {
             )
         )
 
-
+        // xử lý weight
+        val refWeight = mdatabase.getReference(Constant.KEY_WEIGHT).child(Firebase.auth.currentUser!!.uid)
+        
     }
 
     override fun onBind(intent: Intent?): IBinder? {

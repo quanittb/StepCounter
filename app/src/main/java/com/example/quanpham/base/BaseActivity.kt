@@ -24,20 +24,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.example.quanpham.R
 import com.example.quanpham.db.AppDatabase
-import com.example.quanpham.db.model.Steps
-import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.model.Users
-import com.example.quanpham.services.ResetReceiver
 import com.example.quanpham.utility.Constant
-import com.example.quanpham.utility.getEndOfDay
-import com.example.quanpham.utility.getStartOfDay
-import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.showToast
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -46,8 +38,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.util.Calendar
-import java.util.Date
 
 
 abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {

@@ -14,8 +14,11 @@ import com.example.quanpham.R
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentStepLenghtBinding
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.rxbus.RxBus
 import com.example.quanpham.utility.rxbus.StepLengthUpdate
+import com.example.quanpham.utility.showToast
 import com.mobiai.app.ui.dialog.HeightDialog
 
 class StepLengthFragment : BaseFragment<FragmentStepLenghtBinding>() {
@@ -74,7 +77,26 @@ class StepLengthFragment : BaseFragment<FragmentStepLenghtBinding>() {
             openHeightBottomSheet()
         }
     }
+    private fun updateProfile() {
+        if (auth.currentUser != null) {
+            val updates = hashMapOf<String, Any>(
+                "age" to SharedPreferenceUtils.age,
+                "gender" to if (SharedPreferenceUtils.selectSex == 1) true else false,
+                "height" to SharedPreferenceUtils.height
+            )
+            firestore.collection(Constant.KEY_USER)
+                .document(auth.currentUser!!.uid)
+                .update(updates)
+                .addOnSuccessListener {
+                    logD("Update profile thành công!")
 
+                }
+                .addOnFailureListener {
+                    showToast(it.message.toString())
+                }
+        }
+
+    }
     fun updateData() {
         val textToAppend: String?
         if (SharedPreferenceUtils.unit)
@@ -128,7 +150,6 @@ class StepLengthFragment : BaseFragment<FragmentStepLenghtBinding>() {
     }
 
     private fun openHeightBottomSheet() {
-        Log.d("abcde","${SharedPreferenceUtils.height} va ${SharedPreferenceUtils.height0_temporary}")
         bottomSheetHeightDialog == null
         if (bottomSheetHeightDialog == null) {
             bottomSheetHeightDialog = HeightDialog(
@@ -153,6 +174,7 @@ class StepLengthFragment : BaseFragment<FragmentStepLenghtBinding>() {
                         }
 
                         updateData()
+                        updateProfile()
                     }
                 })
         }

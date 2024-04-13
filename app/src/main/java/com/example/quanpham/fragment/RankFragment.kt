@@ -1,23 +1,16 @@
 package com.example.quanpham.fragment
 
+import DateUtils.getStartOfDay
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.quanpham.adapter.RankAdapter
 import com.example.quanpham.base.BaseFragment
 import com.example.quanpham.databinding.FragmentRankBinding
 import com.example.quanpham.db.model.Rank
-import com.example.quanpham.db.model.StepsFirebase
-import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
-import com.example.quanpham.utility.getStartOfDay
-import com.example.quanpham.utility.logD
-import com.example.quanpham.utility.showToast
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
-import kotlin.math.log
 
 class RankFragment: BaseFragment<FragmentRankBinding>() {
     companion object{
