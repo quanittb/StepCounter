@@ -140,7 +140,7 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                                     count++
 
                                     if (count == dataSnapshot.childrenCount.toInt()) {
-                                        SplashActivity.startMain(this@SignInActivity, true)
+                                        MainActivity.startMain(this@SignInActivity, true)
                                     }
                                 }
 
@@ -170,7 +170,7 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
         refWeights.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    snapshot.children.forEach { item ->
+                    snapshot.children.forEachIndexed { index,item ->
                         val data = item.getValue(WeightsFirebase::class.java)
                         data?.let {
                             database.weightDao().insert(
@@ -179,7 +179,7 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                                     getDateFromTimeMillis(it.updateTime.time)
                                 )
                             )
-                            if (getStartOfDay(it.updateTime.time) == getStartOfDay(System.currentTimeMillis()))
+                            if (index == 0)
                                 SharedPreferenceUtils.weight = it.weight!!
                         }
                     }

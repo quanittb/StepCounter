@@ -1,7 +1,10 @@
 package com.example.quanpham.fragment
 
 import DateUtils.convertSecondToTime
+import DateUtils.getEndOfDay
+import DateUtils.getEndOfDayMinus
 import DateUtils.getHour
+import DateUtils.getStartOfDay
 import DateUtils.getStartOfDayMinus
 import android.Manifest
 import android.content.Intent
@@ -13,6 +16,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
@@ -27,7 +31,10 @@ import com.example.quanpham.permission.StoragePermissionUtils
 import com.example.quanpham.services.ResetStepForegroundService
 import com.example.quanpham.services.StepServices
 import com.example.quanpham.utility.Constant
+import com.example.quanpham.utility.Constant.CM_TO_KM
 import com.example.quanpham.utility.Constant.KcalOne
+import com.example.quanpham.utility.formatNumbers
+import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.makeGone
 import com.example.quanpham.utility.makeVisible
 import com.example.quanpham.utility.showToast
@@ -58,38 +65,48 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun initView() {
-        val permissions = arrayOf(
-            Manifest.permission.ACTIVITY_RECOGNITION
-        )
-        for (permission in permissions) {
+        val permission = Manifest.permission.ACTIVITY_RECOGNITION
+        if(isAdded) {
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
                     permission
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 showRequirePermissionActivityDialog()
+            } else {
+                if (SharedPreferenceUtils.startStep) {
+                    Handler().postDelayed({
+                        startService()
+                    }, 1000)
+                }
             }
         }
-        if (!SharedPreferenceUtils.setOrStartGoal) {
+        if (SharedPreferenceUtils.setOrStartGoal)
             binding.lnGoal.makeGone()
-        }
+        else
+            binding.lnGoal.makeVisible()
         serviceIntent = Intent(requireContext(), StepServices::class.java)
         getLoginUser()
         if (!SplashActivity.IS_PUSH) {
             pushData()
         }
+        if (SharedPreferenceUtils.startStep) {
+            startService()
+            binding.ivStepStart.setImageResource(R.drawable.ic_pause_step_home)
+            binding.tvPause.makeGone()
+            binding.lnTarget.makeVisible()
+        } else {
+            stopService()
+            binding.ivStepStart.setImageResource(R.drawable.ic_step_pause)
+            binding.tvPause.makeVisible()
+            binding.lnTarget.makeGone()
+        }
         setListener()
         setWelcome()
         updateUI()
-        if (SharedPreferenceUtils.startStep) {
-            Handler().postDelayed({
-                startService()
-            }, 1000)
-        }
     }
-
-    var user = Users()
     private fun getLoginUser() {
+        var user: Users
         if (auth.currentUser != null) {
             firestore.collection(Constant.KEY_USER)
                 .document(auth.currentUser!!.uid)
@@ -101,7 +118,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     SharedPreferenceUtils.selectSex = if (user.gender) 1 else 0  // nam 1 , nu 0
                     SharedPreferenceUtils.age = user.age!!
                     SharedPreferenceUtils.stepLength = user.height!! * 0.4f
+                    SharedPreferenceUtils.dayStep = database.stepDao().getStepsDay(
+                        getStartOfDay(System.currentTimeMillis()),
+                        getEndOfDay(System.currentTimeMillis())
+                    )
 
+                    currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())
                 }
                 .addOnFailureListener {
                     showToast(it.message.toString())
@@ -124,10 +146,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             SharedPreferenceUtils.dayStep.toFloat()
         )
         val stepCountKm =
-            (SharedPreferenceUtils.dayStep * (SharedPreferenceUtils.stepLength / 100000))
+            (SharedPreferenceUtils.dayStep * SharedPreferenceUtils.stepLength * CM_TO_KM)
         val stepCountKcal = SharedPreferenceUtils.dayStep * KcalOne
-        val formattedNumberKcal = String.format("%.1f", stepCountKcal)
-        val formattedNumberKm = String.format("%.2f", stepCountKm)
+        val formattedNumberKcal = formatNumbers(stepCountKcal)
+        val formattedNumberKm = formatNumbers(stepCountKm)
         val activeTime = convertSecondToTime(SharedPreferenceUtils.dayStep)
 
         binding.tvKmHome.text = formattedNumberKm
@@ -175,16 +197,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.btnStepGoal.setOnClickListener {
             openStepGoalBottomSheet()
             binding.lnGoal.makeGone()
-            SharedPreferenceUtils.setOrStartGoal = false
+            SharedPreferenceUtils.setOrStartGoal = true
         }
         binding.ivClose.setOnClickListener {
             binding.lnGoal.makeGone()
+            SharedPreferenceUtils.setOrStartGoal = true
         }
     }
 
     private fun startService() {
-        if (isAdded)
-            requireContext().startService((serviceIntent))
+        val permission = Manifest.permission.ACTIVITY_RECOGNITION
+        if (isAdded){
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                showRequirePermissionActivityDialog()
+            } else{
+                requireContext().startService((serviceIntent))
+            }
+        }
+
+
+
     }
 
     private fun stopService() {
@@ -231,7 +267,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     ) { permissions ->
         val allGranted = permissions.all { it.value }
         if (allGranted) {
-            //todo contact
             isGotoSettingActivity = false
             if (SharedPreferenceUtils.startStep) {
                 startService()
@@ -241,7 +276,42 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             showRequirePermissionRejectActivityDialog()
         }
     }
-
+    private fun showRequirePermissionActivityDialog() {
+        if (permissionDialog == null) {
+            permissionDialog = PermissionDialog(
+                requireContext(),
+            ) {
+                StoragePermissionUtils.requestActivityRecognitionLogPermission(
+                    requestMultipleActivityPermissionsLauncher
+                )
+                isGotoSettingActivity = true
+                SharedPreferenceUtils.checkCountRejectPermission++
+            }
+        }
+        if (SharedPreferenceUtils.checkCountRejectPermission > 1)
+            showRequirePermissionRejectActivityDialog()
+        else if (!permissionDialog!!.isShowing && SharedPreferenceUtils.firstPermissionRequired) {
+            permissionDialog!!.show()
+        }
+    }
+    private fun showRequirePermissionRejectActivityDialog() {
+        if (permissionDialog != null)
+            permissionDialog!!.hide()
+        if (permissionReject1Dialog == null) {
+            permissionReject1Dialog = PermissionReject1Dialog(
+                requireContext(),
+            ) {
+                StoragePermissionUtils.requestActivityRecognitionLogPermission(
+                    requestMultipleActivityPermissionsLauncher
+                )
+                isGotoSettingActivity = true
+                SharedPreferenceUtils.checkCountRejectPermission++
+            }
+        }
+        if (!permissionReject1Dialog!!.isShowing) {
+            permissionReject1Dialog!!.show()
+        }
+    }
     private fun checkPermission() {
         val permissions = arrayOf(
             Manifest.permission.ACTIVITY_RECOGNITION
@@ -266,23 +336,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
                     permission
-                ) == PackageManager.PERMISSION_GRANTED
+                ) == PackageManager.PERMISSION_DENIED
             ) {
-                if (ActivityCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.ACTIVITY_RECOGNITION
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-
-                } else {
-                    SharedPreferenceUtils.checkCountRejectPermission++
-                    if (SharedPreferenceUtils.checkCountRejectPermission > 2)
-                        showRequirePermissionReject2ActivityDialog()
-                    else
-                        showRequirePermissionRejectActivityDialog()
-                }
-            } else {
                 checkPermission()
+                SharedPreferenceUtils.checkCountRejectPermission++
                 if (SharedPreferenceUtils.checkCountRejectPermission > 2)
                     showRequirePermissionReject2ActivityDialog()
                 else
@@ -291,24 +348,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    private fun showRequirePermissionRejectActivityDialog() {
-        if (permissionDialog != null)
-            permissionDialog!!.hide()
-        if (permissionReject1Dialog == null) {
-            permissionReject1Dialog = PermissionReject1Dialog(
-                requireContext(),
-            ) {
-                StoragePermissionUtils.requestActivityRecognitionLogPermission(
-                    requestMultipleActivityPermissionsLauncher
-                )
-                isGotoSettingActivity = true
-                SharedPreferenceUtils.checkCountRejectPermission++
-            }
-        }
-        if (!permissionReject1Dialog!!.isShowing) {
-            permissionReject1Dialog!!.show()
-        }
-    }
+
 
     private fun showRequirePermissionReject2ActivityDialog() {
         if (permissionDialog != null)
@@ -349,24 +389,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    private fun showRequirePermissionActivityDialog() {
-        if (permissionDialog == null) {
-            permissionDialog = PermissionDialog(
-                requireContext(),
-            ) {
-                StoragePermissionUtils.requestActivityRecognitionLogPermission(
-                    requestMultipleActivityPermissionsLauncher
-                )
-                isGotoSettingActivity = true
-                SharedPreferenceUtils.checkCountRejectPermission++
-            }
-        }
-        if (SharedPreferenceUtils.checkCountRejectPermission > 1)
-            showRequirePermissionRejectActivityDialog()
-        else if (!permissionDialog!!.isShowing && SharedPreferenceUtils.firstPermissionRequired) {
-            permissionDialog!!.show()
-        }
-    }
+
 
     override fun onResume() {
         if (isGotoSettingActivity) {

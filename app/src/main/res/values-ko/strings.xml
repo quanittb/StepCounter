@@ -178,5 +178,23 @@
     <string name="add_your_calories">칼로리를 추가하세요...</string>
     <string name="add_your_calories_to_track_your_health_in_the_most_intuitive_way_">칼로리를 추가하여 가장 직관적인 방법으로 건강을 추적하세요🤗</string>
     <string name="add_your_calories_to_track_your_health_in_the_most_intuitive_way">가장 직관적인 방법으로 건강을 추적하려면 칼로리를 추가하세요</string>
+    <string name="sign_in">Đăng nhập</string>
+    <string name="register_now_the_application">Đăng ký ngay để trải nghiệm ứng dụng</string>
+    <string name="user_name">Tên người dùng</string>
+    <string name="email">Email</string>
+    <string name="password">Mật khẩu</string>
+    <string name="reenter_password">Nhập lại mật khẩu</string>
+    <string name="have_an_account">Có tài khoản?</string>
+    <string name="enter_all_value">Vui lòng nhập đầy đủ thông tin</string>
+    <string name="sign_up">Đăng ký</string>
+    <string name="log_in_now_to_experience_the_application">Đăng nhập ngay để trải nghiệm ứng dụng</string>
+    <string name="forget_pass">Quên mật khẩu?</string>
+    <string name="back">Quay lại</string>
+    <string name="send">Gửi</string>
+    <string name="rank">Xếp hạng</string>
+    <string name="log_out">Đăng xuất</string>
+    <string name="please_enter_your_registered_email_and_check_your_mailbox_to_create_a_new_password">Vui lòng nhập email đã đăng ký của bạn và kiểm tra hộp thư để tạo mật khẩu mới</string>
+    <string name="cancel">Hủy</string>
+    <string name="name">Tên</string>
 
 </resources>

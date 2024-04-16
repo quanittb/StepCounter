@@ -20,7 +20,7 @@ class Steps (
     var startTime : Date ,
     var activeTime : Long = 0,
     var calo : Double = 0.0,
-    var distance : Double = 0.0,
+    var distance : Double = 0.0, // km
     var isPush : Boolean = false
     )
 

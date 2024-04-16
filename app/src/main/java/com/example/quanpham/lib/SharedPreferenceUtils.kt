@@ -85,8 +85,9 @@ object SharedPreferenceUtils {
     var checkCountRejectPermission: Int
         get() = sharedPreferencesManager.getIntValue(CHECK_COUNT_REJECT, 1)
         set(value) = sharedPreferencesManager.setIntValue(CHECK_COUNT_REJECT, value)
+    // true : Đã mở -> Ko hiện
     var setOrStartGoal: Boolean
-        get() = sharedPreferencesManager.getValueBool(SET_OR_CLOSE_STEP_GOAL, true)
+        get() = sharedPreferencesManager.getValueBool(SET_OR_CLOSE_STEP_GOAL, false)
         set(value) = sharedPreferencesManager.setValueBool(SET_OR_CLOSE_STEP_GOAL, value)
     var bmi: Float?
         get() = sharedPreferencesManager.getFloatValue(BMI, 18f)

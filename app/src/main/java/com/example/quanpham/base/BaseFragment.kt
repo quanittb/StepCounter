@@ -16,6 +16,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import androidx.viewbinding.ViewBinding
 import com.example.quanpham.db.AppDatabase
+import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.logD
@@ -68,7 +69,7 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         }
         database = Room.databaseBuilder(
             requireContext(),
-            AppDatabase::class.java, "step-db"
+            AppDatabase::class.java, Constant.STEP_DB
         )
             .allowMainThreadQueries()
             .build()
@@ -200,6 +201,26 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
     protected fun addDispose(disposable: Disposable?) {
         disposable?.let {
             compositeDisposable.add(disposable)
+        }
+
+    }
+    fun updateProfile() {
+        if (auth.currentUser != null) {
+            val updates = hashMapOf<String, Any>(
+                "age" to SharedPreferenceUtils.age,
+                "gender" to if (SharedPreferenceUtils.selectSex == 1) true else false,
+                "height" to SharedPreferenceUtils.height
+            )
+            firestore.collection(Constant.KEY_USER)
+                .document(auth.currentUser!!.uid)
+                .update(updates)
+                .addOnSuccessListener {
+                    logD("Update profile thành công!")
+
+                }
+                .addOnFailureListener {
+                    showToast(it.message.toString())
+                }
         }
 
     }

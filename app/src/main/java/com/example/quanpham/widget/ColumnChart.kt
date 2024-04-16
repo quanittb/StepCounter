@@ -13,6 +13,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.FrameLayout
 import com.example.quanpham.R
+import com.example.quanpham.utility.logD
 import com.mobiai.views.beforeafter.chart.utility.drawRoundRectPath
 import com.mobiai.views.beforeafter.chart.utility.drawTriangle
 
@@ -114,7 +115,8 @@ class ColumnChart @JvmOverloads constructor(
     fun setData(arr: ArrayList<Column>) {
         this.listColumn.clear()
         this.listColumn.addAll(arr)
-        initMaxMin(this.listColumn)
+//        if(this.listColumn.isNotEmpty())
+            initMaxMin(this.listColumn)
         listShapeColumn = ArrayList()
         getListShapeColumn(this.listColumn) {
             this.listShapeColumn.clear()
@@ -144,7 +146,7 @@ class ColumnChart @JvmOverloads constructor(
             this.maxValue = if(listColumn.maxOf { it.value } > 0) listColumn.maxOf { it.value } else 0.0
             this.listHorizonVal.clear()
         }
-        for (index in 0 until arrValue.size - 1) {
+        for (index in 0 until arrValue.lastIndex) {
             val currentValue = arrValue[index]
             maxLeftValue = currentValue
 
@@ -153,6 +155,9 @@ class ColumnChart @JvmOverloads constructor(
                 break
             }
             maxLeftValue = arrValue[index + 1]
+        }
+        if(listColumn.isEmpty()){
+            maxLeftValue = 1000
         }
             listHorizonVal.add(0)
             listHorizonVal.add((maxLeftValue * 0.2).toInt())
@@ -167,7 +172,8 @@ class ColumnChart @JvmOverloads constructor(
         super.onDraw(canvas)
         drawTextPaint(canvas)
         drawLineHorizontal(canvas!!, columnSelected)
-        drawLeftValue(canvas)
+//        drawLeftValue(canvas)
+        drawHorizontalValue(canvas)
         if (isShowTarget) {
             drawTargetValue(canvas)
         }
@@ -215,7 +221,7 @@ class ColumnChart @JvmOverloads constructor(
             var endValue = "0"
             if (value == 0) {
                 endValue = "0"
-            } else if (value in 2..999) {
+            } else if (value in 1..999) {
                 endValue = value.toString()
             } else {
                 endValue = (value / 1000).toString() + "k"
@@ -225,11 +231,29 @@ class ColumnChart @JvmOverloads constructor(
             startY -= spaces - 6f
         }
     }
-
+    private fun drawHorizontalValue(canvas: Canvas) {
+        val spaces = (startPointDrawY - endPointDrawY) / 5
+        var startY = startPointDrawY + 6f
+        var textPaintValue = textPaint.apply {
+            textSize = 30f
+            color= Color.parseColor("#434E58")
+        }
+        listHorizonVal.forEachIndexed { index, value ->
+            if(index > 5) return
+            var endValue = "0"
+            if (value in 0..999) {
+                endValue = value.toString()
+            } else {
+                endValue = (value / 1000).toString() + "k"
+            }
+            canvas.drawText(endValue, 12f, startY, textPaintValue)
+            startY -= spaces - 6f
+        }
+    }
     private var isShowTarget = false
-    private var targetValue = 0
+    private var targetValue = 0.0
 
-    fun setTargetValue(ishow: Boolean, value: Int) {
+    fun setTargetValue(ishow: Boolean, value: Double) {
         this.isShowTarget = ishow
         this.targetValue = value
         invalidate()

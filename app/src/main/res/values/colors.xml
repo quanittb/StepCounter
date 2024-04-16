@@ -473,6 +473,7 @@
     <color name="bmi_normal">#9DD030</color>
     <color name="bmi_overweight">#FF8C39</color>
     <color name="bmi_obesity">#FF395D</color>
+    <color name="test">#E3E9ED</color>
 
     <color name="text_color_notify">#000000</color>
     <color name="transparent">#00FFFFFF</color>

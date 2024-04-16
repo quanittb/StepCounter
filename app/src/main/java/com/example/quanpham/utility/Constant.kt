@@ -15,7 +15,8 @@ object Constant {
     const val cmToIn = 0.393701f
     const val inToM = 0.0254f
     const val CALO_STEP = 0.05
-
+    const val CM_TO_KM = 0.00001
+    const val STEP_DB = "step-db"
     const val DEFAULT_DATE_TIME = "dd/MM/yyyy HH:mm"
     const val DEFAULT_DATE = "dd/MM/yyyy"
     const val DEFAULT_DAY = "dd/MM"

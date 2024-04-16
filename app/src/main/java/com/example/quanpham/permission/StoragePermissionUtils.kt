@@ -23,6 +23,7 @@ object StoragePermissionUtils {
         )
     }
 
+    // xin quyền ACTIVITY_RECOGNITION
     fun requestActivityRecognitionLogPermission(resultLauncher: ActivityResultLauncher<Array<String>>){
         PermissionUtils.requestMultiplePermission(
             arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),

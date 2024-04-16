@@ -28,6 +28,7 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.example.quanpham.R
 import com.example.quanpham.db.AppDatabase
+import com.example.quanpham.language.LanguageUtil
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.showToast
@@ -61,7 +62,7 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
         setContentView(binding.root)
         database = Room.databaseBuilder(
             this,
-            AppDatabase::class.java, "step-db"
+            AppDatabase::class.java, Constant.STEP_DB
         )
             .allowMainThreadQueries()
             .build()

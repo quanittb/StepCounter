@@ -3,9 +3,15 @@ package com.example.quanpham.fragment
 import DateUtils.getEndOfDay
 import DateUtils.getStartOfDay
 import android.annotation.SuppressLint
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Handler
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.example.quanpham.R
 import com.example.quanpham.activity.LanguageActivity
 import com.example.quanpham.activity.SignInActivity
@@ -17,6 +23,9 @@ import com.example.quanpham.dialog.StepGoalBottomDialog
 import com.example.quanpham.dialog.StepGoalBottomDialog.OnClickBottomSheetListener
 import com.example.quanpham.language.Language
 import com.example.quanpham.lib.SharedPreferenceUtils
+import com.example.quanpham.lib.SharedPreferencesManager
+import com.example.quanpham.services.PushData
+import com.example.quanpham.services.ResetStepForegroundService
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.Constant.cmToIn
 import com.example.quanpham.utility.Constant.kgToLb
@@ -39,7 +48,7 @@ import com.mobiai.app.ui.dialog.MetricDialog
 import com.mobiai.app.ui.dialog.WeightDialog
 import java.util.Date
 
-class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
+class SettingFragment : BaseFragment<FragmentSettingsBinding>(), PushData {
 
     var listLanguages: ArrayList<Language> = arrayListOf()
     private var bottomSheetStepGoalDialog: StepGoalBottomDialog? = null
@@ -87,12 +96,39 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
         }
 
         binding.txtLogOut.setOnClickListener {
-            SignInActivity.start(this@SettingFragment.requireContext(), true)
-            auth.signOut()
+            pushDataAnDelete()
         }
 
     }
+    private lateinit var service: ResetStepForegroundService
+    private val connection = object : ServiceConnection{
+        override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
+            val localBinder = binder as ResetStepForegroundService.LocalBinder
+            service = localBinder.getService()
+            service.setCallback(this@SettingFragment)
+        }
 
+        override fun onServiceDisconnected(name: ComponentName?) {
+            TODO("Not yet implemented")
+        }
+    }
+    override fun pushComplete() {
+        logD("Chạy vào call back ở setting")
+        Handler().postDelayed({
+            database.clearAllTables()
+            auth.signOut()
+            SignInActivity.start(this@SettingFragment.requireContext(), true)
+
+        },1000)
+    }
+    var check = 0
+    fun pushDataAnDelete(){
+        if(isAdded) {
+            val intent = Intent(requireActivity(), ResetStepForegroundService::class.java)
+            ContextCompat.startForegroundService(requireActivity(), intent)
+            pushComplete()
+        }
+    }
     fun setValue() {
         initDataLanguage()
         checkLanguage()
@@ -177,26 +213,6 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
         bottomSheetAgeDialog?.checkShowBottomSheet()
     }
 
-    private fun updateProfile() {
-        if (auth.currentUser != null) {
-            val updates = hashMapOf<String, Any>(
-                "age" to SharedPreferenceUtils.age,
-                "gender" to if (SharedPreferenceUtils.selectSex == 1) true else false,
-                "height" to SharedPreferenceUtils.height
-            )
-            firestore.collection(Constant.KEY_USER)
-                .document(auth.currentUser!!.uid)
-                .update(updates)
-                .addOnSuccessListener {
-                    logD("Update profile thành công!")
-
-                }
-                .addOnFailureListener {
-                    showToast(it.message.toString())
-                }
-        }
-
-    }
 
     private fun openWeightBottomSheet() {
         if (bottomSheetWeightDialog == null) {
@@ -436,6 +452,8 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>() {
             }
         }
     }
+
+
 
 
 }
