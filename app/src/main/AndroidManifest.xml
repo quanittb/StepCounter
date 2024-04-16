@@ -63,6 +63,10 @@
                 <action android:name="android.intent.action.DATE_CHANGED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".services.ReminderReceiver"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+        </receiver>
     </application>
 
 </manifest>

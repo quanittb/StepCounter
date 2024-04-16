@@ -18,16 +18,6 @@ fun logD(value: Any){
     Log.d("abcd", "$value")
 }
 
-fun formatTimes(timestamp: Any?): String {
-    if (timestamp is Long) {
-        val date = Date(timestamp)
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
-        return sdf.format(date)
-    }
-    return ""
-}
-
-
 fun formatNumbers(inputNums : Float) : String{
     val formattedNumber = String.format("%.2f", inputNums).replace(",", ".")
     return if (formattedNumber.endsWith(".00")) {

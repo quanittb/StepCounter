@@ -230,16 +230,6 @@
                         />
                 </LinearLayout>
 
-                <com.mobiai.base.chart.weekly_review.WeekReviewView
-                    android:id="@+id/chartWeek"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_3sdp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    />
-
             </LinearLayout>
 
 

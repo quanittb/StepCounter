@@ -5,8 +5,9 @@ object Constant {
     val KEY_RANK= "Ranks"
     val KEY_WEIGHT = "Weights"
     val KEY_STEP = "Steps"
-    val CHANNEL_ID_STEP = "CHANNEL_ID_STEP"
-    val CHANNEL_ID_UPDATE = "CHANNEL_ID_UPDATE"
+    const val CHANNEL_ID_STEP = "CHANNEL_ID_STEP"
+    const val CHANNEL_ID_ALARM = "CHANNEL_ID_ALARM"
+    const val CHANNEL_ID_UPDATE = "CHANNEL_ID_UPDATE"
     const val KcalOne = 0.05
     const val LB = "Lb"
     const val KG = "Kg"

@@ -33,6 +33,7 @@ import com.example.quanpham.utility.Constant.lbToKg
 import com.example.quanpham.utility.logD
 import com.example.quanpham.utility.rxbus.ChangeUnit
 import com.example.quanpham.utility.rxbus.NumberHeight
+import com.example.quanpham.utility.rxbus.ReminderUpdateTime
 import com.example.quanpham.utility.rxbus.RxBus
 import com.example.quanpham.utility.rxbus.StepLengthUpdate
 import com.example.quanpham.utility.rxbus.listenEvent
@@ -90,13 +91,14 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(), PushData {
             LanguageActivity.start(requireContext(), openFromMain = true, clearTask = false)
         }
         binding.btnReminder.setOnClickListener {
+            addFragment(ReminderDetailFragment.instance())
         }
         binding.btnStepLength.setOnClickListener {
             addFragment(StepLengthFragment.instance())
         }
 
         binding.txtLogOut.setOnClickListener {
-            pushDataAnDelete()
+            pushDataAndDelete()
         }
 
     }
@@ -122,7 +124,7 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(), PushData {
         },1000)
     }
     var check = 0
-    fun pushDataAnDelete(){
+    fun pushDataAndDelete(){
         if(isAdded) {
             val intent = Intent(requireActivity(), ResetStepForegroundService::class.java)
             ContextCompat.startForegroundService(requireActivity(), intent)
@@ -132,6 +134,7 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(), PushData {
     fun setValue() {
         initDataLanguage()
         checkLanguage()
+        binding.txtMetric.text = if(SharedPreferenceUtils.unit) getString(R.string.kg_cm_km) else  getString(R.string.lbs_ft_mile)
         binding.tvName.text = SharedPreferenceUtils.name
         if (SharedPreferenceUtils.selectSex == 0)
             binding.txtSex.text = resources.getString(R.string.female)
@@ -149,6 +152,12 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(), PushData {
         else
             binding.txtWeight.text = "${SharedPreferenceUtils.weight * kgToLb}"
         binding.txtStepLength.text = SharedPreferenceUtils.stepLength.toString()
+        if (SharedPreferenceUtils.minuteAlarm >= 10)
+            binding.txtTimeAlarm.text =
+                "${SharedPreferenceUtils.hourAlarm}:${SharedPreferenceUtils.minuteAlarm}"
+        else
+            binding.txtTimeAlarm.text =
+                "${SharedPreferenceUtils.hourAlarm}:0${SharedPreferenceUtils.minuteAlarm}"
 
     }
 
@@ -157,6 +166,9 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(), PushData {
             when (it) {
                 is StepLengthUpdate -> {
                     binding.txtStepLength.text = SharedPreferenceUtils.stepLength.toString()
+                }
+                is ReminderUpdateTime ->{
+                    binding.txtTimeAlarm.text = it.time
                 }
             }
         }, {}))

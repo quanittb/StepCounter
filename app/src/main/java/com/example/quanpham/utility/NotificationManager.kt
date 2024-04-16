@@ -10,8 +10,9 @@ import androidx.core.app.NotificationManagerCompat
 
 class NotificationManager {
     companion object{
-        const val FULLSCREEN_REMINDER_NOTIFICATION_ID = 10000
-        const val FULLSCREEN_UPDATE_DATA_NOTIFICATION_ID = 10001
+        const val FULLSCREEN_REMINDER_NOTIFICATION_ID = 1
+        const val FULLSCREEN_ALARM_NOTIFICATION_ID = 2
+        const val FULLSCREEN_UPDATE_DATA_NOTIFICATION_ID = 3
 
         fun sendNotification(context: Context, notificationId: Int, notification: Notification) {
             with(NotificationManagerCompat.from(context)) {

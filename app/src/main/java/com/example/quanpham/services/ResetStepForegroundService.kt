@@ -80,6 +80,7 @@ class ResetStepForegroundService() : Service() {
             .setAutoCancel(true)
             .setOnlyAlertOnce(true)
             .setContentIntent(appPendingIntent)
+            .setTimeoutAfter(2000)
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
