@@ -8,6 +8,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.os.Binder
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
@@ -33,9 +34,10 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class ResetStepForegroundService : Service() {
+class ResetStepForegroundService() : Service() {
     private lateinit var notification: NotificationCompat.Builder
     val mdatabase = Firebase.database
+    var pushData: PushData? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return START_STICKY
@@ -44,6 +46,18 @@ class ResetStepForegroundService : Service() {
     override fun onCreate() {
         update()
         super.onCreate()
+    }
+    fun setCallback(callback: PushData) {
+        this.pushData = callback
+    }
+    // Khai báo một LocalBinder bên trong Service
+    inner class LocalBinder : Binder() {
+        fun getService(): ResetStepForegroundService = this@ResetStepForegroundService
+    }
+
+    private val binder = LocalBinder()
+    override fun onBind(intent: Intent?): IBinder {
+        return binder
     }
 
     fun update() {
@@ -78,7 +92,7 @@ class ResetStepForegroundService : Service() {
         }
         var database: AppDatabase = Room.databaseBuilder(
             this,
-            AppDatabase::class.java, "step-db"
+            AppDatabase::class.java, Constant.STEP_DB
         )
             .allowMainThreadQueries()
             .build()
@@ -131,6 +145,7 @@ class ResetStepForegroundService : Service() {
                             if (listRecord.indexOf(i) == listRecord.lastIndex) {
                                 database.stepDao().updateStatePushForStep()
                                 RxBus.publish(StopUpdate())
+                                pushData?.pushComplete()
                             }
                         }
 
@@ -159,12 +174,10 @@ class ResetStepForegroundService : Service() {
             )
         )
 
-        // xử lý weight
-        val refWeight = mdatabase.getReference(Constant.KEY_WEIGHT).child(Firebase.auth.currentUser!!.uid)
-        
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
+
+}
+interface PushData{
+    fun pushComplete()
 }

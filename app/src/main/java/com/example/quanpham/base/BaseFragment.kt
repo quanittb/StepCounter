@@ -69,7 +69,7 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         }
         database = Room.databaseBuilder(
             requireContext(),
-            AppDatabase::class.java, "step-db"
+            AppDatabase::class.java, Constant.STEP_DB
         )
             .allowMainThreadQueries()
             .build()

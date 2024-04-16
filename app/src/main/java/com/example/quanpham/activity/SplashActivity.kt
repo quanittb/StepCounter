@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySplashBinding
 import com.example.quanpham.fragment.HomeFragment
+import com.example.quanpham.language.LanguageUtil
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.services.ResetStepForegroundService
 import com.example.quanpham.utility.Constant
@@ -28,10 +29,7 @@ import com.example.quanpham.utility.Constant
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     companion object {
-        private const val TIME_OUT = 30000L
-        private const val TIME_DELAY = 5000L
         var IS_PUSH = false
-        private val TAG = SplashActivity::class.java.name
         fun startMain(context: Context, clearTask : Boolean ){
             val intent = Intent(context, SplashActivity::class.java).apply {
                 if(clearTask){
@@ -47,6 +45,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         ActivitySplashBinding.inflate(layoutInflater)
 
     override fun createView() {
+        LanguageUtil.setupLanguage(this)
         createNotificationChannel()
         getStepsDay()
 //        scheduleAlarm(this)
@@ -85,7 +84,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         SharedPreferenceUtils.yesterdayStep = database.stepDao().getStepsDay(
             getStartOfDayMinus(System.currentTimeMillis(),1),
             getEndOfDayMinus(System.currentTimeMillis(),1)
-        )
+        ) - SharedPreferenceUtils.dayStep
         HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())
     }
 

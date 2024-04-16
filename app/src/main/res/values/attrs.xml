@@ -19,7 +19,7 @@
         <attr name="bmiHeight" format="integer"/>
         <attr name="clickable" format="boolean"/>
     </declare-styleable>
-    <declare-styleable name="CaloriChart">
+    <declare-styleable name="CalorieChart">
         <attr name="strokeWith" format="integer"/>
         <attr name="strokeColor" format="color"/>
     </declare-styleable>

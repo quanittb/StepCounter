@@ -29,7 +29,9 @@ import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.utility.Constant.CALO_STEP
 import com.example.quanpham.utility.Constant.CHANNEL_ID_STEP
+import com.example.quanpham.utility.Constant.CM_TO_KM
 import com.example.quanpham.utility.Constant.KcalOne
+import com.example.quanpham.utility.Constant.STEP_DB
 import com.example.quanpham.utility.NotificationManager
 import com.example.quanpham.utility.NotificationManager.Companion.FULLSCREEN_REMINDER_NOTIFICATION_ID
 import com.example.quanpham.utility.logD
@@ -61,7 +63,7 @@ class StepServices : Service(), SensorEventListener {
         )
         database = Room.databaseBuilder(
             this,
-            AppDatabase::class.java, "step-db"
+            AppDatabase::class.java, STEP_DB
         )
             .allowMainThreadQueries()
             .build()
@@ -85,16 +87,15 @@ class StepServices : Service(), SensorEventListener {
                     currentTime,
                     1,
                     CALO_STEP,
-                    (SharedPreferenceUtils.stepLength * 0.001)
+                    (SharedPreferenceUtils.stepLength * CM_TO_KM)
                 )
             )
         else {
             steps.step++
             steps.calo = (steps.step * CALO_STEP)
-            steps.distance += SharedPreferenceUtils.stepLength * 0.001
+            steps.distance += SharedPreferenceUtils.stepLength * CM_TO_KM
             steps.activeTime = steps.activeTime.plus(1)
             steps.isPush = false
-            logD("đã update isPush = ${steps.isPush}")
             database.stepDao().updateStep(steps)
         }
         HomeFragment.currentStep.postValue(SharedPreferenceUtils.dayStep.toInt())

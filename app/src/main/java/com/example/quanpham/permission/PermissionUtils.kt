@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 
 object PermissionUtils {
 
-    fun isPermissionGrandted(
+    fun isPermissionGranted(
         context:Any?,
         permissionArray: Array<String>,
     ): Boolean{
@@ -42,6 +42,7 @@ object PermissionUtils {
     fun requestPermission(permissionArray: String, resultLauncher: ActivityResultLauncher<String>? = null){
         resultLauncher?.launch(permissionArray)
     }
+    // xin quyền và trả về một list đc acp
     fun requestMultiplePermission(permissionArray: Array<String>, resultLauncher: ActivityResultLauncher<Array<String>>? = null){
         resultLauncher?.launch(permissionArray)
     }

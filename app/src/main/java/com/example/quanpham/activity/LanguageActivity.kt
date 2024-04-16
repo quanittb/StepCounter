@@ -44,10 +44,10 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
     override fun createView() {
         showFullscreen(true)
         getDataLanguage()
-        if (!intent.getBooleanExtra(OPEN_FROM_MAIN, false)) {
-        } else {
-
-        }
+//        if (!intent.getBooleanExtra(OPEN_FROM_MAIN, false)) {
+//        } else {
+//
+//        }
         binding.imgConfirm.setOnClickListener {
             changeLanguage()
             Log.d("TAGGG", "---------->  getLangueCode: $languageCode")
@@ -74,7 +74,7 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
     private fun getDataLanguage() {
         initData()
         val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Resources.getSystem().configuration.locales.get(0)
+            Resources.getSystem().configuration.locales[0]
         } else {
             Resources.getSystem().configuration.locale
         }
@@ -102,7 +102,6 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
 
     private fun changeLanguage() {
         SharedPreferenceUtils.languageCode = languageCode
-
         LanguageUtil.changeLang(SharedPreferenceUtils.languageCode!!, this)
         SharedPreferenceUtils.firstOpenApp = false
         if(usLoggin?.value==null){

@@ -41,11 +41,11 @@ class CalorieChart @JvmOverloads constructor(
     private var strokewidth = 30f
 
     init {
-        typedArray = context.obtainStyledAttributes(attrs, R.styleable.CaloriChart)
+        typedArray = context.obtainStyledAttributes(attrs, R.styleable.CalorieChart)
 
         strokeColor =
-            typedArray.getColor(R.styleable.CaloriChart_strokeColor, Color.parseColor("#E3E9ED"))
-        strokewidth = typedArray.getDimension(R.styleable.CaloriChart_strokeWith, 50f).toFloat()
+            typedArray.getColor(R.styleable.CalorieChart_strokeColor, Color.parseColor("#E3E9ED"))
+        strokewidth = typedArray.getDimension(R.styleable.CalorieChart_strokeWith, 50f).toFloat()
 
         backgroundPaint = Paint().apply {
             isAntiAlias = true
@@ -58,7 +58,6 @@ class CalorieChart @JvmOverloads constructor(
         typedArray.recycle()
     }
 
-    val arcProportionBg=0.6f
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
@@ -68,31 +67,29 @@ class CalorieChart @JvmOverloads constructor(
         val desiredWidth = widthSize // Use the full available width
         val desiredHeight = (desiredWidth * 0.75f).toInt() // Set the height to 3/4 of the width
 
-        val finalWidth: Int
-        val finalHeight: Int
-
-        when (widthMode) {
-            EXACTLY -> finalWidth = widthSize
-            AT_MOST -> finalWidth = min(desiredWidth, widthSize)
-            else -> finalWidth = desiredWidth
+        val finalWidth: Int = when (widthMode) {
+            EXACTLY -> widthSize
+            AT_MOST -> min(desiredWidth, widthSize)
+            else -> desiredWidth // UNSPECIFIED
         }
 
-        when (heightMode) {
-            EXACTLY -> finalHeight = heightSize
-            AT_MOST -> finalHeight = min(desiredHeight, heightSize)
-            else -> finalHeight = desiredHeight
+        val finalHeight: Int = when (heightMode) {
+            EXACTLY -> heightSize
+            AT_MOST -> min(desiredHeight, heightSize)
+            else -> desiredHeight
         }
 
         setMeasuredDimension(finalWidth, finalHeight)
     }
 
+    val arcProportionBg=0.6f
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (rectangle == null) {
-            val centerX = canvas.width / 2f
-            val centerY = canvas.width / 2f
-            val rectSize = canvas.width - strokewidth
+            val centerX = width / 2f
+            val centerY = width / 2f
+            val rectSize = width - strokewidth
             val rectLeft = centerX - rectSize / 2
             val rectTop = centerY - rectSize / 2
             val rectRight = centerX + rectSize / 2
@@ -100,8 +97,9 @@ class CalorieChart @JvmOverloads constructor(
 
             rectangle = RectF(rectLeft, rectTop, rectRight, rectBottom)
         }
-        val totalSweepAngle = 360f * arcProportionBg
-        val startAngle = 270f - totalSweepAngle / 2
+        val totalSweepAngle = 360f * arcProportionBg // góc bắt đầu
+        val startAngle = 180 - (totalSweepAngle -180)/2 // góc của vòng cung
+
         drawBackground(canvas, totalSweepAngle, startAngle)
         val paintColor = Paint().apply {
             isAntiAlias = true
@@ -136,6 +134,14 @@ class CalorieChart @JvmOverloads constructor(
     }
 
     private fun drawBackground(canvas: Canvas, totalSweepAngle: Float, startAngle: Float) {
+        val testPaint = Paint().apply {
+            isAntiAlias = true
+            color = Color.GREEN
+            strokeCap = Paint.Cap.ROUND
+            strokeWidth = strokewidth
+            style = Paint.Style.STROKE
+        }
+        // tọa độ tính từ tâm trục bên phải
         canvas.drawArc(rectangle!!, startAngle, totalSweepAngle, false, backgroundPaint)
     }
 

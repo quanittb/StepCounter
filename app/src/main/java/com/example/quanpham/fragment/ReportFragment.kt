@@ -86,31 +86,6 @@ class ReportFragment : BaseFragment<FragmentReportBinding>() {
             }
         }
     }
-
-//    private fun setPage(){
-//        when (MainActivity.nameReport) {
-//            DailyActivity.KEY_CLICK_NOTY_DAILY_DISTANCE -> {
-//                binding.run {
-//                    viewPager.setCurrentItem(3, false)
-//                }
-//            }
-//            DailyActivity.KEY_CLICK_NOTY_DAILY_FIRE -> {
-//                binding.run {
-//                    viewPager.setCurrentItem(1, false)
-//                }
-//            }
-//            DailyActivity.KEY_CLICK_NOTY_DAILY_TIME -> {
-//                binding.run {
-//                    viewPager.setCurrentItem(2, false)
-//                }
-//            }
-//            else -> {
-//                binding.run {
-//                    viewPager.setCurrentItem(0, false)
-//                }
-//            }
-//        }
-//    }
     private fun initViewPager() {
         val listTitle: ArrayList<String> = arrayListOf(
             getString(R.string.steps),
@@ -122,8 +97,6 @@ class ReportFragment : BaseFragment<FragmentReportBinding>() {
         binding.run {
             viewPager.adapter = viewPagerAdapter
             viewPager.offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
-            //viewPager.setCurrentItem(0, false)
-//            setPage()
             TabLayoutMediator(tabLayout, viewPager) { tab, postition ->
                 tab.text = listTitle[postition]
                 }.attach()
@@ -132,7 +105,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>() {
                         super.onPageSelected(position)
                     }
                 })
-                viewPager.isUserInputEnabled = false
+                viewPager.isUserInputEnabled = true
             }
     }
     override fun handlerBackPressed() {

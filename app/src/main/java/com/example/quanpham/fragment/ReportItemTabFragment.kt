@@ -296,6 +296,7 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
             getStartOfDayMinus(System.currentTimeMillis(), minus),
             getEndOfDayMinus(System.currentTimeMillis(), minus)
         )
+
         val totalDay = listStepDay.size
         val avgSteps = if (listStepDay.isNotEmpty())
             database.stepDao().getStepsDay(
@@ -309,6 +310,10 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                 getEndOfDayMinus(System.currentTimeMillis(), minus)
             ) / totalDay
         else 0
+        var totalDistance = 0.0
+        listStepDay.forEach {
+            totalDistance += it.distance
+        }
         val avgDistance = if (listStepDay.isNotEmpty())
             database.stepDao().getDistanceDay(
                 getStartOfDayMinus(System.currentTimeMillis(), minus),
@@ -347,7 +352,7 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                                     "${hour}:00-${hour}:59"
                                 )
                             )
-                            binding.chartView.setTargetValue(true, avgSteps.toInt())
+                            binding.chartView.setTargetValue(true, avgSteps.toDouble())
 
                         }
 
@@ -356,11 +361,11 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                             listColum.add(
                                 Column(
                                     it.calo,
-                                    "${it.calo} ${requireContext().getString(R.string.kcal)}",
+                                    "${formatNumbers(it.calo)} ${requireContext().getString(R.string.kcal)}",
                                     "${hour}:00-${hour}:59"
                                 )
                             )
-                            binding.chartView.setTargetValue(true, avgCalories.toInt())
+                            binding.chartView.setTargetValue(true, avgCalories.toDouble())
                         }
 
                         DISTANCE -> {
@@ -368,7 +373,7 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                                 listColum.add(
                                     Column(
                                         it.distance,
-                                        "${it.distance} ${requireContext().getString(R.string.km)}",
+                                        "${formatNumbers(it.distance)} ${requireContext().getString(R.string.km)}",
                                         "${hour}:00-${hour}:59"
                                     )
                                 )
@@ -377,12 +382,12 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                                 listColum.add(
                                     Column(
                                         distance.toDouble(),
-                                        "${distance} ${requireContext().getString(R.string.ft)}",
+                                        "${formatNumbers(distance)} ${requireContext().getString(R.string.ft)}",
                                         "${hour}:00-${hour}:59"
                                     )
                                 )
                             }
-                            binding.chartView.setTargetValue(true, avgDistance.toInt())
+                            binding.chartView.setTargetValue(true, avgDistance.toDouble())
                         }
 
                         TIME -> {
@@ -393,16 +398,23 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                                     "${hour}:00-${hour}:59"
                                 )
                             )
-                            binding.chartView.setTargetValue(true, avgHour.toInt())
+                            binding.chartView.setTargetValue(true, avgHour.toDouble())
                         }
                     }
                 }
             }
         val currentDate = LocalDate.now()
         var today = currentDate.dayOfYear
+
+        if(listColum.isEmpty()){
+            listRow.add("0H")
+            listRow.add("6H")
+            listRow.add("12H")
+            listRow.add("18H")
+        }
+        binding.chartView.setData(listColum)
         binding.chartView.setColumnSelected(listMonth.indexOf(today))
         binding.chartView.listHorizontal = listRow
-        binding.chartView.setData(listColum)
     }
 
     @SuppressLint("NewApi")
@@ -414,15 +426,15 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                 getEndDayOfYear(currentMonth.endDay)
             ) / totalDayInMonth
         val avgCalories =
-            database.stepDao().getCaloDay(
+            formatNumbers( (database.stepDao().getCaloDay(
                 getStartDayOfYear(currentMonth.startDay),
                 getEndDayOfYear(currentMonth.endDay)
-            ) / totalDayInMonth
+            ) / totalDayInMonth ).toDouble() )
         val avgDistance =
-            database.stepDao().getDistanceDay(
+            formatNumbers( (database.stepDao().getDistanceDay(
                 getStartDayOfYear(currentMonth.startDay),
                 getEndDayOfYear(currentMonth.endDay)
-            ) / totalDayInMonth
+            ) / totalDayInMonth)).toDouble()
         val avgHour =
             database.stepDao().getTimeDay(
                 getStartDayOfYear(currentMonth.startDay),
@@ -467,7 +479,7 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
         when (reportType) {
             STEP -> {
                 listCollum.clear()
-                binding.chartView.setTargetValue(true, avgSteps.toInt())
+                binding.chartView.setTargetValue(true, avgSteps.toDouble())
                 listFinalStepDayOfMonth.sortedBy { it.startTime }.forEach {
                     var monthString =
                         getString(getMonthInStringIdSplit3(getMonthOfYear(it.startTime.time)))
@@ -483,7 +495,7 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
 
             CALORIE -> {
                 listCollum.clear()
-                binding.chartView.setTargetValue(true, avgCalories.toInt())
+                binding.chartView.setTargetValue(true, avgCalories.toDouble())
 
                 listFinalStepDayOfMonth.sortedBy { it.startTime }.forEach {
                     var monthString =
@@ -500,7 +512,7 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
 
             TIME -> {
                 listCollum.clear()
-                binding.chartView.setTargetValue(true, avgHour.toInt())
+                binding.chartView.setTargetValue(true, avgHour.toDouble())
                 listFinalStepDayOfMonth.sortedBy { it.startTime }.forEach {
                     var monthString =
                         getString(getMonthInStringIdSplit3(getMonthOfYear(it.startTime.time)))
@@ -517,14 +529,14 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
 
             DISTANCE -> {
                 listCollum.clear()
-                binding.chartView.setTargetValue(true, avgDistance.toInt())
+                binding.chartView.setTargetValue(true, avgDistance.toDouble())
                 listFinalStepDayOfMonth.sortedBy { it.startTime }.forEach {
                     var monthString =
                         getString(getMonthInStringIdSplit3(getMonthOfYear(it.startTime.time)))
                     var day = getDayOfMonth(it.startTime.time)
                     val column = Column(
                         it.distance.toDouble(),
-                        "${it.distance} ${requireContext().getString(R.string.km)}",
+                        "${formatNumbers(it.distance)} ${requireContext().getString(R.string.km)}",
                         "$monthString $day"
                     )
                     listCollum.add(column)
@@ -548,20 +560,20 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
     private fun updateDataToWeekChart(currentWeek: MutableList<Int>) {
         val totalDayInWeek = 7
         val avgSteps =
-            database.stepDao().getStepsDay(
+            formatNumbers( (database.stepDao().getStepsDay(
                 getStartDayOfYear(currentWeek.first()),
                 getEndDayOfYear(currentWeek.last())
-            ) / totalDayInWeek
+            ) / totalDayInWeek).toDouble() )
         val avgCalories =
-            database.stepDao().getCaloDay(
+            formatNumbers( (database.stepDao().getCaloDay(
                 getStartDayOfYear(currentWeek.first()),
                 getEndDayOfYear(currentWeek.last())
-            ) / totalDayInWeek
+            ) / totalDayInWeek).toDouble() )
         val avgDistance =
-            database.stepDao().getDistanceDay(
+            formatNumbers( (database.stepDao().getDistanceDay(
                 getStartDayOfYear(currentWeek.first()),
                 getEndDayOfYear(currentWeek.last())
-            ) / totalDayInWeek
+            )/ totalDayInWeek).toDouble() )
         val avgHour =
             database.stepDao().getTimeDay(
                 getStartDayOfYear(currentWeek.first()),
@@ -585,11 +597,11 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
         //list step cả tuần
         val listStepWeek = database.stepDao().getRecordStepsDay(
             getStartDayOfYear(currentWeek.first()),
-            getStartDayOfYear(currentWeek.last())
+            getEndDayOfYear(currentWeek.last())
         )
         val listFinalStepDayOfWeek: ArrayList<Steps> = arrayListOf()
         currentWeek.forEach {
-            var step = Steps(startTime = Date())
+            var step = Steps(startTime = getDateFromDayOfYear(it))
             listStepWeek.forEach { item ->
                 if (getDayOfYear(item.startTime) == it) {
                     step.step += item.step
@@ -619,14 +631,14 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                             } ${date.first}"
                         )
                     )
-                    binding.chartView.setTargetValue(true, avgSteps.toInt())
+                    binding.chartView.setTargetValue(true, avgSteps.toDouble())
                 }
 
                 CALORIE -> {
                     listColum.add(
                         Column(
-                            it.calo.toDouble(),
-                            "${it.calo} ${requireContext().getString(R.string.kcal)}",
+                            it.calo,
+                            "${formatNumbers(it.calo)} ${requireContext().getString(R.string.kcal)}",
                             "${
                                 DateUtils.getMonthInStringText(
                                     requireContext(),
@@ -635,15 +647,14 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                             } ${date.first}"
                         )
                     )
-                    binding.chartView.setTargetValue(true, avgCalories.toInt())
+                    binding.chartView.setTargetValue(true, avgCalories.toDouble())
                 }
-
                 DISTANCE -> {
                     if (SharedPreferenceUtils.unit)
                         listColum.add(
                             Column(
-                                it.distance.toDouble(),
-                                "${it.distance} ${requireContext().getString(R.string.km)}",
+                                it.distance,
+                                "${formatNumbers(it.distance)} ${requireContext().getString(R.string.km)}",
                                 "${
                                     DateUtils.getMonthInStringText(
                                         requireContext(),
@@ -667,7 +678,7 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                             )
                         )
                     }
-                    binding.chartView.setTargetValue(true, avgDistance.toInt())
+                    binding.chartView.setTargetValue(true, avgDistance.toDouble())
                 }
 
                 TIME -> {
@@ -683,7 +694,7 @@ class ReportItemTabFragment : BaseFragment<FragmentReportItemTabBinding>() {
                             } ${date.first}"
                         )
                     )
-                    binding.chartView.setTargetValue(true, avgHour.toInt())
+                    binding.chartView.setTargetValue(true, avgHour.toDouble())
                 }
             }
         }
