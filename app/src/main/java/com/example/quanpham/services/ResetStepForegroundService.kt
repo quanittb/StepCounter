@@ -78,6 +78,7 @@ class ResetStepForegroundService() : Service() {
             .setContentTitle(this.getString(R.string.app_name))
             .setContentText("Update data")
             .setAutoCancel(true)
+            .setOngoing(false)
             .setOnlyAlertOnce(true)
             .setContentIntent(appPendingIntent)
             .setTimeoutAfter(2000)

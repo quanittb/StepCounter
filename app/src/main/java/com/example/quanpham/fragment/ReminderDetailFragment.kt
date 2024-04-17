@@ -38,7 +38,7 @@ class ReminderDetailFragment : BaseFragment<FragmentReminderBinding>() {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val notificationIntent = Intent(requireContext(), ReminderReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, notificationIntent,
-            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.FLAG_IMMUTABLE)
         checkAutoToggle()
         if (SharedPreferenceUtils.minuteAlarm >= 10)
             binding.txtTime.text =
@@ -56,7 +56,6 @@ class ReminderDetailFragment : BaseFragment<FragmentReminderBinding>() {
         binding.btnSave.setOnClickListener {
             RxBus.publish(ReminderUpdateTime(binding.txtTime.text.toString()))
             SharedPreferenceUtils.alarm = checkAlarm
-            logD("đã vào alarm : ${SharedPreferenceUtils.alarm}")
             if (SharedPreferenceUtils.alarm) {
                 setAlarm(alarmManager,pendingIntent)
             } else {
@@ -99,6 +98,7 @@ class ReminderDetailFragment : BaseFragment<FragmentReminderBinding>() {
         bottomSheetTimeDialog?.checkShowBottomSheet()
     }
 
+    @SuppressLint("ScheduleExactAlarm")
     private fun setAlarm(alarmManager : AlarmManager, pendingIntent: PendingIntent){
         val calendar = Calendar.getInstance()
         calendar.apply {
@@ -111,16 +111,28 @@ class ReminderDetailFragment : BaseFragment<FragmentReminderBinding>() {
             }
         }
 
-        alarmManager.setRepeating(
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        }
+        else
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+
+            alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
             AlarmManager.INTERVAL_DAY,
-            pendingIntent!!
+            pendingIntent
         )
     }
     private fun cancelAlarm(alarmManager: AlarmManager, pendingIntent: PendingIntent){
-        alarmManager!!.cancel(pendingIntent!!)
-        pendingIntent!!.cancel()
+        alarmManager.cancel(pendingIntent)
+        pendingIntent.cancel()
     }
 
 

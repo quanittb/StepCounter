@@ -170,6 +170,8 @@ object DateUtils {
         return txt.substring(0, txt.length.coerceAtMost(3)) +" "
     }
 
+
+    // list tuần đến tuần hiện tại
     fun generateWeeksInYear(year: Int): MutableList<MutableList<Int>> {
         var isHasCurrentDay = false
         val currentDayOfYear = getDayOfYear()
@@ -192,6 +194,7 @@ object DateUtils {
             }
 
         }
+
         Log.i(TAG, "generateWeeksInYear: total week = ${weeks.size}")
         for (item in weeks){
             Log.i(TAG, "generateWeeksInYear: size = ${item.size}, days = ${item}")

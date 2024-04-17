@@ -18,6 +18,7 @@ fun logD(value: Any){
     Log.d("abcd", "$value")
 }
 
+
 fun formatNumbers(inputNums : Float) : String{
     val formattedNumber = String.format("%.2f", inputNums).replace(",", ".")
     return if (formattedNumber.endsWith(".00")) {

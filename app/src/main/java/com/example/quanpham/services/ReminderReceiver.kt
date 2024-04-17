@@ -40,10 +40,10 @@ class ReminderReceiver : BroadcastReceiver() {
         builder.setSmallIcon(R.mipmap.ic_app_launcher_q_round)
             .setContentTitle("${context.getString(R.string.yesterday_total_steps)} $stepYesterday")
             .setContentText(context.getString(R.string.check_your_walking_report))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(appPendingIntent)
             .setAutoCancel(true)
-            .setOngoing(true)
+            .setOngoing(false)
             NotificationManager.sendNotification(context,
                 NotificationManager.FULLSCREEN_ALARM_NOTIFICATION_ID, builder.build())
 
