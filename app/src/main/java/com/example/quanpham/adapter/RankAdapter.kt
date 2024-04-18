@@ -1,5 +1,6 @@
 package com.example.quanpham.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
@@ -36,7 +37,10 @@ class RankAdapter : BaseAdapter<Rank,ItemRankBinding>() {
                  binding.ivRank.makeVisible()
                  binding.ivRank.setImageResource(R.drawable.rank_three)
              }
-            else -> binding.ivRank.makeInvisible()
+            else -> {
+                binding.ivRank.makeInvisible()
+                binding.root.setBackgroundColor(Color.TRANSPARENT)
+            }
         }
     }
 }
