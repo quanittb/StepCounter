@@ -120,7 +120,7 @@ class CalorieChart @JvmOverloads constructor(
 
         }
         val totalSweepAnglePaint = 360f * arcProportionValue
-        val startAnglePaint = 270f - totalSweepAngle / 2
+        val startAnglePaint = 180 - (totalSweepAngle -180)/2
         drawPaintValue(canvas, totalSweepAnglePaint, startAnglePaint, paintColor)
     }
     private fun drawPaintValue(

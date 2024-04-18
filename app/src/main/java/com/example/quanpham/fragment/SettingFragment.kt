@@ -121,7 +121,6 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(), PushData {
             auth.signOut()
             if(isAdded)
                 SignInActivity.start(this@SettingFragment.requireContext(), true)
-
         },1000)
     }
     var check = 0
