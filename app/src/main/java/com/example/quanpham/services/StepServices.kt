@@ -149,7 +149,7 @@ class StepServices : Service(), SensorEventListener {
             this,
             0,
             appIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         notification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationCompat.Builder(this, CHANNEL_ID_STEP)
@@ -157,7 +157,8 @@ class StepServices : Service(), SensorEventListener {
             NotificationCompat.Builder(this)
         }
             .setSmallIcon(R.mipmap.ic_app_launcher_q)
-            .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_app_launcher_q))
+            .setShowWhen(false)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.test_png))
             .setContentTitle(this.getString(R.string.app_name))
             .setContentText(currentStep.toString())
             .setAutoCancel(false)
@@ -165,7 +166,7 @@ class StepServices : Service(), SensorEventListener {
             .setOnlyAlertOnce(true)
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText(currentStep.toString())
+                    .bigText("$currentStep ${this.getString(R.string.steps)}")
             )
             .setContentIntent(appPendingIntent)
             .setContent(remoteViews)
@@ -173,6 +174,8 @@ class StepServices : Service(), SensorEventListener {
             .setCustomBigContentView(remoteViews)
             .setDefaults(Notification.DEFAULT_ALL)
             .setPriority(Notification.PRIORITY_HIGH)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC
+            )
 
         if (ActivityCompat.checkSelfPermission(
                 this,

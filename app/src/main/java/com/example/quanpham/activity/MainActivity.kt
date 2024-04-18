@@ -1,29 +1,21 @@
 package com.example.quanpham.activity
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.quanpham.R
 import com.example.quanpham.databinding.ActivityMainBinding
 import com.example.quanpham.base.BaseActivity
-import com.example.quanpham.db.model.Steps
-import com.example.quanpham.db.model.Weights
 import com.example.quanpham.fragment.HealthFragment
 import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.fragment.RankFragment
 import com.example.quanpham.fragment.ReportFragment
 import com.example.quanpham.fragment.SettingFragment
+import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
-import com.example.quanpham.utility.Constant.CHANNEL_ID_STEP
+import com.example.quanpham.utility.NotificationManager
 import com.example.quanpham.utility.showToast
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.database
+import java.util.Calendar
 
 class MainActivity : BaseActivity<ActivityMainBinding>(){
     companion object{
@@ -109,5 +101,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
         initBottomNav()
         setListeners()
     }
+
+    override fun onStop() {
+        super.onStop()
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        NotificationManager.showNotificationInfoStep(this,hour,minute)
+
+    }
+
 
 }

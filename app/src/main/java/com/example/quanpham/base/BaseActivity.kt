@@ -2,6 +2,7 @@ package com.example.quanpham.base
 
 import android.Manifest
 import android.app.AlarmManager
+import android.app.KeyguardManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -15,6 +16,7 @@ import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -299,6 +301,21 @@ abstract class BaseActivity<V : ViewBinding> : AppCompatActivity() {
         onFullscreen = on
         if (on)
             setFullscreen()
+    }
+    protected fun showOnLockscreen() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON)
+        }
+    }
+
+    protected fun dismissKeyguard() {
+        with(getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                requestDismissKeyguard(this@BaseActivity, null)
+            }
+        }
     }
 
 }

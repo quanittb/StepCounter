@@ -2,6 +2,7 @@ package com.example.quanpham.lib
 
 
 import com.intuit.sdp.BuildConfig
+import org.checkerframework.checker.units.qual.A
 
 
 object SharedPreferenceUtils {
@@ -29,6 +30,8 @@ object SharedPreferenceUtils {
     private const val AUTO_CALCULATE_STEP_LENGTH = "AUTO_CALCULATE_STEP_LENGTH"
     private const val BMI ="BMI"
     private const val NAME ="NAME"
+    private const val ALARM ="ALARM"
+    private const val SETUP_ACCOUNT ="SETUP_ACCOUNT"
 
 
     var firstOpenApp: Boolean
@@ -74,7 +77,7 @@ object SharedPreferenceUtils {
         get() = sharedPreferencesManager.getValueBool(UNIT, true)
         set(value) = sharedPreferencesManager.setValueBool(UNIT, value)
     var hourAlarm: Int
-        get() = sharedPreferencesManager.getIntValue(HOUR_ALARM, -1)
+        get() = sharedPreferencesManager.getIntValue(HOUR_ALARM, 6)
         set(value) = sharedPreferencesManager.setIntValue(HOUR_ALARM, value)
     var minuteAlarm: Int
         get() = sharedPreferencesManager.getIntValue(MINUTE_ALARM, 0)
@@ -114,5 +117,11 @@ object SharedPreferenceUtils {
     var name: String?
         get() =  sharedPreferencesManager.getValue(NAME, "" )
         set(value) = sharedPreferencesManager.setValue(NAME, value)
+    var alarm: Boolean
+        get() = sharedPreferencesManager.getValueBool(ALARM, false)
+        set(value) = sharedPreferencesManager.setValueBool(ALARM, value)
+    var isSetupAccount: Boolean
+        get() = sharedPreferencesManager.getValueBool(SETUP_ACCOUNT, false)
+        set(value) = sharedPreferencesManager.setValueBool(SETUP_ACCOUNT, value)
 
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_info_step_1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    app:layout_constraintTop_toTopOf="parent">
+
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="@dimen/_6sdp"
+        android:layout_weight="1"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:text="@string/add_your_steps"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textSize="@dimen/_10ssp" />
+    <TextView
+        android:id="@+id/iv_add_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/add"
+        android:textSize="@dimen/_10ssp"
+        android:fontFamily="@font/mukta_regular"
+        android:textColor="#3E3E3E"
+        android:background="@drawable/bg_content_noti_lock"
+        android:backgroundTint="#B8F839"
+        android:paddingHorizontal="@dimen/_10ssp"
+        android:paddingVertical="@dimen/_2ssp"
+        android:drawablePadding="@dimen/_2ssp"
+        android:drawableStart="@drawable/ic_add_black"/>
+</LinearLayout>
+
+
