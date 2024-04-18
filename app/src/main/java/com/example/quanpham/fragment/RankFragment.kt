@@ -25,7 +25,7 @@ class RankFragment: BaseFragment<FragmentRankBinding>() {
     override fun initView() {
         var count = 0
         val listRank : ArrayList<Rank> = arrayListOf()
-        var rankAdapter = RankAdapter()
+        var rankAdapter = RankAdapter(requireContext())
         var isChecked = true
         fbDatabase.getReference(Constant.KEY_RANK).child(getStartOfDay(System.currentTimeMillis()).toString()).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {

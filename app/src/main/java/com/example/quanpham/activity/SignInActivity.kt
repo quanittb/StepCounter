@@ -120,8 +120,14 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                         refStep.addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 database.stepDao().deleteAllStep()
-                                if (!dataSnapshot.exists())
-                                    MainActivity.startMain(this@SignInActivity, true)
+                                if (!dataSnapshot.exists()) {
+                                    if (usLoggin?.value?.height == null) {
+                                        SharedPreferenceUtils.isSetupAccount = true
+                                        SetupAccountActivity.startMain(this@SignInActivity, true)
+                                    }
+                                    else
+                                        MainActivity.startMain(this@SignInActivity, true)
+                                }
                                 for (snapshot in dataSnapshot.children) {
                                     val data = snapshot.getValue(StepsFirebase::class.java)
                                     data?.let {
@@ -140,7 +146,15 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
                                     count++
 
                                     if (count == dataSnapshot.childrenCount.toInt()) {
-                                        MainActivity.startMain(this@SignInActivity, true)
+                                        if (usLoggin?.value?.height == null) {
+                                            SharedPreferenceUtils.isSetupAccount = true
+                                            SetupAccountActivity.startMain(
+                                                this@SignInActivity,
+                                                true
+                                            )
+                                        }
+                                        else
+                                            MainActivity.startMain(this@SignInActivity, true)
                                     }
                                 }
 

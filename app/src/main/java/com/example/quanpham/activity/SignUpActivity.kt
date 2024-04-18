@@ -7,6 +7,7 @@ import android.util.Patterns.EMAIL_ADDRESS
 import com.example.quanpham.R
 import com.example.quanpham.base.BaseActivity
 import com.example.quanpham.databinding.ActivitySignUpBinding
+import com.example.quanpham.lib.SharedPreferenceUtils
 import com.example.quanpham.model.Users
 import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.showToast
@@ -89,10 +90,11 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
     private fun singUpApp() {
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnSuccessListener { auth ->
-                val user = Users(auth.user?.uid, email,name, pass, 20,true,170f)
+                val user = Users(auth.user?.uid, email,name, pass, null,true,null)
                 firestore.collection(Constant.KEY_USER).document(user.id!!).set(user)
                     .addOnSuccessListener {
-                        MainActivity.startMain(this, true)
+                        SharedPreferenceUtils.isSetupAccount = true
+                        SetupAccountActivity.startMain(this, true)
                         finish()
                     }.addOnFailureListener {
                         showToast(it.message.toString())

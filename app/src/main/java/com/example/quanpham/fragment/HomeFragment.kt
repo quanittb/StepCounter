@@ -88,6 +88,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         serviceIntent = Intent(requireContext(), StepServices::class.java)
         getLoginUser()
         if (!SplashActivity.IS_PUSH) {
+            SplashActivity.IS_PUSH = true
             pushData()
         }
         if (SharedPreferenceUtils.startStep) {
@@ -105,9 +106,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         setWelcome()
         updateUI()
     }
+
     private fun getLoginUser() {
         var user: Users
         if (auth.currentUser != null) {
+            if(SharedPreferenceUtils.isSetupAccount){
+                updateProfile()
+                SharedPreferenceUtils.isSetupAccount = false
+                SharedPreferenceUtils.stepLength = if(SharedPreferenceUtils.height != 0f) SharedPreferenceUtils.height * 0.4f else 0f
+
+            }
+            else{
             firestore.collection(Constant.KEY_USER)
                 .document(auth.currentUser!!.uid)
                 .get()
@@ -128,6 +137,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 .addOnFailureListener {
                     showToast(it.message.toString())
                 }
+            }
         }
 
     }

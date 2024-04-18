@@ -119,7 +119,8 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(), PushData {
         Handler().postDelayed({
             database.clearAllTables()
             auth.signOut()
-            SignInActivity.start(this@SettingFragment.requireContext(), true)
+            if(isAdded)
+                SignInActivity.start(this@SettingFragment.requireContext(), true)
 
         },1000)
     }

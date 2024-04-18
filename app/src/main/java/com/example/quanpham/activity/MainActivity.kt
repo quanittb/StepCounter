@@ -11,7 +11,10 @@ import com.example.quanpham.fragment.HomeFragment
 import com.example.quanpham.fragment.RankFragment
 import com.example.quanpham.fragment.ReportFragment
 import com.example.quanpham.fragment.SettingFragment
+import com.example.quanpham.model.Users
+import com.example.quanpham.utility.Constant
 import com.example.quanpham.utility.NotificationManager
+import com.example.quanpham.utility.showToast
 import java.util.Calendar
 
 class MainActivity : BaseActivity<ActivityMainBinding>(){
@@ -107,5 +110,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
         NotificationManager.showNotificationInfoStep(this,hour,minute)
 
     }
+
 
 }

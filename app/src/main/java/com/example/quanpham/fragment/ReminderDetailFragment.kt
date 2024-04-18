@@ -98,7 +98,7 @@ class ReminderDetailFragment : BaseFragment<FragmentReminderBinding>() {
         bottomSheetTimeDialog?.checkShowBottomSheet()
     }
 
-    @SuppressLint("ScheduleExactAlarm")
+    @SuppressLint("ScheduleExactAlarm", "SuspiciousIndentation")
     private fun setAlarm(alarmManager : AlarmManager, pendingIntent: PendingIntent){
         val calendar = Calendar.getInstance()
         calendar.apply {
@@ -123,12 +123,12 @@ class ReminderDetailFragment : BaseFragment<FragmentReminderBinding>() {
         else
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
 
-            alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
+//            alarmManager.setRepeating(
+//            AlarmManager.RTC_WAKEUP,
+//            calendar.timeInMillis,
+//            AlarmManager.INTERVAL_DAY,
+//            pendingIntent
+//        )
     }
     private fun cancelAlarm(alarmManager: AlarmManager, pendingIntent: PendingIntent){
         alarmManager.cancel(pendingIntent)

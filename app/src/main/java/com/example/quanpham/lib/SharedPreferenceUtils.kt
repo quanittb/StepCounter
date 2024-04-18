@@ -31,6 +31,7 @@ object SharedPreferenceUtils {
     private const val BMI ="BMI"
     private const val NAME ="NAME"
     private const val ALARM ="ALARM"
+    private const val SETUP_ACCOUNT ="SETUP_ACCOUNT"
 
 
     var firstOpenApp: Boolean
@@ -119,5 +120,8 @@ object SharedPreferenceUtils {
     var alarm: Boolean
         get() = sharedPreferencesManager.getValueBool(ALARM, false)
         set(value) = sharedPreferencesManager.setValueBool(ALARM, value)
+    var isSetupAccount: Boolean
+        get() = sharedPreferencesManager.getValueBool(SETUP_ACCOUNT, false)
+        set(value) = sharedPreferencesManager.setValueBool(SETUP_ACCOUNT, value)
 
 }
