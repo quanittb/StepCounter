@@ -86,6 +86,11 @@
             android:launchMode="singleTask"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
         </receiver>
+        <receiver android:name=".services.StepGoalReceiver"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+        </receiver>
     </application>
 
 </manifest>

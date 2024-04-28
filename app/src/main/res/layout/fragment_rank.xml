@@ -21,14 +21,20 @@
         android:textAlignment="center"
         android:textColor="@color/app_text_color"
         />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_rank"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/layout_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"
-        tools:listitem="@layout/item_rank"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_30sdp"/>
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_rank"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            tools:listitem="@layout/item_rank"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </LinearLayout>

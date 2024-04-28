@@ -162,7 +162,6 @@
     <string name="des_benefits_exercise">Raisons pour lesquelles vous devriez faire de l\'exercice et avantages de l\'exercice 🫢</string>
     <string name="see_more">Voir plus</string>
     <string name="detail">Détail</string>
-    <string name="detail_exercise">Selon le NHS, il est médicalement prouvé que les femmes qui sont régulièrement actives physiquement ont :\nJusqu\'à 35 % de réduction du risque de maladie coronarienne et d\'accident vasculaire cérébral. Jusqu\'à 50 % de réduction du risque de diabète de type 2 Jusqu\'à 50 % de réduction du risque de cancer du côlon Jusqu\'à 20 % de réduction du risque de cancer du sein 30 % de réduction du risque de décès prématuré Jusqu\'à 83 % de réduction du risque d\'arthrose Jusqu\'à 68 % de réduction du risque de fracture de la hanche 30 % de risque de chute ( chez les personnes âgées) Jusqu\'à 30 % de réduction du risque de dépression Jusqu\'à 30 % de réduction du risque de démence</string>
     <string name="if_you_forget">Si vous oubliez...😳</string>
     <string name="if_you_forgot_to_record_your_steps_record_them_to_monitor_your_health_">Si vous avez oublié d\'enregistrer vos pas, enregistrez-les pour surveiller votre santé 🫢</string>
     <string name="you_just_gained_weight">Vous venez de prendre du poids...</string>
@@ -201,5 +200,6 @@
     <string name="please_enter_your_registered_email_and_check_your_mailbox_to_create_a_new_password">Veuillez saisir votre e-mail enregistré et vérifier votre boîte de réception pour créer un nouveau mot de passe</string>
     <string name="cancel">Annuler</string>
     <string name="name">Nom</string>
-
+    <string name="pass_noti">Félicitations ! Vous avez atteint votre objectif de pas pour aujourd\'hui 😘</string>
+    <string name="not_pass_noti">Oops ! Il semble que l\'objectif de pas d\'aujourd\'hui n\'ait pas été atteint ! Allez 😘</string>
 </resources>

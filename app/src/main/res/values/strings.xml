@@ -187,7 +187,6 @@
     <string name="des_benefits_exercise">Reasons you should exercise and benefits of exercise 🫢</string>
     <string name="see_more">See more</string>
     <string name="detail">Detail</string>
-    <string name="detail_exercise">According to the NHS, it is medically proven that women who are regularly physically active have:\n Up to 35% reduced risk of coronary heart disease and stroke Up to 50% reduction in risk of type diabetes 2 Up to 50% reduction in colon cancer risk Up to 20% reduction in breast cancer risk 30% reduction in risk of early death Up to 83% reduction in osteoarthritis risk Up to 68% reduction in hip fracture risk 30 % risk of falls (in older adults) Up to 30% reduction in risk of depression Up to 30% reduction in dementia risk</string>
     <string name="play" translatable="false">Play</string>
     <string name="see_chart" translatable="false">See chart</string>
     <string name="you_should_look_at_the_weight_chart_to_take_better_care_of_yourself" translatable="false">You should look at the weight chart to take better care of yourself</string>
@@ -232,5 +231,8 @@
     <string name="please_enter_your_registered_email_and_check_your_mailbox_to_create_a_new_password">Please enter your registered email and check your mailbox to create a new password</string>
     <string name="cancel">Cancel</string>
     <string name="name">Name</string>
+    <string name="pass_noti"  >Congratulations! You\'ve reached your step goal for today 😘</string>
+    <string name="not_pass_noti" >Oops! It seems like today\'s step goal wasn\'t met! Come on 😘
+    </string>
 
 </resources>

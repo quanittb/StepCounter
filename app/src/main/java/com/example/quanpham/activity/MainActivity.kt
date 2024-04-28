@@ -102,6 +102,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
         setListeners()
     }
 
+    override fun onResume() {
+        super.onResume()
+        NotificationManager.showNotificationStepGoal(this)
+    }
     override fun onStop() {
         super.onStop()
         val calendar = Calendar.getInstance()

@@ -21,8 +21,8 @@ class LineChartView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
 
-    private var dataList: MutableList<Data> = mutableListOf()
-    private var listPoint = mutableListOf<PointF>()
+    private var dataList: MutableList<Data> = mutableListOf() // chứa list data truyenè vào
+    private var listPoint = mutableListOf<PointF>() // chứa list point
     private var minValue = 0f
     private var maxValue = 0f
     private var textHorzWidth = 0f
@@ -31,7 +31,6 @@ class LineChartView @JvmOverloads constructor(
     private var textColumnPaint = Paint()
 
     init {
-
         textColumnPaint = Paint().apply {
             textSize = 28f
             color = Color.parseColor("#66707A")
@@ -127,6 +126,8 @@ class LineChartView @JvmOverloads constructor(
         }
         return stringVal
     }
+
+    /// ???
     private fun getIndexByPoint(
         event: MotionEvent,
         calback: (Int, PointF) -> Unit
@@ -188,7 +189,7 @@ class LineChartView @JvmOverloads constructor(
         this.spaceWidth = spaceWidth
         var X = startPointDrawX
         listPoint.clear()
-        val heightDraw = startPointDrawY - endPointDrawY
+        val heightDraw = startPointDrawY - endPointDrawY  // tổng chiều cao
         this.dataList.forEach { data ->
             var Y = startPointDrawY - ((data.value - min) / (max - min)) * heightDraw
             this.listPoint.add(PointF(X, Y))
@@ -379,14 +380,14 @@ class LineChartView @JvmOverloads constructor(
                     secondPointLineX = list.get(index + 1).x
                     secondPointLineY = list.get(index + 1).y
                 }
-                if (isShowValue) {
+                if (!isShowValue) {
                     canvas.drawText(
                         dataList.get(index).value.toString(),
                         firstPointLineX + 6f,
                         firstPointLineY,
                         Paint().apply {
                             color = Color.GRAY
-                            textSize = 18f
+                            textSize = 20f
                             style = Paint.Style.FILL
                         })
                 }
@@ -515,8 +516,8 @@ class LineChartView @JvmOverloads constructor(
         return largestDivisibleBy5
     }
 
-    var min = 0f
-    var max = 0f
+    var min = 0f // max horizontal
+    var max = 0f // min horizontal
 
     private fun initMinMax(minValue: Float, maxValue: Float, calback: (MutableList<Int>) -> Unit) {
         val listData = mutableListOf<Int>()
@@ -525,8 +526,13 @@ class LineChartView @JvmOverloads constructor(
         var minvalloop = this.min
         val space = (this.max - minvalloop)
         for (i in 0..4) {
-            listData.add(minvalloop.toInt())
-            minvalloop += (space / 4)
+            if(i == 4) {
+                listData.add(max.toInt())
+            }
+            else {
+                listData.add(minvalloop.toInt())
+                minvalloop += (space / 4)
+            }
         }
         calback(listData)
     }
