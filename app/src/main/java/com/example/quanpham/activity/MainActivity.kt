@@ -98,13 +98,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
     override fun getViewBinding() = ActivityMainBinding.inflate(layoutInflater)
 
     override fun createView() {
+        NotificationManager.showNotificationStepGoal(this)
         initBottomNav()
         setListeners()
     }
 
     override fun onResume() {
         super.onResume()
-        NotificationManager.showNotificationStepGoal(this)
     }
     override fun onStop() {
         super.onStop()

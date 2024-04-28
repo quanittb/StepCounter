@@ -40,6 +40,6 @@ class StepGoalReceiver : BroadcastReceiver() {
             .setContentIntent(pendingIntent)
         NotificationManager.cancelNotification(context, NotificationManager.FULLSCREEN_REMINDER_NOTIFICATION_ID_STEP_GOAL, notificationBuilder.build())
         NotificationManager.sendNotification(context, NotificationManager.FULLSCREEN_REMINDER_NOTIFICATION_ID_STEP_GOAL, notificationBuilder.build())
-        NotificationManager.showNotificationStepGoal(context)
+//        NotificationManager.showNotificationStepGoal(context)
     }
 }

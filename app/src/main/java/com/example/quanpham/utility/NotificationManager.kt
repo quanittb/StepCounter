@@ -69,7 +69,7 @@ class NotificationManager {
             // Sử dụng FLAG_IMMUTABLE để cập nhật PendingIntent nếu nó đã tồn tại
             val pendingIntent =
                 PendingIntent.getBroadcast(context,
-                    FULLSCREEN_REMINDER_NOTIFICATION_ID_STEP_GOAL, intent, PendingIntent.FLAG_IMMUTABLE)
+                    FULLSCREEN_REMINDER_NOTIFICATION_ID_STEP_GOAL, intent,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
             val calendar: Calendar = Calendar.getInstance()
             calendar.timeInMillis = System.currentTimeMillis()
             calendar.set(Calendar.HOUR_OF_DAY, setHour)
