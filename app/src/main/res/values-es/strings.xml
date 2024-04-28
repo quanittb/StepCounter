@@ -161,7 +161,6 @@
     <string name="des_benefits_exercise">Razones por las que deberías hacer ejercicio y beneficios del ejercicio 🫢</string>
     <string name="see_more">Ver más</string>
     <string name="detail">Detalle</string>
-    <string name="detail_exercise">Según el NHS, está médicamente comprobado que las mujeres que hacen actividad física regularmente tienen:\nHasta un 35 % menos de riesgo de enfermedad coronaria y accidente cerebrovascular Hasta un 50 % de reducción del riesgo de diabetes tipo 2 Hasta un 50 % de reducción del riesgo de cáncer de colon Hasta un 20 % de reducción del riesgo de cáncer de mama 30 % de reducción del riesgo de muerte prematura Hasta un 83 % de reducción del riesgo de osteoartritis Hasta un 68 % de reducción del riesgo de fractura de cadera 30 % de riesgo de caídas ( en adultos mayores) Hasta un 30% de reducción en el riesgo de depresión Hasta un 30% de reducción en el riesgo de demencia</string>
     <string name="if_you_forget">Si lo olvidas...😳</string>
     <string name="if_you_forgot_to_record_your_steps_record_them_to_monitor_your_health_">Si olvidó registrar sus pasos, regístrelos para controlar su salud 🫢</string>
     <string name="you_just_gained_weight">Acabas de ganar peso...</string>
@@ -200,4 +199,6 @@
     <string name="please_enter_your_registered_email_and_check_your_mailbox_to_create_a_new_password">Por favor, ingrese su correo electrónico registrado y verifique su buzón para crear una nueva contraseña</string>
     <string name="cancel">Cancelar</string>
     <string name="name">Nombre</string>
+    <string name="pass_noti" >¡Felicidades! ¡Has alcanzado tu objetivo de pasos para hoy! 😘</string>
+    <string name="not_pass_noti">¡Vaya! ¡Parece que no se alcanzó el objetivo de pasos de hoy! ¡Vamos! 😘</string>
 </resources>

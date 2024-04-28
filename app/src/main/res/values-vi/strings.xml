@@ -165,7 +165,6 @@
     <string name="des_benefits_exercise">Lý do bạn nên tập thể dục và lợi ích của việc tập thể dục 🫢</string>
     <string name="see_more">Xem thêm</string>
     <string name="detail">Chi tiết</string>
-    <string name="detail_exercise">Theo NHS, người ta đã chứng minh về mặt y tế rằng những phụ nữ thường xuyên vận động thể chất:\nGiảm tới 35% nguy cơ mắc bệnh tim mạch vành và đột quỵ Giảm tới 50% nguy cơ mắc bệnh tiểu đường loại 2 Giảm tới 50% nguy cơ ung thư ruột kết Giảm tới 20% nguy cơ ung thư vú Giảm 30% nguy cơ tử vong sớm Giảm tới 83% nguy cơ viêm xương khớp Giảm tới 68% nguy cơ gãy xương hông 30% nguy cơ té ngã ( ở người lớn tuổi) Giảm tới 30% nguy cơ trầm cảm Giảm tới 30% nguy cơ mất trí nhớ</string>
     <string name="play" >Tiếp tục</string>
     <string name="if_you_forget">Nếu bạn quên...😳</string>
     <string name="if_you_forgot_to_record_your_steps_record_them_to_monitor_your_health_">Nếu bạn quên ghi lại số bước đi của mình, hãy ghi lại chúng để theo dõi sức khỏe của bạn 🫢</string>
@@ -205,5 +204,6 @@
     <string name="please_enter_your_registered_email_and_check_your_mailbox_to_create_a_new_password">Vui lòng nhập email đã đăng ký và kiểm tra hộp thư để tạo mật khẩu mới</string>
     <string name="cancel">Hủy</string>
     <string name="name">Tên</string>
-
+    <string name="pass_noti">Chúc mừng! Bạn đã đạt được mục tiêu số bước chân cho hôm nay 😘</string>
+    <string name="not_pass_noti">Oops! Dường như mục tiêu số bước chân cho hôm nay chưa được đạt! Hãy cố lên 😘</string>
 </resources>

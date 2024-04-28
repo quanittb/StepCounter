@@ -170,7 +170,6 @@
     <string name="des_benefits_exercise">Gründe, warum Sie trainieren sollten und Vorteile des Trainings 🫢</string>
     <string name="see_more">Mehr anzeigen</string>
     <string name="detail">Detail</string>
-    <string name="detail_exercise">Laut NHS ist es medizinisch erwiesen, dass Frauen, die regelmäßig körperlich aktiv sind, Folgendes haben:\nBis zu 35 % geringeres Risiko für koronare Herzkrankheit und Schlaganfall. Bis zu 50 % geringeres Risiko für Typ-Diabetes 2 Bis zu 50 % Reduzierung des Darmkrebsrisikos Bis zu 20 % Reduzierung des Brustkrebsrisikos 30 % Reduzierung des Risikos eines frühen Todes Bis zu 83 % Reduzierung des Arthroserisikos Bis zu 68 % Reduzierung des Hüftfrakturrisikos 30 % Sturzrisiko ( bei älteren Erwachsenen) Bis zu 30 % Reduzierung des Depressionsrisikos Bis zu 30 % Reduzierung des Demenzrisikos</string>
     <string name="if_you_forget">Wenn du es vergisst...😳</string>
     <string name="if_you_forgot_to_record_your_steps_record_them_to_monitor_your_health_">Wenn Sie vergessen haben, Ihre Schritte aufzuzeichnen, zeichnen Sie sie auf, um Ihre Gesundheit zu überwachen 🫢</string>
     <string name="you_just_gained_weight">Du hast gerade zugenommen...</string>
@@ -209,4 +208,6 @@
     <string name="please_enter_your_registered_email_and_check_your_mailbox_to_create_a_new_password">Bitte geben Sie Ihre registrierte E-Mail ein und überprüfen Sie Ihr Postfach, um ein neues Passwort zu erstellen</string>
     <string name="cancel">Abbrechen</string>
     <string name="name">Name</string>
+    <string name="pass_noti">Glückwunsch! Du hast dein Schrittziel für heute erreicht 😘</string>
+    <string name="not_pass_noti">Hoppla! Es sieht so aus, als ob das Schrittziel für heute nicht erreicht wurde! Komm schon 😘</string>
 </resources>

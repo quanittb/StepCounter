@@ -171,6 +171,19 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             )
             manager?.createNotificationChannel(channel)
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                Constant.CHANNEL_ID_STEP_GOAL,
+                "CHANNEL_ID_STEP_GOAL",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            channel.description ="CHANNEL_ID_STEP_GOAL"
+
+            val manager = getSystemService(
+                NotificationManager::class.java
+            )
+            manager?.createNotificationChannel(channel)
+        }
     }
 
 

@@ -86,7 +86,8 @@ dependencies {
     implementation 'com.github.gastricspark:scrolldatepicker:0.0.1'
     //circle imageview
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-
+    // refresh data
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     // Vertical Sensitive
 //    implementation 'com.github.Jay-Goo:RangeSeekBar:v3.0.0'
 }

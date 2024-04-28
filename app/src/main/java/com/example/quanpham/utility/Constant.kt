@@ -9,6 +9,7 @@ object Constant {
     const val CHANNEL_ID_ALARM = "CHANNEL_ID_ALARM"
     const val CHANNEL_ID_UPDATE = "CHANNEL_ID_UPDATE"
     const val CHANNEL_ID_INFO_STEP = "CHANNEL_ID_INFO_STEP"
+    const val CHANNEL_ID_STEP_GOAL = "CHANNEL_ID_STEP_GOAL"
 
     const val KcalOne = 0.05
     const val LB = "Lb"
