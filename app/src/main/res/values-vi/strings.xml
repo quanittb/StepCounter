@@ -206,4 +206,6 @@
     <string name="name">Tên</string>
     <string name="pass_noti">Chúc mừng! Bạn đã đạt được mục tiêu số bước chân cho hôm nay 😘</string>
     <string name="not_pass_noti">Oops! Dường như mục tiêu số bước chân cho hôm nay chưa được đạt! Hãy cố lên 😘</string>
+    <string name="calo">Calo</string>
+    <string name="success">"Success "</string>
 </resources>

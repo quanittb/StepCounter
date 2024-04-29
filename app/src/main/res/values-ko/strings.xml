@@ -197,4 +197,6 @@
     <string name="name">이름</string>
     <string name="pass_noti">축하합니다! 오늘 하루의 걸음 목표를 달성했습니다 😘</string>
     <string name="not_pass_noti">이런! 오늘의 걸음 목표를 달성하지 못했군요! 힘내세요 😘</string>
+    <string name="calo">Calo</string>
+    <string name="success">"Success "</string>
 </resources>

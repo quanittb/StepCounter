@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.quanpham.services.InfoStepReceiver
 import com.example.quanpham.services.StepGoalReceiver
+import io.grpc.android.BuildConfig
 import java.util.Calendar
 
 
@@ -42,7 +43,10 @@ class NotificationManager {
                     FULLSCREEN_REMINDER_NOTIFICATION_ID_INFO_STEP, intent, PendingIntent.FLAG_IMMUTABLE)
             val calendar: Calendar = Calendar.getInstance()
             calendar.timeInMillis = System.currentTimeMillis()
-            calendar.set(Calendar.HOUR_OF_DAY, setHour)
+            if(BuildConfig.DEBUG)
+                calendar.set(Calendar.HOUR_OF_DAY, setHour)
+            else
+                calendar.set(Calendar.HOUR_OF_DAY, setHour + 4)
             calendar.set(Calendar.MINUTE, setMinute+1)
             calendar.set(Calendar.SECOND, 0)
 //            calendar.add(Calendar.DAY_OF_MONTH, 1)

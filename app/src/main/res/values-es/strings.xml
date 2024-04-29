@@ -201,4 +201,6 @@
     <string name="name">Nombre</string>
     <string name="pass_noti" >¡Felicidades! ¡Has alcanzado tu objetivo de pasos para hoy! 😘</string>
     <string name="not_pass_noti">¡Vaya! ¡Parece que no se alcanzó el objetivo de pasos de hoy! ¡Vamos! 😘</string>
+    <string name="calo">Calo</string>
+    <string name="success">"Success "</string>
 </resources>

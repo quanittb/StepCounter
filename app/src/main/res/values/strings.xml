@@ -234,5 +234,7 @@
     <string name="pass_noti"  >Congratulations! You\'ve reached your step goal for today 😘</string>
     <string name="not_pass_noti" >Oops! It seems like today\'s step goal wasn\'t met! Come on 😘
     </string>
+    <string name="calo">Calo</string>
+    <string name="success">"Success "</string>
 
 </resources>

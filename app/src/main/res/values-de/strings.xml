@@ -210,4 +210,6 @@
     <string name="name">Name</string>
     <string name="pass_noti">Glückwunsch! Du hast dein Schrittziel für heute erreicht 😘</string>
     <string name="not_pass_noti">Hoppla! Es sieht so aus, als ob das Schrittziel für heute nicht erreicht wurde! Komm schon 😘</string>
+    <string name="calo">Calo</string>
+    <string name="success">"Success "</string>
 </resources>

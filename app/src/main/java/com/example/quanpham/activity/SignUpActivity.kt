@@ -54,7 +54,6 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
     override fun createView() {
         binding.btnSignUp.setOnClickListener {
             if (checkValue()) {
-                showToast("Test")
                 singUpApp()
             } else {
                 showToast(getString(R.string.enter_all_value))
@@ -95,6 +94,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
                     .addOnSuccessListener {
                         SharedPreferenceUtils.isSetupAccount = true
                         SetupAccountActivity.startMain(this, true)
+                        showToast(getString(R.string.success))
                         finish()
                     }.addOnFailureListener {
                         showToast(it.message.toString())
